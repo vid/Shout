@@ -36,7 +36,7 @@ export default class Search extends React.Component {
   }
   componentDidMount () {
     this.searchSizer();
-    window.addEventListener('resize', () => this.searchSizer, false);
+    window.addEventListener('resize', () => this.searchSizer(), false);
   }
   componentWillUnmount () {
     window.removeEventListener('resize', this.searchSizer, false);
