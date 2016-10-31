@@ -1,6 +1,12 @@
 /* jslint node: true, esnext: true */
 'use strict';
 
+/**
+
+The main component with the app's actions and 'store.'
+
+**/
+
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -16,6 +22,7 @@ import Footer from './Footer.jsx';
 export default class App extends React.Component {
   constructor() {
     super();
+    // this component's state acts as the overall store for now
     this.state = {
       filteredResources: resources
     };
@@ -23,6 +30,7 @@ export default class App extends React.Component {
   componentDidMount () {
     this.displaySearch();
   }
+  // these are the app's actions, passed to and called by other components
   displayResult (result) {
     this.setState({screen: <Result displaySearch={(result) => this.displaySearch()} result={result} />});
   }
@@ -37,6 +45,7 @@ export default class App extends React.Component {
     const filteredResources = resources.filter(resource => resource.name.toLowerCase().indexOf(string.toLowerCase()) > -1);
     this.setState({filteredResources});
   }
+  // end of actions
   render () {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
