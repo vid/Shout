@@ -2,7 +2,7 @@
 'use strict';
 
 export const resources = [
-  {name: "Open Door Community", civic_address: "910 Ponce De Leon Ave NE", phone: "(404) 874-9652"},
+  {name: "Open Door Community", civic_address: "910 Ponce De Leon Ave NE", phone: "(404) 874-9652", description: "description info description info description info"},
   {name: "Community Advance Practice Nurses", civic_address: "173 Boulevard NE", z: "Atlanta", postal_code: "30312", phone: "(404) 658-1500"},
   {name: "Mercy Care at The Gateway", civic_address: "424 Decatur St SE Atlanta", postal_code: "30312", phone: "(678) 843-8600"},
   {name: "Metro Atlanta Task Force for the Homeless", civic_address: "477 Peachtree St NE Atlanta", postal_code: "30308", phone: "(404) 787-5826"},
