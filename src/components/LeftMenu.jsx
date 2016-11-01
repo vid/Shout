@@ -21,11 +21,11 @@ export default class LeftMenu extends React.Component {
            <Paper zDepth={1} style={style}>
            
             <MenuItem primaryText="New Search" />
-        <MenuItem primaryText="Add New Resource" />
-        <MenuItem primaryText="Change Location" />
+            <MenuItem primaryText="Add New Resource" />
+            <MenuItem primaryText="Change Location" />
 
-        <MenuItem primaryText="About" />
-        <MenuItem primaryText="Invite friends" />
+            <MenuItem primaryText="About" />
+            <MenuItem primaryText="Invite friends" />
           
           </Paper>
             </div>

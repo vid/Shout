@@ -13,15 +13,21 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+
+import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 
 import {resources} from '../lib/resources.js';
 
 
 //import other components & pages
 import Search from './Search.jsx';
-import Result from './Result.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
+
+import ClinicPage from '../pages/ClinicPage.jsx'
 
 
 export default class App extends React.Component {
@@ -31,18 +37,23 @@ export default class App extends React.Component {
     this.state = {
         filteredResources: resources,
         showMenu: false,
+        appbarState: false,
     };
   }
   componentDidMount () {
     this.displaySearch();
   }
-  // these are the app's actions, passed to and called by other components
+    // these are the app's actions, passed to and called by other components
+
+
   displayResult (result) {
-    this.setState({screen: <Result displaySearch={(result) => this.displaySearch()} result={result} />});
+      this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
+      this.setState({appbarState: true});
   }
   displaySearch () {
-    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getFilteredResources={() => this.state.filteredResources} />});
-  }
+      this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getFilteredResources={() => this.state.filteredResources}/>});
+      this.setState({appbarState:false});
+}
   filterResources (string) {
     if (!string || string.length < 1) {
       this.setState({filteredResources: resources});
@@ -55,7 +66,12 @@ export default class App extends React.Component {
   //onClick function for toggling menu
   onClick(e){
       e.preventDefault();
-      this.setState({showMenu: !this.state.showMenu})
+     if(!this.appbarState){
+          this.setState({showMenu: !this.state.showMenu}); 
+     }
+     else{
+         this.displaySearch();
+     }
   }
 
   // end of actions
@@ -71,7 +87,8 @@ export default class App extends React.Component {
 
          
           <div id='header'>
-            <AppBar onLeftIconButtonTouchTap={this.onClick.bind(this)} title="Shout" />
+
+             <AppBar iconElementLeft={<IconButton>{this.state.appbarState?<NavigationChevronLeft/>:<NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={this.onClick.bind(this)} title="Shout" />
           </div>
 
 
