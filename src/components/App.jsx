@@ -18,13 +18,16 @@ import {resources} from '../lib/resources.js';
 import Search from './Search.jsx';
 import Result from './Result.jsx';
 import Footer from './Footer.jsx';
+import LeftMenu from './LeftMenu.jsx';
+import Paper from 'material-ui/Paper';
 
 export default class App extends React.Component {
   constructor() {
     super();
     // this component's state acts as the overall store for now
     this.state = {
-      filteredResources: resources
+        filteredResources: resources,
+        showReply: false,
     };
   }
   componentDidMount () {
@@ -45,13 +48,22 @@ export default class App extends React.Component {
     const filteredResources = resources.filter(resource => resource.name.toLowerCase().indexOf(string.toLowerCase()) > -1);
     this.setState({filteredResources});
   }
+
+  onClick(e){
+      e.preventDefault();
+      this.setState({showReply: !this.state.showReply})
+  }
+
   // end of actions
   render () {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
+            <div id='menu'>
+             {this.state.showReply && < LeftMenu / >}
+             </div>
           <div id='header'>
-            <AppBar onLeftIconButtonTouchTap={console.log} title="Shout" />
+            <AppBar onLeftIconButtonTouchTap={this.onClick.bind(this)} title="Shout" />
           </div>
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='push' transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
@@ -61,6 +73,7 @@ export default class App extends React.Component {
           <div ref='footer' id='footer'>
             <Footer />
           </div>
+         
         </div>
       </MuiThemeProvider>
     );

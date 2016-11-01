@@ -13,3 +13,6 @@ To use:
 * open a browser to http://localhost:8080 (Webpack is used for hot updates as files are edited)
 * Install Cordova as used
 * run cordova app, eg ```cordova run android```
+
+
+* (#1: if npm start fails at : 'node config && HOST=0.0.0.0 webpack-dev-server' then remove "HOST=0.0.0.0" from that line in package.json)
