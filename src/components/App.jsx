@@ -12,14 +12,17 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import Paper from 'material-ui/Paper';
 
 import {resources} from '../lib/resources.js';
 
+
+//import other components & pages
 import Search from './Search.jsx';
 import Result from './Result.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
-import Paper from 'material-ui/Paper';
+
 
 export default class App extends React.Component {
   constructor() {
@@ -27,7 +30,7 @@ export default class App extends React.Component {
     // this component's state acts as the overall store for now
     this.state = {
         filteredResources: resources,
-        showReply: false,
+        showMenu: false,
     };
   }
   componentDidMount () {
@@ -49,9 +52,10 @@ export default class App extends React.Component {
     this.setState({filteredResources});
   }
 
+  //onClick function for toggling menu
   onClick(e){
       e.preventDefault();
-      this.setState({showReply: !this.state.showReply})
+      this.setState({showMenu: !this.state.showMenu})
   }
 
   // end of actions
@@ -59,17 +63,25 @@ export default class App extends React.Component {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
-            <div id='menu'>
-             {this.state.showReply && < LeftMenu / >}
-             </div>
+
+      
+          <div id='menu'>
+             {this.state.showMenu && < LeftMenu / >}
+          </div>
+
+         
           <div id='header'>
             <AppBar onLeftIconButtonTouchTap={this.onClick.bind(this)} title="Shout" />
           </div>
+
+
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='push' transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
             {this.state.screen}
           </CSSTransitionGroup>
           </div>
+
+    
           <div ref='footer' id='footer'>
             <Footer />
           </div>
