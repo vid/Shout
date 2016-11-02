@@ -22,20 +22,26 @@ const style = {
 };
 
 
+
 export default class LeftMenu extends React.Component {
     constructor() {
         super()
     }
     render(){
+        
+        const {addResource} = this.props;
+        const {displayAbout} = this.props;
+
+
         return(
         <div id='menu'>
            <Paper zDepth={1} style={style}>
            
             <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />}/>
+            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={addResource}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />}/>
                 <Divider />
-            <MenuItem primaryText="About" leftIcon={<SocialPerson />}/>
+            <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={displayAbout}/>
             <MenuItem primaryText="Invite friends" leftIcon={<SocialShare />}/>
           
           </Paper>

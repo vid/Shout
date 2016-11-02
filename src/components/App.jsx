@@ -28,6 +28,8 @@ import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 
 import ClinicPage from '../pages/ClinicPage.jsx'
+import AddResource from '../pages/AddResource.jsx'
+import About from '../pages/About.jsx'
 
 
 export default class App extends React.Component {
@@ -45,7 +47,15 @@ export default class App extends React.Component {
   }
     // these are the app's actions, passed to and called by other components
 
+  addResource() {
+      this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});      
+      this.setState({showMenu: !this.state.showMenu}); 
+}
 
+displayAbout(){
+    this.setState({screen: <About displaySearch={(result)=>this.displaySearch()} />});
+    this.setState({showMenu: !this.state.showMenu}); 
+}
   displayResult (result) {
       this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
       this.setState({appbarState: true});
@@ -82,7 +92,7 @@ export default class App extends React.Component {
 
       
           <div id='menu'>
-             {this.state.showMenu && < LeftMenu / >}
+             {this.state.showMenu && < LeftMenu addResource={() => this.addResource()} displayAbout={() => this.displayAbout()}/>}
           </div>
 
          
