@@ -82,7 +82,7 @@ handleRequestDelete(key){
       <div id = "clinicpage">
         <Paper style={styles.regStyle} zDepth={2}>
            <div className="hello" onClick={displaySearch}>
-             <h3> << Back to search</h3>
+             <h3> « Back to search</h3>
            </div>
             <h1> Add Resource </h1>
 
