@@ -4,13 +4,22 @@ import React,  {Component} from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
 import {Card, CardActions, CardHeader, CardText, CardTitle, CardMedia} from 'material-ui/Card';
+import {cyan200} from 'material-ui/styles/colors';
 
-const style = {
-    height: '30%',
-    width: '30%',
-    margin: 20,
-    alignment: 'right',
-    display: 'inline-block',
+
+const styles = {
+    mainStyle: {
+  
+        height: '100%',
+        width: '100%',
+        padding: '2%',
+        alignment: 'right',
+        display: 'inline-block',
+    },
+
+     cardStyle: {
+        color: cyan200,
+    },
 };
 
 
@@ -20,9 +29,13 @@ export default class ClinicPage extends React.Component {
     const {displaySearch} = this.props;
 
     return (
-      <div id='clinicpage'>
+        <div id='clinicpage'>
+
+        <Paper style={styles.mainStyle} zDepth={1}>
+          
+      
         <div className="hello" onClick={displaySearch}>
-          « Back to search
+          <h3>« Back to search</h3>
         </div>    
           <Card>
         <CardHeader
@@ -35,7 +48,7 @@ export default class ClinicPage extends React.Component {
        
         <CardTitle title={result.name} subtitle={result.civic_address} expandable={true}/>
         <CardText expandable={true}>
-             <Paper  style={style}>
+             <Paper  style={styles.cardStyle}>
           <img src="http://www.emorydailypulse.com/wp-content/uploads/2016/06/grady.jpg" />
             </Paper>
              <Paper>
@@ -95,6 +108,8 @@ export default class ClinicPage extends React.Component {
     feedback
   </CardText>
 </Card>
+
+            </Paper>
       </div>
     );
   }
