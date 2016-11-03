@@ -15,6 +15,7 @@ import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
+import Drawer from 'material-ui/Drawer';
 
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
@@ -30,6 +31,14 @@ import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from '../pages/ClinicPage.jsx'
 import AddResource from '../pages/AddResource.jsx'
 import About from '../pages/About.jsx'
+
+
+
+const stylemenu = {
+    position: 'fixed',
+    padding:'70px 5px 15px 15px',
+    height: '100%',
+};
 
 
 export default class App extends React.Component {
@@ -74,8 +83,7 @@ displayAbout(){
   }
 
   //onClick function for toggling menu
-  onClick(e){
-      e.preventDefault();
+  appbarClick(){
      if(!this.appbarState){
           this.setState({showMenu: !this.state.showMenu}); 
      }
@@ -84,24 +92,27 @@ displayAbout(){
      }
   }
 
-  // end of actions
+// end of actions
+
+
+//old appbar with conditional iconbutton: //<AppBar iconElementLeft={<IconButton>{this.state.appbarState?<NavigationChevronLeft/>:<NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
+//temporarily removed it and back button is within the page being rendered
+
+
   render () {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
 
       
-          <div id='menu'>
-             {this.state.showMenu && < LeftMenu addResource={() => this.addResource()} displayAbout={() => this.displayAbout()}/>}
-          </div>
-
+         
          
           <div id='header'>
 
-             <AppBar iconElementLeft={<IconButton>{this.state.appbarState?<NavigationChevronLeft/>:<NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={this.onClick.bind(this)} title="Shout" />
+             <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
           </div>
 
-
+          
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='push' transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
             {this.state.screen}
@@ -112,6 +123,13 @@ displayAbout(){
           <div ref='footer' id='footer'>
             <Footer />
           </div>
+
+           <div id='menu'>
+              <Drawer open={this.state.showMenu} style={stylemenu} docked={false}>
+             <LeftMenu addResource={() => this.addResource()} displayAbout={() => this.displayAbout()}/>
+                 </Drawer>
+          </div>
+
          
         </div>
       </MuiThemeProvider>

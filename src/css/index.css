@@ -23,7 +23,10 @@ html, body {
 }
 #header{
 }
+
+
 #menu {
+  padding:70px 10px 5px 5px;
   z-index:10;
 }
 

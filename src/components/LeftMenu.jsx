@@ -14,15 +14,6 @@ import SocialPerson from 'material-ui/svg-icons/social/person';
 
 import Divider from 'material-ui/Divider';
 
-const style = {
- position: 'fixed',
-  padding:'70px 5px 15px',
-  width: '40%',
-  height: '100%',
-};
-
-
-
 export default class LeftMenu extends React.Component {
     constructor() {
         super()
@@ -35,8 +26,6 @@ export default class LeftMenu extends React.Component {
 
         return(
         <div id='menu'>
-           <Paper zDepth={1} style={style}>
-           
             <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={addResource}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />}/>
@@ -44,7 +33,6 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={displayAbout}/>
             <MenuItem primaryText="Invite friends" leftIcon={<SocialShare />}/>
           
-          </Paper>
             </div>
       )
     }
