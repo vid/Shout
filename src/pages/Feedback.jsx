@@ -1,5 +1,5 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
+
 
 
 //export default class Feedback
@@ -7,7 +7,8 @@ export default class Feedback extends React.Component {
 
 
     render () {
-        const {displaySearch} = this.props;
+    
+
         return (
 
         	<div class="feedback-container">

@@ -22,6 +22,7 @@ export default class LeftMenu extends React.Component {
 
         const {displayAddResource} = this.props;
         const {displayAbout} = this.props;
+        const {displayFeedback} = this.props;
 
 
         return(
