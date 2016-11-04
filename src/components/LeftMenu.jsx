@@ -22,7 +22,7 @@ export default class LeftMenu extends React.Component {
 
         const {displayAddResource} = this.props;
         const {displayAbout} = this.props;
-        const {displayFeedback} = this.props;
+
 
 
         return(
@@ -33,7 +33,7 @@ export default class LeftMenu extends React.Component {
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={displayAbout}/>
             <MenuItem primaryText="Invite friends" leftIcon={<SocialShare />}/>
-            <MenuItem primaryText="Feedback"  onTouchTap={displayFeedback}/>
+          
 
             </div>
       )

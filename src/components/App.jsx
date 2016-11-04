@@ -27,7 +27,7 @@ import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from '../pages/ClinicPage.jsx';
 import AddResource from '../pages/AddResource.jsx';
 import About from '../pages/About.jsx';
-import Feedback from '../pages/Feedback.jsx';
+
 
 const stylemenu = {
     position: 'fixed',
@@ -124,7 +124,7 @@ export default class App extends React.Component {
 
            <div id='menu'>
               <Drawer open={this.state.showMenu} style={stylemenu} docked={false}>
-                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} displayFeedback={() => this.displayFeedback()}/>
+                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} />
              </Drawer>
           </div>
         </div>
