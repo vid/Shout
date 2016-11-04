@@ -8,6 +8,7 @@ import {cyan200} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
+import Checkbox from 'material-ui/Checkbox';
 
 
 import UpdateResource from '../components/UpdateResource.jsx';
@@ -165,6 +166,50 @@ constructor(props) {
       actAsExpander={true}
       showExpandableButton={true}
     />
+
+    <div className="update-container">
+      <h4> Please select all that are applicable </h4>
+      <div style={styles.block}>
+          <Checkbox
+            label="Simple"
+            style={styles.checkbox}
+          />
+          </div>
+          <div style={styles.block}>
+          <Checkbox
+            label="Simple"
+            style={styles.checkbox}
+          />
+          </div>
+           <TextField
+            hintText="Hint Text"
+            floatingLabelText="Fixed Floating Label Text"
+            floatingLabelFixed={true}
+          /><br />
+          <div style={styles.block}>
+          <Checkbox
+            label="Simple"
+            style={styles.checkbox}
+          />  
+          </div>
+           <TextField
+            hintText="Hint Text"
+            floatingLabelText="Fixed Floating Label Text"
+            floatingLabelFixed={true}
+          /><br />
+          <div style={styles.block}>
+          <Checkbox
+            label="Simple"
+            style={styles.checkbox}
+          />
+          </div>
+           <TextField
+            hintText="Hint Text"
+            floatingLabelText="Fixed Floating Label Text"
+            floatingLabelFixed={true}
+          /><br />
+     
+    </div>
     <CardText expandable={true}>
       <UpdateResource/>
     </CardText>
