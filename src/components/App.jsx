@@ -1,6 +1,3 @@
-/* jslint node: true, esnext: true */
-'use strict';
-
 /**
 
 The main component with the app's actions and 'store.'
@@ -22,17 +19,14 @@ import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 
 import {resources} from '../lib/resources.js';
 
-
 //import other components & pages
 import Search from './Search.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 
-import ClinicPage from '../pages/ClinicPage.jsx'
-import AddResource from '../pages/AddResource.jsx'
-import About from '../pages/About.jsx'
-
-
+import ClinicPage from '../pages/ClinicPage.jsx';
+import AddResource from '../pages/AddResource.jsx';
+import About from '../pages/About.jsx';
 
 const stylemenu = {
     position: 'fixed',
@@ -40,14 +34,13 @@ const stylemenu = {
     height: '100%',
 };
 
-
 export default class App extends React.Component {
-  constructor() {
+  constructor () {
     super();
     // this component's state acts as the overall store for now
     this.state = {
         allResources: [...resources],
-        filteredResources: [resources],
+        filteredResources: resources,
         showMenu: false,
         appbarState: false,
     };
@@ -57,66 +50,61 @@ export default class App extends React.Component {
   }
     // these are the app's actions, passed to and called by other components
 
-  displayAddResource() {
+  displayAddResource () {
     this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});
-      this.setState({showMenu: !this.state.showMenu});
-}
+    this.setState({showMenu: !this.state.showMenu});
+  }
 
-displayAbout(){
+  displayAbout () {
     this.setState({screen: <About displaySearch={(result)=>this.displaySearch()} />});
     this.setState({showMenu: !this.state.showMenu});
-}
+  }
+
   displayResult (result) {
-      this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
-      this.setState({appbarState: true});
+    this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
+    this.setState({appbarState: true});
   }
   displaySearch () {
-      this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getFilteredResources={() => this.state.filteredResources}/>});
-      this.setState({appbarState:false});
-}
+    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getFilteredResources={() => this.state.filteredResources}/>});
+    this.setState({appbarState: false});
+  }
+
 // Add a resource to the collection
   addResource (res) {
-    allResources.push(res);
+    this.setState({allResources: [...this.state.allResources, res]});
+    this.filterResources(this.state.searchString);
   }
-  filterResources (string) {
-    if (!string || string.length < 1) {
-      this.setState({filteredResources: allResources});
+
+  filterResources (searchString) {
+    if (!searchString || searchString.length < 1) {
+      this.setState({filteredResources: this.state.allResources, searchString});
       return;
     }
-    const filteredResources = allResources.filter(resource => resource.name.toLowerCase().indexOf(string.toLowerCase()) > -1);
-    this.setState({filteredResources});
+    const filteredResources = this.state.allResources.filter(resource => resource.name.toLowerCase().includes(searchString.toLowerCase()));
+    this.setState({filteredResources, searchString});
   }
 
   //onClick function for toggling menu
-  appbarClick(){
-     if(!this.appbarState){
+  appbarClick () {
+     if (!this.appbarState) {
           this.setState({showMenu: !this.state.showMenu});
-     }
-     else{
+     } else {
          this.displaySearch();
      }
   }
 
 // end of actions
 
-
 //old appbar with conditional iconbutton: //<AppBar iconElementLeft={<IconButton>{this.state.appbarState?<NavigationChevronLeft/>:<NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
 //temporarily removed it and back button is within the page being rendered
-
 
   render () {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
-
-
-
-
           <div id='header'>
-
-             <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
+           <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
           </div>
-
 
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='push' transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
@@ -124,18 +112,15 @@ displayAbout(){
           </CSSTransitionGroup>
           </div>
 
-
           <div ref='footer' id='footer'>
             <Footer />
           </div>
 
            <div id='menu'>
               <Drawer open={this.state.showMenu} style={stylemenu} docked={false}>
-             <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>
-                 </Drawer>
+                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>
+             </Drawer>
           </div>
-
-
         </div>
       </MuiThemeProvider>
     );
