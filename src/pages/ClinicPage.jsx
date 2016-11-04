@@ -7,6 +7,10 @@ import {Card, CardActions, CardHeader, CardText, CardTitle, CardMedia} from 'mat
 import {cyan200} from 'material-ui/styles/colors';
 
 
+import UpdateResource from '../components/UpdateResource.jsx';
+import FlagContent from '../components/FlagContent.jsx';
+
+
 const styles = {
     mainStyle: {
   
@@ -85,7 +89,7 @@ export default class ClinicPage extends React.Component {
         showExpandableButton={true}
       />
       <CardText expandable={true}>
-        feedback
+        submit feedback
       </CardText>
     </Card>
     <Card>
@@ -95,7 +99,7 @@ export default class ClinicPage extends React.Component {
       showExpandableButton={true}
     />
     <CardText expandable={true}>
-      feedback
+      <UpdateResource/>
     </CardText>
   </Card>
   <Card>
@@ -105,7 +109,7 @@ export default class ClinicPage extends React.Component {
     showExpandableButton={true}
   />
   <CardText expandable={true}>
-    feedback
+    <FlagContent />
   </CardText>
 </Card>
 
