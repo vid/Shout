@@ -46,7 +46,8 @@ export default class App extends React.Component {
     super();
     // this component's state acts as the overall store for now
     this.state = {
-        filteredResources: resources,
+        allResources: [...resources],
+        filteredResources: [resources],
         showMenu: false,
         appbarState: false,
     };
@@ -56,14 +57,14 @@ export default class App extends React.Component {
   }
     // these are the app's actions, passed to and called by other components
 
-  addResource() {
-      this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});      
-      this.setState({showMenu: !this.state.showMenu}); 
+  displayAddResource() {
+    this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});
+      this.setState({showMenu: !this.state.showMenu});
 }
 
 displayAbout(){
     this.setState({screen: <About displaySearch={(result)=>this.displaySearch()} />});
-    this.setState({showMenu: !this.state.showMenu}); 
+    this.setState({showMenu: !this.state.showMenu});
 }
   displayResult (result) {
       this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
@@ -73,19 +74,23 @@ displayAbout(){
       this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getFilteredResources={() => this.state.filteredResources}/>});
       this.setState({appbarState:false});
 }
+// Add a resource to the collection
+  addResource (res) {
+    allResources.push(res);
+  }
   filterResources (string) {
     if (!string || string.length < 1) {
-      this.setState({filteredResources: resources});
+      this.setState({filteredResources: allResources});
       return;
     }
-    const filteredResources = resources.filter(resource => resource.name.toLowerCase().indexOf(string.toLowerCase()) > -1);
+    const filteredResources = allResources.filter(resource => resource.name.toLowerCase().indexOf(string.toLowerCase()) > -1);
     this.setState({filteredResources});
   }
 
   //onClick function for toggling menu
   appbarClick(){
      if(!this.appbarState){
-          this.setState({showMenu: !this.state.showMenu}); 
+          this.setState({showMenu: !this.state.showMenu});
      }
      else{
          this.displaySearch();
@@ -104,33 +109,33 @@ displayAbout(){
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
 
-      
-         
-         
+
+
+
           <div id='header'>
 
              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
           </div>
 
-          
+
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='push' transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
             {this.state.screen}
           </CSSTransitionGroup>
           </div>
 
-    
+
           <div ref='footer' id='footer'>
             <Footer />
           </div>
 
            <div id='menu'>
               <Drawer open={this.state.showMenu} style={stylemenu} docked={false}>
-             <LeftMenu addResource={() => this.addResource()} displayAbout={() => this.displayAbout()}/>
+             <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>
                  </Drawer>
           </div>
 
-         
+
         </div>
       </MuiThemeProvider>
     );
