@@ -32,6 +32,7 @@ export default class LeftMenu extends React.Component {
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={displayAbout}/>
             <MenuItem primaryText="Invite friends" leftIcon={<SocialShare />}/>
+            <MenuItem primaryText="Feedback"  onTouchTap={displayFeedback}/>
 
             </div>
       )

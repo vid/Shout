@@ -27,6 +27,7 @@ import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from '../pages/ClinicPage.jsx';
 import AddResource from '../pages/AddResource.jsx';
 import About from '../pages/About.jsx';
+import Feedback from '..pages/Feedback.jsx';
 
 const stylemenu = {
     position: 'fixed',
