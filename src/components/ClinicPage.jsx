@@ -13,7 +13,7 @@ import FlagContent from '../components/FlagContent.jsx';
 
 const styles = {
     mainStyle: {
-  
+
         height: '100%',
         width: '100%',
         padding: '2%',
@@ -24,6 +24,10 @@ const styles = {
      cardStyle: {
         color: cyan200,
     },
+
+    cardHeaderStyle: {
+       color: cyan200,
+   },
 };
 
 
@@ -36,20 +40,21 @@ export default class ClinicPage extends React.Component {
         <div id='clinicpage'>
 
         <Paper style={styles.mainStyle} zDepth={1}>
-          
-      
+
+
         <div className="hello" onClick={displaySearch}>
           <h3>« Back to search</h3>
-        </div>    
+        </div>
           <Card>
         <CardHeader
           title="Overview"
           subtitle={result.name}
           avatar=""
+          style={styles.cardHeaderStyle}
           actAsExpander={true}
           showExpandableButton={true}
         />
-       
+
         <CardTitle title={result.name} subtitle={result.civic_address} expandable={true}/>
         <CardText expandable={true}>
              <Paper  style={styles.cardStyle}>
@@ -60,7 +65,7 @@ export default class ClinicPage extends React.Component {
                 {result.description}
            </Paper>
         </CardText>
-        
+
       </Card>
       <Card>
           <CardHeader

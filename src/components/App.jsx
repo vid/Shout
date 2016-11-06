@@ -112,16 +112,18 @@ export default class App extends React.Component {
           </CSSTransitionGroup>
           </div>
 
+          <div id='menu'>
+             <Drawer open={this.state.showMenu} style={stylemenu} docked={false}>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>
+            </Drawer>
+         </div>
+
+
           <div ref='footer' id='footer'>
             <Footer />
           </div>
+   </div>
 
-           <div id='menu'>
-              <Drawer open={this.state.showMenu} style={stylemenu} docked={false}>
-                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>
-             </Drawer>
-          </div>
-        </div>
       </MuiThemeProvider>
     );
   }

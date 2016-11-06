@@ -16,7 +16,7 @@ export default class FlagContent extends React.Component {
     constructor() {
         super()
         this.state = {
-   value: 1,
+   value: null,
  };
     }
     render(){
@@ -28,7 +28,7 @@ export default class FlagContent extends React.Component {
 
               <h3> Please select a reason: </h3>
               <SelectField
-          floatingLabelText="Frequency"
+          floatingLabelText="Select"
           value={this.state.value}
           onChange={(event, index, value) => this.setState({value})}>
 
