@@ -24,9 +24,9 @@ import Search from './Search.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 
-import ClinicPage from '../pages/ClinicPage.jsx';
-import AddResource from '../pages/AddResource.jsx';
-import About from '../pages/About.jsx';
+import ClinicPage from './ClinicPage.jsx';
+import AddResource from './AddResource.jsx';
+import About from './About.jsx';
 
 const stylemenu = {
     position: 'fixed',

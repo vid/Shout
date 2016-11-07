@@ -7,8 +7,8 @@ import {Card, CardActions, CardHeader, CardText, CardTitle, CardMedia} from 'mat
 import {cyan200} from 'material-ui/styles/colors';
 
 
-import UpdateResource from '.UpdateResource.jsx';
-import FlagContent from '.FlagContent.jsx';
+import UpdateResource from './UpdateResource.jsx';
+import FlagContent from './FlagContent.jsx';
 
 
 const styles = {
@@ -22,7 +22,7 @@ const styles = {
     },
 
      cardStyle: {
-        padding: '5%',
+        padding: '3%',
     },
 
     cardHeaderStyle: {
@@ -45,11 +45,9 @@ export default class ClinicPage extends React.Component {
         <div className="hello" onClick={displaySearch}>
           <h3>« Back to search</h3>
         </div>
-<<<<<<< HEAD
-          <Card>
-=======
-          <Card style={styles.cardStyle}>
->>>>>>> dev
+
+      <Card style={styles.cardStyle}>
+
         <CardHeader
           title="Overview"
           subtitle={result.name}
