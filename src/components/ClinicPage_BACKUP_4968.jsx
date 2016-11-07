@@ -16,7 +16,7 @@ const styles = {
 
         height: '100%',
         width: '100%',
-        padding: '5%',
+        padding: '2%',
         alignment: 'right',
         display: 'inline-block',
     },
@@ -24,10 +24,6 @@ const styles = {
      cardStyle: {
         padding: '5%',
     },
-
-    cardHeaderStyle: {
-       color: cyan200,
-   },
 };
 
 

@@ -7,27 +7,23 @@ import {Card, CardActions, CardHeader, CardText, CardTitle, CardMedia} from 'mat
 import {cyan200} from 'material-ui/styles/colors';
 
 
-import UpdateResource from '.UpdateResource.jsx';
-import FlagContent from '.FlagContent.jsx';
+import UpdateResource from '../components/UpdateResource.jsx';
+import FlagContent from '../components/FlagContent.jsx';
 
 
 const styles = {
     mainStyle: {
-
+  
         height: '100%',
         width: '100%',
-        padding: '5%',
+        padding: '2%',
         alignment: 'right',
         display: 'inline-block',
     },
 
      cardStyle: {
-        padding: '5%',
+        color: cyan200,
     },
-
-    cardHeaderStyle: {
-       color: cyan200,
-   },
 };
 
 
@@ -40,25 +36,20 @@ export default class ClinicPage extends React.Component {
         <div id='clinicpage'>
 
         <Paper style={styles.mainStyle} zDepth={1}>
-
-
+          
+      
         <div className="hello" onClick={displaySearch}>
           <h3>« Back to search</h3>
-        </div>
-<<<<<<< HEAD
+        </div>    
           <Card>
-=======
-          <Card style={styles.cardStyle}>
->>>>>>> dev
         <CardHeader
           title="Overview"
           subtitle={result.name}
           avatar=""
-          style={styles.cardHeaderStyle}
           actAsExpander={true}
           showExpandableButton={true}
         />
-
+       
         <CardTitle title={result.name} subtitle={result.civic_address} expandable={true}/>
         <CardText expandable={true}>
              <Paper  style={styles.cardStyle}>
@@ -69,9 +60,9 @@ export default class ClinicPage extends React.Component {
                 {result.description}
            </Paper>
         </CardText>
-
+        
       </Card>
-      <Card style={styles.cardStyle}>
+      <Card>
           <CardHeader
           title="Public Transit Routes"
           actAsExpander={true}
@@ -81,7 +72,7 @@ export default class ClinicPage extends React.Component {
          businfo
         </CardText>
       </Card>
-      <Card style={styles.cardStyle}>
+      <Card>
           <CardHeader
           title="Feedback"
           actAsExpander={true}
@@ -91,7 +82,7 @@ export default class ClinicPage extends React.Component {
           feedback
         </CardText>
       </Card>
-      <Card style={styles.cardStyle}>
+      <Card>
           <CardHeader
         title="Submit Feedback"
         actAsExpander={true}
@@ -101,7 +92,7 @@ export default class ClinicPage extends React.Component {
         submit feedback
       </CardText>
     </Card>
-    <Card style={styles.cardStyle}>
+    <Card>
           <CardHeader
       title="Update"
       actAsExpander={true}
@@ -111,7 +102,7 @@ export default class ClinicPage extends React.Component {
       <UpdateResource/>
     </CardText>
   </Card>
-  <Card style={styles.cardStyle}>
+  <Card>
           <CardHeader
     title="Flag this content"
     actAsExpander={true}

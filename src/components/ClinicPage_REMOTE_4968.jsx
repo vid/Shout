@@ -16,7 +16,7 @@ const styles = {
 
         height: '100%',
         width: '100%',
-        padding: '5%',
+        padding: '2%',
         alignment: 'right',
         display: 'inline-block',
     },
@@ -24,10 +24,6 @@ const styles = {
      cardStyle: {
         padding: '5%',
     },
-
-    cardHeaderStyle: {
-       color: cyan200,
-   },
 };
 
 
@@ -45,16 +41,11 @@ export default class ClinicPage extends React.Component {
         <div className="hello" onClick={displaySearch}>
           <h3>« Back to search</h3>
         </div>
-<<<<<<< HEAD
-          <Card>
-=======
           <Card style={styles.cardStyle}>
->>>>>>> dev
         <CardHeader
           title="Overview"
           subtitle={result.name}
           avatar=""
-          style={styles.cardHeaderStyle}
           actAsExpander={true}
           showExpandableButton={true}
         />
