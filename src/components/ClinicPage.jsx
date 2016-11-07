@@ -16,7 +16,7 @@ const styles = {
 
         height: '100%',
         width: '100%',
-        padding: '2%',
+        padding: '5%',
         alignment: 'right',
         display: 'inline-block',
     },
