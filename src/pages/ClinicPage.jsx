@@ -9,10 +9,11 @@ import TextField from 'material-ui/TextField';
 import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
 import Checkbox from 'material-ui/Checkbox';
-
+import StarRating from 'react-star-rating';
 
 import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
+
 
 
 const styles = {
@@ -28,6 +29,7 @@ const styles = {
      cardStyle: {
         color: cyan200,
     },
+
 };
 
 
@@ -118,11 +120,45 @@ constructor(props) {
           showExpandableButton={true}
         />
         <CardText expandable={true}>
-          <div className="feedback-container">
+           <div className="rate-service">
+              <h3>Service</h3> 
+            
+              <Rater/>
+            </div>
+
+            <div className="rate-transportation">
+              <h3>Transportation</h3> 
+                    <Rater />
+            </div>
+
+            <div className="rate-qualitycare">
+              <h3>Quality of Care</h3> 
+                    <Rater />
+            </div>
+            <div> 
+              <h3>Tags:</h3>
+               <div style={this.styles.wrapper}>
+                    {this.state.chipData.map(this.renderChip, this)}
+                </div>
+            </div>
+            
+
+        </CardText>
+      </Card>
+      <Card>
+          <CardHeader
+        title="Submit Feedback"
+        actAsExpander={true}
+        showExpandableButton={true}
+      />
+      <CardText expandable={true}>
+        submit feedback
+        <form className="feedback-container">
 
             <div className="rate-service">
               <h3>Service</h3> 
-                     <Rater />
+
+                     <Rater total={5} />
             </div>
 
             <div className="rate-transportation">
@@ -147,17 +183,7 @@ constructor(props) {
                 </div>
 
 
-          </div>
-        </CardText>
-      </Card>
-      <Card>
-          <CardHeader
-        title="Submit Feedback"
-        actAsExpander={true}
-        showExpandableButton={true}
-      />
-      <CardText expandable={true}>
-        submit feedback
+          </form>
       </CardText>
     </Card>
     <Card>
@@ -167,7 +193,10 @@ constructor(props) {
       showExpandableButton={true}
     />
 
-    <div className="update-container">
+   
+    <CardText expandable={true}>
+      <UpdateResource/>
+       <div className="update-container">
       <h4> Please select all that are applicable </h4>
       <div style={styles.block}>
           <Checkbox
@@ -210,8 +239,6 @@ constructor(props) {
           /><br />
      
     </div>
-    <CardText expandable={true}>
-      <UpdateResource/>
     </CardText>
   </Card>
   <Card>
