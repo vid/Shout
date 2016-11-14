@@ -28,6 +28,7 @@ import ClinicPage from '../pages/ClinicPage.jsx';
 import AddResource from '../pages/AddResource.jsx';
 import About from '../pages/About.jsx';
 
+
 const stylemenu = {
     position: 'fixed',
     padding:'70px 5px 15px 15px',
@@ -57,6 +58,11 @@ export default class App extends React.Component {
 
   displayAbout () {
     this.setState({screen: <About displaySearch={(result)=>this.displaySearch()} />});
+    this.setState({showMenu: !this.state.showMenu});
+  }
+
+  displayFeedback () {
+    this.setState({screen: <Feedback displaySearch={(result)=>this.displaySearch()} />});
     this.setState({showMenu: !this.state.showMenu});
   }
 
@@ -124,7 +130,7 @@ export default class App extends React.Component {
           </div>
    </div>
 
-      </MuiThemeProvider>
+        
     );
   }
 }
