@@ -37,10 +37,8 @@ export default class ClinicPage extends React.Component {
 constructor(props) {
     super(props);
     this.state = {chipData: [
-      {key: 0, label: 'Angular'},
-      {key: 1, label: 'JQuery'},
-      {key: 2, label: 'Polymer'},
-      {key: 3, label: 'ReactJS'},
+      {key: 0, label: props.label
+      }
     ]};
     this.styles = {
       chip: {
@@ -50,10 +48,15 @@ constructor(props) {
         display: 'flex',
         flexWrap: 'wrap',
       },
+
     };
   }
 
-  
+  submitFeedback(event){
+    this.setState({
+    label:event.target.value
+    });
+  }
 
   renderChip(data) {
     return (
@@ -153,7 +156,7 @@ constructor(props) {
       />
       <CardText expandable={true}>
         submit feedback
-        <form className="feedback-container">
+        <div className="feedback-container">
 
             <div className="rate-service">
               <h3>Service</h3> 
@@ -171,19 +174,17 @@ constructor(props) {
                     <Rater />
             </div>
 
-                <TextField hintText="Tags" 
-                       
-                       floatingLabelText="Tags"
-                       floatingLabelFixed={true}                   
-                       onChange={() => this.setState({value_Tags: event.target.value})}/>
+                <input type="text"   
+                         value={this.state.label}              
+                       onChange={(event) => this.submitFeedback(event)}/>
                 <br />
 
-                <div style={this.styles.wrapper}>
-                    {this.state.chipData.map(this.renderChip, this)}
-                </div>
+                 <div style={this.styles.wrapper}>
+                     {this.state.chipData.map(this.renderChip, this)}
+                 </div>
 
-
-          </form>
+          <button onClick={this.submitFeedback.bind(this)} className="btn btn-primary">Submit</button>
+          </div>
       </CardText>
     </Card>
     <Card>
@@ -197,46 +198,49 @@ constructor(props) {
     <CardText expandable={true}>
       <UpdateResource/>
        <div className="update-container">
-      <h4> Please select all that are applicable </h4>
-      <div style={styles.block}>
-          <Checkbox
-            label="Simple"
-            style={styles.checkbox}
-          />
-          </div>
-          <div style={styles.block}>
-          <Checkbox
-            label="Simple"
-            style={styles.checkbox}
-          />
-          </div>
-           <TextField
-            hintText="Hint Text"
-            floatingLabelText="Fixed Floating Label Text"
-            floatingLabelFixed={true}
-          /><br />
-          <div style={styles.block}>
-          <Checkbox
-            label="Simple"
-            style={styles.checkbox}
-          />  
-          </div>
-           <TextField
-            hintText="Hint Text"
-            floatingLabelText="Fixed Floating Label Text"
-            floatingLabelFixed={true}
-          /><br />
-          <div style={styles.block}>
-          <Checkbox
-            label="Simple"
-            style={styles.checkbox}
-          />
-          </div>
-           <TextField
-            hintText="Hint Text"
-            floatingLabelText="Fixed Floating Label Text"
-            floatingLabelFixed={true}
-          /><br />
+        <h4> Please select all that are applicable </h4>
+        <div style={styles.block}>
+            <Checkbox
+              label="Simple"
+              style={styles.checkbox}
+            />
+            </div>
+            <div style={styles.block}>
+            <Checkbox
+              label="Simple"
+              style={styles.checkbox}
+            />
+            </div>
+             <TextField
+              hintText="Hint Text"
+              floatingLabelText="Fixed Floating Label Text"
+              floatingLabelFixed={true}
+            /><br />
+            <div style={styles.block}>
+            <Checkbox
+              label="Simple"
+              style={styles.checkbox}
+            />  
+            </div>
+             <TextField
+              hintText="Hint Text"
+              floatingLabelText="Fixed Floating Label Text"
+              floatingLabelFixed={true}
+            /><br />
+            <div style={styles.block}>
+            <Checkbox
+              label="Simple"
+              style={styles.checkbox}
+            />
+            </div>
+             <TextField
+              hintText="Hint Text"
+              floatingLabelText="Fixed Floating Label Text"
+            
+              floatingLabelFixed={true}
+            /><br />
+
+         
      
     </div>
     </CardText>
@@ -256,4 +260,8 @@ constructor(props) {
       </div>
     );
   }
+}
+
+ClinicPage.PropTypes={
+  label:React.PropTypes.string,
 }
