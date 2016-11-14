@@ -108,6 +108,7 @@ export default class App extends React.Component {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
+
           <div id='header'>
            <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
           </div>
@@ -128,9 +129,10 @@ export default class App extends React.Component {
           <div ref='footer' id='footer'>
             <Footer />
           </div>
-   </div>
 
-        
+        </div>
+      </MuiThemeProvider>
+
     );
   }
 }
