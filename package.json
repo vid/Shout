@@ -17,6 +17,7 @@
     "react": "^15.3.0",
     "react-addons-css-transition-group": "^15.3.0",
     "react-dom": "^15.3.0",
+    "react-star-rating": "^1.4.2",
     "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.6.0",
     "webpack": "^1.12.12",

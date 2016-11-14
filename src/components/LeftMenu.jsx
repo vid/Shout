@@ -24,6 +24,7 @@ export default class LeftMenu extends React.Component {
         const {displayAbout} = this.props;
 
 
+
         return(
         <div id='menu'>
             <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
@@ -32,6 +33,7 @@ export default class LeftMenu extends React.Component {
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={displayAbout}/>
             <MenuItem primaryText="Invite friends" leftIcon={<SocialShare />}/>
+          
 
             </div>
       )
