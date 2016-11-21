@@ -44,6 +44,7 @@ export default class App extends React.Component {
         filteredResources: resources,
         showMenu: false,
         appbarState: false,
+        selectedFooterIndex: 0,
     };
   }
   componentDidMount () {
@@ -90,6 +91,11 @@ export default class App extends React.Component {
     this.setState({filteredResources, searchString});
   }
 
+  /*Change the footer index (this fxn is passed into footer)*/
+  footerSelect(index) {
+    this.setState({selectedFooterIndex: index});
+  }
+
   //onClick function for toggling menu
   appbarClick () {
      if (!this.appbarState) {
@@ -98,6 +104,8 @@ export default class App extends React.Component {
          this.displaySearch();
      }
   }
+
+
 
 // end of actions
 
@@ -127,7 +135,7 @@ export default class App extends React.Component {
 
 
           <div ref='footer' id='footer'>
-            <Footer />
+            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
           </div>
 
         </div>

@@ -6,31 +6,37 @@ import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
+import ActionRestore from 'material-ui/svg-icons/action/restore';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 
-const recentsIcon = <FontIcon className="material-icons">home</FontIcon>;
-const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
+const recentsIcon = <ActionRestore />;
+const favoritesIcon = <ActionFavorite />;
 const nearbyIcon = <IconLocationOn />;
 
 export default class Footer extends Component {
 
   render() {
+
+  const {selectedIndex}=this.props;
+  const {onSelect}=this.props;
+
     return (
       <Paper zDepth={1}>
-        <BottomNavigation selectedIndex={1}>
+        <BottomNavigation selectedIndex={selectedIndex}>
           <BottomNavigationItem
             label="Recents"
             icon={recentsIcon}
-            onTouchTap={() => this.select(0)}
+            onTouchTap={() => onSelect(0)}
           />
           <BottomNavigationItem
             label="Favorites"
             icon={favoritesIcon}
-            onTouchTap={() => this.select(1)}
+            onTouchTap={() => onSelect(1)}
           />
           <BottomNavigationItem
             label="Nearby"
             icon={nearbyIcon}
-            onTouchTap={() => this.select(2)}
+            onTouchTap={() => onSelect(2)}
           />
         </BottomNavigation>
       </Paper>

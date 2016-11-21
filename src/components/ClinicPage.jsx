@@ -9,7 +9,7 @@ import TextField from 'material-ui/TextField';
 import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
 import Checkbox from 'material-ui/Checkbox';
-import StarRating from 'react-star-rating';
+import StarRatingComponent from 'react-star-rating-component';
 
 import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
@@ -18,7 +18,7 @@ import FlagContent from '../components/FlagContent.jsx';
 
 const styles = {
     mainStyle: {
-  
+
         height: '100%',
         width: '100%',
         padding: '2%',
@@ -80,11 +80,11 @@ constructor(props) {
         <div id='clinicpage'>
 
         <Paper style={styles.mainStyle} zDepth={1}>
-          
-      
+
+
         <div className="hello" onClick={displaySearch}>
           <h3>« Back to search</h3>
-        </div>    
+        </div>
           <Card>
         <CardHeader
           title="Overview"
@@ -93,7 +93,7 @@ constructor(props) {
           actAsExpander={true}
           showExpandableButton={true}
         />
-       
+
         <CardTitle title={result.name} subtitle={result.civic_address} expandable={true}/>
         <CardText expandable={true}>
              <Paper  style={styles.cardStyle}>
@@ -104,7 +104,7 @@ constructor(props) {
                 {result.description}
            </Paper>
         </CardText>
-        
+
       </Card>
       <Card>
           <CardHeader
@@ -113,7 +113,7 @@ constructor(props) {
           showExpandableButton={true}
         />
         <CardText expandable={true}>
-         businfo
+         This feature is under construction.
         </CardText>
       </Card>
       <Card>
@@ -124,58 +124,94 @@ constructor(props) {
         />
         <CardText expandable={true}>
            <div className="rate-service">
-              <h3>Service</h3> 
-            
-              <Rater/>
+              <h3>Service</h3>
+
+              <StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={3} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              />
             </div>
 
             <div className="rate-transportation">
-              <h3>Transportation</h3> 
-                    <Rater />
+              <h3>Transportation</h3>
+
+              <StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={3} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              />
+
             </div>
 
             <div className="rate-qualitycare">
-              <h3>Quality of Care</h3> 
-                    <Rater />
+              <h3>Quality of Care</h3>
+
+              <StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={3} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              />
+
             </div>
-            <div> 
+            <div>
               <h3>Tags:</h3>
                <div style={this.styles.wrapper}>
                     {this.state.chipData.map(this.renderChip, this)}
                 </div>
             </div>
-            
+
 
         </CardText>
       </Card>
       <Card>
           <CardHeader
-        title="Submit Feedback"
-        actAsExpander={true}
-        showExpandableButton={true}
-      />
+          title="Submit Feedback"
+          actAsExpander={true}
+          showExpandableButton={true}
+          />
       <CardText expandable={true}>
-        submit feedback
+
         <div className="feedback-container">
 
             <div className="rate-service">
-              <h3>Service</h3> 
+              <h3>Overall</h3>
+              <StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={result.rating.overall} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+                onStarClick={()=>this.setState(rating.accessibility)}
+              />
 
-                     <Rater total={5} />
             </div>
 
             <div className="rate-transportation">
-              <h3>Transportation</h3> 
-                    <Rater />
+              <h3>Accessibility</h3>
+              <p>How easy was it to get here via public transportation?</p>
+              <StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={result.rating.accessibility} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              />
+
             </div>
 
             <div className="rate-qualitycare">
-              <h3>Quality of Care</h3> 
-                    <Rater />
+              <h3>Quality of Care</h3>
+              <p>Please rate the quality of service (waiting time, courtesy, explanation of your health/management)</p>
+              <StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={result.rating.qualityofcare} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              />
+
             </div>
 
-                <input type="text"   
-                         value={this.state.label}              
+            <h3> Comments </h3>
+            <p> Please leave any comments that might help others who are looking for healthcare. Limit 160 char. </p>
+
+                <input type="text"
+                         value={this.state.label}
                        onChange={(event) => this.submitFeedback(event)}/>
                 <br />
 
@@ -194,7 +230,7 @@ constructor(props) {
       showExpandableButton={true}
     />
 
-   
+
     <CardText expandable={true}>
       <UpdateResource/>
        <div className="update-container">
@@ -220,7 +256,7 @@ constructor(props) {
             <Checkbox
               label="Simple"
               style={styles.checkbox}
-            />  
+            />
             </div>
              <TextField
               hintText="Hint Text"
@@ -236,12 +272,12 @@ constructor(props) {
              <TextField
               hintText="Hint Text"
               floatingLabelText="Fixed Floating Label Text"
-            
+
               floatingLabelFixed={true}
             /><br />
 
-         
-     
+
+
     </div>
     </CardText>
   </Card>
