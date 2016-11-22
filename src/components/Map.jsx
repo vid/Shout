@@ -24,9 +24,10 @@ export default class Map extends React.Component {
       <div style={{height, width}}>
          <GoogleMap
             defaultCenter={this.defaults.center}
-            defaultZoom={this.defaults.zoom}>
+            defaultZoom={this.defaults.zoom}
+            hoverDistance={50}>
 
-            {filteredResources.map((result, i) => (<Place lat={result.lat} lng={result.lng} text={i} />))}
+            {filteredResources.map((result, i) => (<Place lat={result.lat} lng={result.lng} text={i+1} />))}
         </GoogleMap>
       </div>
     );
@@ -38,6 +39,7 @@ export default class Map extends React.Component {
   render() {
     const K_WIDTH = 20;
     const K_HEIGHT = 20;
+
     const style = {
     // initially any map object has left top corner at lat lng coordinates
     // it's on you to set object origin to 0,0 coordinates
@@ -47,9 +49,9 @@ export default class Map extends React.Component {
     left: -K_WIDTH / 2,
     top: -K_HEIGHT / 2,
 
-    border: '5px solid #f44336',
+    border: '5px solid #38eeff',
     borderRadius: K_HEIGHT,
-    backgroundColor: 'white',
+    backgroundColor: 'cyan',
     textAlign: 'center',
     color: '#3f51b5',
     fontSize: 16,
@@ -57,8 +59,26 @@ export default class Map extends React.Component {
     padding: 4
   };
 
+  const styleHover = {
+  // initially any map object has left top corner at lat lng coordinates
+  // it's on you to set object origin to 0,0 coordinates
+  position: 'absolute',
+  width: K_WIDTH,
+  height: K_HEIGHT,
+  left: -K_WIDTH / 2,
+  top: -K_HEIGHT / 2,
+
+  border: '5px solid #38eeff',
+  borderRadius: K_HEIGHT,
+  backgroundColor: 'white',
+  textAlign: 'center',
+  color: '#3f51b5',
+  fontSize: 16,
+  fontWeight: 'bold',
+  padding: 4
+};
   return (
-     <div style={style}>
+     <div style={this.props.$hover ? style : styleHover}>
         {this.props.text}
      </div>
     );
