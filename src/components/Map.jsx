@@ -25,7 +25,7 @@ export default class Map extends React.Component {
          <GoogleMap
             defaultCenter={this.defaults.center}
             defaultZoom={this.defaults.zoom}
-            hoverDistance={50}>
+            hoverDistance={40}>
 
             {filteredResources.map((result, i) => (<Place lat={result.lat} lng={result.lng} text={i+1} />))}
         </GoogleMap>
