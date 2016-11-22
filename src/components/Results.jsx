@@ -21,7 +21,7 @@ export default class Results extends React.Component {
           {filteredResources.map((result, i) => (
             <TableRow key={i} onClick={() => displayResult()}>
               <TableRowColumn>{1.1}</TableRowColumn>
-              <TableRowColumn>{result.name}</TableRowColumn>
+              <TableRowColumn>{(i+1)+") "+result.name}</TableRowColumn>
               <TableRowColumn>{result.civic_address}</TableRowColumn>
             </TableRow>
           ))}

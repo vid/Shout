@@ -6,6 +6,8 @@ export const resources = [{
     civic_address: "910 Ponce De Leon Ave NE",
     phone: "(404) 874-9652",
     description: "The Open Door Community is a residential community in the Catholic Worker tradition (we’re sometimes called a Protestant Catholic Worker House). We seek to dismantle racism, sexism and heterosexism, abolish the death penalty, and proclaim the Beloved Community through loving relationships with some of the most neglected and outcast of God’s children: the homeless and our sisters and brothers who are in prison. We serve breakfasts and soup-kitchen lunches, provide showers and changes of clothes, staff a free medical clinic, conduct worship services and meetings for the clarification of thought, and provide a prison ministry, including monthly trips for families to visit loved ones at the Hardwick Prisons in central Georgia. We also advocate on behalf of the oppressed, homeless and prisoners through non-violent protests, grassroots organizing and the publication of our monthly newspaper, Hospitality.",
+    lat: "33.724465",
+    lng: "-81.080121",
     rating: {
       overall: 2,
       accessibility: 2,
@@ -28,6 +30,8 @@ export const resources = [{
     name: "Community Advance Practice Nurses",
     civic_address: "173 Boulevard NE, Atlanta",
     postal_code: "30312",
+    lat: "33.524465",
+    lng: "-83.090121",
     phone: "(404) 658-1500",
     hours: {
       M: {
@@ -70,6 +74,8 @@ export const resources = [{
     name: "Mercy Care at The Gateway",
     civic_address: "275 Pryor St SW, Atlanta",
     postal_code: "30303",
+    lat: "33.724465",
+    lng: "-83.580121",
     phone: "(678) 843-8840",
     description: "We honor the healing mission of the Sisters of Mercy by providing excellent healthcare to the poor and marginalized.Our fundamentals are compassion, commitment to the poor, excellence, integrity, justice, stewardship and reverence for the dignity of each person. We are rich with workers, volunteers, board members, collaborators, funders; excellent facilities and vehicle fleets; and professional and technological expertise.",
     rating: {
@@ -183,6 +189,8 @@ export const resources = [{
     name: "Mercy Care North",
     civic_address: "Northeast Plaza, 3367 Buford Hwy NE #910",
     postal_code: "30319 ",
+    lat: "33.71004",
+    lng: "-84.090121",
     description: "",
     rating: {
       overall: 4,
@@ -205,13 +213,19 @@ export const resources = [{
     name: "Georgia Law Center for the Homeless",
     civic_address: "One Park Tower, 34 Peachtree St NW #750",
     postal_code: "30303",
-    phone: "(404) 681-0680"
+    phone: "(404) 681-0680",
+    lat: "33.71004",
+    lng: "-84.090121"
   }, {
     name: "Center for Black Women’s Wellness"
   }, {
-    name: "Grant Park Clinic"
+    name: "Grant Park Clinic",
+    lat: "33.824465",
+    lng: "-84.090121"
   }, {
-    name: "Mercy Care"
+    name: "Mercy Care",
+    lat: "33.704465",
+    lng: "-84.190121"
   }, {
     name: "National AIDS Education and Services for Minorities Inc."
   }, {

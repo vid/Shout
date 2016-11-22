@@ -4,25 +4,29 @@
 import React from 'react';
 
 import GoogleMap from 'google-map-react';
-
 export default class Map extends React.Component {
   constructor (props) {
     super(props);
 
     this.defaults = {
-      center: {lat: 59.938043, lng: 30.337157},
+      center: {lat: 33.7490, lng: -84.3880},
       zoom: 9,
-      greatPlaceCoords: {lat: 59.724465, lng: 30.080121}
+      greatPlaceCoords: {lat: 33.724465, lng: -83.080121}
     };
   }
 
   render() {
     const {width, height} = this.props;
+    const {getFilteredResources} = this.props;
+    const filteredResources = getFilteredResources();
+
     const m = (
       <div style={{height, width}}>
-         <GoogleMap defaultCenter={this.defaults.center} defaultZoom={this.defaults.zoom}>
-          <Place lat={59.955413} lng={30.337844} text={'A'} />
-          <Place {...this.defaults.greatPlaceCoords} text={'B'} />
+         <GoogleMap
+            defaultCenter={this.defaults.center}
+            defaultZoom={this.defaults.zoom}>
+
+            {filteredResources.map((result, i) => (<Place lat={result.lat} lng={result.lng} text={i} />))}
         </GoogleMap>
       </div>
     );
