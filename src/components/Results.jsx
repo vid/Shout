@@ -9,7 +9,9 @@ export default class Results extends React.Component {
     const {getFilteredResources, displayResult} = this.props;
     const filteredResources = getFilteredResources();
     return (
-      <Table selectable={false} onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
+      <Table
+        selectable={false}
+        onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
         <TableHeader displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn>Distance</TableHeaderColumn>
@@ -17,7 +19,9 @@ export default class Results extends React.Component {
             <TableHeaderColumn>Address</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={false}>
+        <TableBody
+          displayRowCheckbox={false}
+          showRowHover={true}>
           {filteredResources.map((result, i) => (
             <TableRow key={i} onClick={() => displayResult()}>
               <TableRowColumn>{1.1}</TableRowColumn>

@@ -128,7 +128,11 @@ export default class App extends React.Component {
           </div>
 
           <div id='menu'>
-             <Drawer open={this.state.showMenu} style={stylemenu} docked={false}>
+             <Drawer
+             open={this.state.showMenu}
+             style={stylemenu}
+             docked={false}
+             onRequestChange={(showMenu) => this.setState({showMenu})}>
                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>
             </Drawer>
          </div>

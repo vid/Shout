@@ -27,13 +27,15 @@ export default class LeftMenu extends React.Component {
 
         return(
         <div id='menu'>
+            <MenuItem primaryText="" />
+            <MenuItem primaryText="" />
             <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={displayAddResource}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />}/>
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={displayAbout}/>
             <MenuItem primaryText="Invite friends" leftIcon={<SocialShare />}/>
-          
+
 
             </div>
       )
