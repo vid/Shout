@@ -21,6 +21,7 @@ import {resources} from '../lib/resources.js';
 
 //import other components & pages
 import Search from './Search.jsx';
+import SearchInputs from './SearchInputs.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 
@@ -28,6 +29,12 @@ import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 import About from './About.jsx';
 
+
+const styles = {
+  appbarTitle: {
+    fontSize: '36',
+  },
+  };
 
 const stylemenu = {
     position: 'fixed',
@@ -118,7 +125,7 @@ export default class App extends React.Component {
         <div id='wrapper'>
 
           <div id='header'>
-           <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
+           <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" titleStyle={styles.appbarTitle} children={<SearchInputs filterResources={(string) => this.filterResources(string)}/>}/>
           </div>
 
           <div ref='content' id='content'>

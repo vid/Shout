@@ -3,7 +3,9 @@
 
 import React from 'react';
 
+import {cyan500} from 'material-ui/styles/colors';
 import GoogleMap from 'google-map-react';
+
 export default class Map extends React.Component {
   constructor (props) {
     super(props);
@@ -49,11 +51,11 @@ export default class Map extends React.Component {
     left: -K_WIDTH / 2,
     top: -K_HEIGHT / 2,
 
-    border: '5px solid #38eeff',
+    border: '5px solid #4DD0E1',
     borderRadius: K_HEIGHT,
-    backgroundColor: 'cyan',
+    backgroundColor: '#B2EBF2',
     textAlign: 'center',
-    color: '#3f51b5',
+    color: cyan500,
     fontSize: 16,
     fontWeight: 'bold',
     padding: 4
@@ -68,7 +70,7 @@ export default class Map extends React.Component {
   left: -K_WIDTH / 2,
   top: -K_HEIGHT / 2,
 
-  border: '5px solid #38eeff',
+  border: '5px solid #4DD0E1',
   borderRadius: K_HEIGHT,
   backgroundColor: 'white',
   textAlign: 'center',

@@ -12,10 +12,12 @@ html, body {
 
 #content {
   z-index:1;
-  flex: 1;
+  flex: 2;
   height: 100%;
   width: 100%;
 }
+
+
 
 #cliniccomponents{
   display: flex; /* or inline-flex */
