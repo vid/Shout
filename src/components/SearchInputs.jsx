@@ -10,9 +10,10 @@ import {blue500} from 'material-ui/styles/colors';
 
 const styles = {
   hintStyle: {
-    color:blue500,
+    color:'#01579B',
   },
   inputStyle: {
+    margin: '5px 5px 5px 5px',
     padding: '0px 0px 5px 5px',
     height:'78%',
     borderColor: blue500,

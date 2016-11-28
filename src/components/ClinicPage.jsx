@@ -27,8 +27,23 @@ const styles = {
     },
 
      cardStyle: {
-        color: cyan200,
+        display: 'flex',
+        flex:1,
+        flexDirection: 'row',
+        height:'100%',
     },
+
+    dataStyle:{
+      margin:'10px',
+      height:'100%',
+    },
+    chipSection: {
+       display: 'flex',
+       flexDirection: 'row'
+   },
+   chipStyle: {
+      height: '80%',
+  },
 
 };
 
@@ -47,6 +62,7 @@ constructor(props) {
       wrapper: {
         display: 'flex',
         flexWrap: 'wrap',
+        flexDirection: 'row',
       },
 
     };
@@ -85,24 +101,30 @@ constructor(props) {
         <div className="hello" onClick={displaySearch}>
           <h3>« Back to search</h3>
         </div>
-          <Card>
-        <CardHeader
-          title="Overview"
-          subtitle={result.name}
-          avatar=""
-          actAsExpander={true}
-          showExpandableButton={true}
-        />
+        <Card style ={styles.cardStyle}>
 
-        <CardTitle title={result.name} subtitle={result.civic_address} expandable={true}/>
-        <CardText expandable={true}>
-             <Paper  style={styles.cardStyle}>
-          <img src="http://www.emorydailypulse.com/wp-content/uploads/2016/06/grady.jpg" />
-            </Paper>
-             <Paper>
-                 <h2> Description </h2>
-                {result.description}
-           </Paper>
+        <CardTitle title={result.name} subtitle={result.civic_address}/>
+        <CardText>
+            <div style={styles.cardStyle}>
+            <div style={styles.dataStyle}>
+              <img src="http://www.capn.org/uploads/1/9/7/5/19759919/_6502107.jpg" />
+              </div>
+              <div style={styles.dataStyle}>
+                <h3> Address: </h3>
+                {result.civic_address}
+                <h3> Phone: </h3>
+                {result.phone}
+                <div style={styles.chipSection}>
+
+                <h3> Popular Tags: </h3>
+                {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
+                </div>
+                                  <h3> Description </h3>
+                  {result.description}
+                </div>
+
+            </div>
+
         </CardText>
 
       </Card>

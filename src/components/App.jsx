@@ -34,13 +34,13 @@ const styles = {
   appbarTitle: {
     fontSize: '36',
   },
-  };
 
-const stylemenu = {
-    position: 'fixed',
-    padding:'70px 5px 15px 15px',
-    height: '100%',
+  stylemenu:{
+      position: 'fixed',
+      height: '100%',
+  },
 };
+
 
 export default class App extends React.Component {
   constructor () {
@@ -137,7 +137,7 @@ export default class App extends React.Component {
           <div id='menu'>
              <Drawer
              open={this.state.showMenu}
-             style={stylemenu}
+             style={styles.stylemenu}
              docked={false}
              onRequestChange={(showMenu) => this.setState({showMenu})}>
                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>

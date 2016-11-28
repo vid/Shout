@@ -42,7 +42,7 @@ export default class Map extends React.Component {
     const K_WIDTH = 20;
     const K_HEIGHT = 20;
 
-    const style = {
+    const styleHover = {
     // initially any map object has left top corner at lat lng coordinates
     // it's on you to set object origin to 0,0 coordinates
     position: 'absolute',
@@ -61,7 +61,7 @@ export default class Map extends React.Component {
     padding: 4
   };
 
-  const styleHover = {
+  const style = {
   // initially any map object has left top corner at lat lng coordinates
   // it's on you to set object origin to 0,0 coordinates
   position: 'absolute',
@@ -70,7 +70,7 @@ export default class Map extends React.Component {
   left: -K_WIDTH / 2,
   top: -K_HEIGHT / 2,
 
-  border: '5px solid #4DD0E1',
+  border: '5px solid #F06292',
   borderRadius: K_HEIGHT,
   backgroundColor: 'white',
   textAlign: 'center',
@@ -80,7 +80,7 @@ export default class Map extends React.Component {
   padding: 4
 };
   return (
-     <div style={this.props.$hover ? style : styleHover}>
+     <div style={this.props.$hover ? styleHover : style}>
         {this.props.text}
      </div>
     );

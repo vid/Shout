@@ -12,23 +12,28 @@ html, body {
 
 #content {
   z-index:1;
-  flex: 2;
+  flex: 1;
   height: 100%;
   width: 100%;
 }
 
 
+h1{
+  color:cyan;
+}
 
+h3{
+  color:#01579B;
+}
 #cliniccomponents{
   display: flex; /* or inline-flex */
-
 }
+
 #header{
 }
 
 
 #menu {
-  padding:0px 10px 5px 5px;
   z-index:10;
 }
 
