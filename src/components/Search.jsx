@@ -7,13 +7,14 @@ import Map from './Map.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Results from './Results.jsx';
 
+
 export default class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
   render () {
-    const {displayResult, filterResources, getFilteredResources} = this.props;
+    const {displayResult, filterResources, searchString, getFilteredResources} = this.props;
     const {offsetWidth, offsetHeight, footerOffsetHeight} = this.state;
     if (offsetHeight === undefined) {
       return null;
@@ -21,7 +22,6 @@ export default class Search extends React.Component {
     return (
       <div>
         <Map width={offsetWidth} height={offsetHeight / 2} getFilteredResources={getFilteredResources} />
-        
         <div style={{height: (offsetHeight / 2) - footerOffsetHeight, overflow: 'auto'}}>
           <Results getFilteredResources={getFilteredResources} displayResult={displayResult} />
         </div>

@@ -7,8 +7,10 @@ import {cyan500} from 'material-ui/styles/colors';
 import GoogleMap from 'google-map-react';
 
 export default class Map extends React.Component {
+
   constructor (props) {
     super(props);
+
 
     this.defaults = {
       center: {lat: 33.7490, lng: -84.3880},
@@ -16,6 +18,16 @@ export default class Map extends React.Component {
       greatPlaceCoords: {lat: 33.724465, lng: -83.080121}
     };
   }
+
+  onGoogleApiLoad(){
+
+    this.geocoder = new google.maps.Geocoder();
+  }
+
+  geocodeAddress(address){
+
+ }
+
 
   render() {
     const {width, height} = this.props;
@@ -27,7 +39,11 @@ export default class Map extends React.Component {
          <GoogleMap
             defaultCenter={this.defaults.center}
             defaultZoom={this.defaults.zoom}
-            hoverDistance={40}>
+            hoverDistance={40}
+            bootstrapURLKeys={{
+            key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
+            language: 'en'}}
+            onGoogleApiLoaded={this.onGoogleApiLoad}>
 
             {filteredResources.map((result, i) => (<Place lat={result.lat} lng={result.lng} text={i+1} />))}
         </GoogleMap>

@@ -12,7 +12,7 @@ import {resources} from '../lib/resources.js';
 
 const styles = {
 regStyle: {
-  
+
     height: '100%',
     width: '100%',
     padding: '5%',
@@ -37,7 +37,7 @@ constructor() {
         value_Phone:'',
         value_Descript:'',
         value_Tags:'',
-        
+
         chipData: [
           {key: 0, label: 'Example1'},
           {key: 1, label: 'Example2'},
@@ -82,55 +82,55 @@ handleRequestDelete(key){
       <div id = "clinicpage">
         <Paper style={styles.regStyle} zDepth={2}>
            <div className="hello" onClick={displaySearch}>
-             <h3> « Back to search</h3>
+             <h3> ï¿½ Back to search</h3>
            </div>
             <h1> Add Resource </h1>
 
           <div>
 
 
-            <TextField hintText="Name" 
+            <TextField hintText="Name"
                        hintStyle={styles.hint}
                        floatingLabelText="Resource Name"
-                       floatingLabelFixed={true}                   
+                       floatingLabelFixed={true}
                        onChange={() => this.setState({value_Name: event.target.value})}/><br />
 
-              <TextField hintText="Clinic" 
+              <TextField hintText="Clinic"
                          hintStyle={styles.hint}
                          floatingLabelText="Select Type"
-                         floatingLabelFixed={true} 
+                         floatingLabelFixed={true}
                          value = {this.state.value_Type}
                          onChange={() => this.setState({value_Type: event.target.value})}/><br />
 
-            <TextField hintText="Street Address" 
+            <TextField hintText="Street Address"
                        hintStyle={styles.hint}
                        floatingLabelText="Street Address"
-                       floatingLabelFixed={true} 
+                       floatingLabelFixed={true}
                        onChange={() => this.setState({value_Address: event.target.value})}/><br />
 
-            <TextField hintText="Phone Number" 
+            <TextField hintText="Phone Number"
                        hintStyle={styles.hint}
                        floatingLabelText="Phone Number"
-                       floatingLabelFixed={true} 
+                       floatingLabelFixed={true}
                        onChange={() => this.setState({value_Phone: event.target.value})}/><br />
 
-            <TextField hintText="Description" 
+            <TextField hintText="Description"
                        hintStyle={styles.hint}
                        floatingLabelText="Description"
-                       floatingLabelFixed={true} 
+                       floatingLabelFixed={true}
                        onChange={() => this.setState({value_Descript: event.target.value})}/><br />
 
                <TextField hintText="Enter Tags"
                           hintStyle={styles.hint}
                           floatingLabelText="Tags"
-                          floatingLabelFixed={true} 
+                          floatingLabelFixed={true}
                           onChange={() => this.setState({value_Tags: event.target.value})}/><br />
 
               {this.state.chipData.map(this.renderChip, this)}
               <br />
               <br />
                 <RaisedButton label="Submit" primary={true} onClick={()=>this.submitAll()}/>
-            
+
           </div>
         </Paper>
       </div>

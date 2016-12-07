@@ -112,6 +112,7 @@ constructor(props) {
               <div style={styles.dataStyle}>
                 <h3> Address: </h3>
                 {result.civic_address}
+
                 <h3> Phone: </h3>
                 {result.phone}
                 <div style={styles.chipSection}>

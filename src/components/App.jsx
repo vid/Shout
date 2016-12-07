@@ -35,6 +35,14 @@ const styles = {
     fontSize: '36',
   },
 
+  appbarsubtitle: {
+    fontSize: '20',
+    color: '#ffffff',
+    divAlign:'left',
+    textAlign:'center',
+    width: '60%'
+  },
+
   stylemenu:{
       position: 'fixed',
       height: '100%',
@@ -79,7 +87,7 @@ export default class App extends React.Component {
     this.setState({appbarState: true});
   }
   displaySearch () {
-    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getFilteredResources={() => this.state.filteredResources}/>});
+    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources}/>});
     this.setState({appbarState: false});
   }
 
@@ -125,7 +133,10 @@ export default class App extends React.Component {
         <div id='wrapper'>
 
           <div id='header'>
-           <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" titleStyle={styles.appbarTitle} children={<SearchInputs filterResources={(string) => this.filterResources(string)}/>}/>
+              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" titleStyle={styles.appbarTitle}>
+                <div style={styles.appbarsubtitle}><h4>Find Accessible Healthcare.</h4></div>
+                <SearchInputs filterResources={(string) => this.filterResources(string)}/>
+              </AppBar>
           </div>
 
           <div ref='content' id='content'>

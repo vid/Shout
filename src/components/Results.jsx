@@ -4,6 +4,12 @@
 import React from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
+
+const styles = {
+  headerStyle: {
+  fontColor:'black'
+  },
+}
 export default class Results extends React.Component {
   render () {
     const {getFilteredResources, displayResult} = this.props;
@@ -13,10 +19,11 @@ export default class Results extends React.Component {
         selectable={false}
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
         <TableHeader displaySelectAll={false}>
-          <TableRow>
-            <TableHeaderColumn>Distance</TableHeaderColumn>
-            <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Address</TableHeaderColumn>
+          <TableRow style={styles.headerStyle}>
+            <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
+            <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
+            <TableHeaderColumn><h2>Address</h2></TableHeaderColumn>
+
           </TableRow>
         </TableHeader>
         <TableBody
@@ -25,7 +32,7 @@ export default class Results extends React.Component {
           {filteredResources.map((result, i) => (
             <TableRow key={i} onClick={() => displayResult()}>
               <TableRowColumn>{1.1}</TableRowColumn>
-              <TableRowColumn>{(i+1)+") "+result.name}</TableRowColumn>
+              <TableRowColumn>{(i+1)+". "+result.name}</TableRowColumn>
               <TableRowColumn>{result.civic_address}</TableRowColumn>
             </TableRow>
           ))}

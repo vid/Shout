@@ -19,7 +19,6 @@ html, body {
 
 
 h1{
-  color:cyan;
 }
 
 h3{
@@ -38,4 +37,5 @@ h3{
 }
 
 #footer{
+  border-top:6px solid grey;
 }
