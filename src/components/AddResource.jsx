@@ -16,7 +16,6 @@ regStyle: {
     height: '100%',
     width: '100%',
     padding: '5%',
-    margin: 20,
     alignment: 'right',
     display: 'inline-block',
 },
@@ -81,9 +80,7 @@ handleRequestDelete(key){
 
       <div id = "clinicpage">
         <Paper style={styles.regStyle} zDepth={2}>
-           <div className="hello" onClick={displaySearch}>
-             <h3> � Back to search</h3>
-           </div>
+
             <h1> Add Resource </h1>
 
           <div>

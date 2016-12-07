@@ -15,6 +15,8 @@ import MapsEditLocation from 'material-ui/svg-icons/maps/edit-location';
 import SocialPerson from 'material-ui/svg-icons/social/person';
 
 
+import AddResource from './AddResource.jsx';
+
 import Divider from 'material-ui/Divider';
 
 export default class LeftMenu extends React.Component {
@@ -24,6 +26,7 @@ export default class LeftMenu extends React.Component {
     this.state = {
         changelocationOpen: false,
         aboutOpen: false,
+        addResourceOpen: false,
       };
 
     }
@@ -41,7 +44,7 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="" />
             <MenuItem primaryText="" />
             <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={displayAddResource}/>
+            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => this.setState({addResourceOpen: true})}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>
@@ -92,6 +95,20 @@ export default class LeftMenu extends React.Component {
                 We believe that the best way to spread healthcare information among marginalized communities is to empower them to inform themselves and each other.
                 Read more about our missiong at www.shoutforhealth.org
                 </p>
+            </Dialog>
+
+            <Dialog
+                actions={
+                   <FlatButton
+                     label="Close"
+                     primary={true}
+                     onTouchTap={() => this.setState({addResourceOpen: false})}/>}
+                modal={false}
+                open={this.state.addResourceOpen}
+                autoScrollBodyContent={true}
+                onRequestClose={() => this.setState({addResourceOpen: false})}>
+
+                <AddResource />
             </Dialog>
 
 
