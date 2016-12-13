@@ -81,13 +81,9 @@ export default class App extends React.Component {
     }
 
   componentDidMount () {
-    this.displayLandingPage();
+    this.displaySearch();
   }
     // these are the app's actions, passed to and called by other components
-
-  displayLandingPage () {
-    this.setState({screen: <LandingPage displaySearch={() => this.displaySearch()}/>});
-  }
 
   displayFeedback () {
     this.setState({screen: <Feedback displaySearch={(result)=>this.displaySearch()} />});
