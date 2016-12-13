@@ -89,11 +89,11 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <platform name="android">
-        <content src="https://shout.zooid.org" />
+        <content src="http://062bbd80.ngrok.io" />
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
-        <content src="https://shout.zooid.org" />
+        <content src="http://localhost:8080/index.html" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <allow-navigation href="http://*/*" />

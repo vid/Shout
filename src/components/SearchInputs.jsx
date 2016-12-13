@@ -8,14 +8,18 @@ import ActionSearch from 'material-ui/svg-icons/action/search';
 
 import {blue500} from 'material-ui/styles/colors';
 
+import {cyan500} from 'material-ui/styles/colors';
+
 const styles = {
   hintStyle: {
     color:'#01579B',
   },
+  backgroundStyle:{
+    backgroundColor:cyan500,
+    height:'100%',
+  },
   inputStyle: {
-    margin: '5px 5px 5px 5px',
-    padding: '0px 0px 5px 5px',
-    height:'78%',
+    margin: '0px 10px 10px 10px',
     borderColor: blue500,
   },
   };
@@ -24,9 +28,9 @@ export default class SearchInputs extends React.Component {
   render () {
     const {filterResources} = this.props;
     return (
-      <div>
+      <div style={styles.backgroundStyle}>
         <Paper style={styles.inputStyle}>
-          <TextField onChange={e => filterResources(e.target.value)} hintText="  Enter any search keyword" hintStyle={styles.hintStyle}/><ActionSearch />
+          <TextField onChange={e => filterResources(e.target.value)} hintText="  Enter any search keyword..." hintStyle={styles.hintStyle}/>
         </Paper>
       </div>
     );

@@ -37,7 +37,7 @@
     <splash density="port-xhdpi" src="res/screen/android/drawable-port-xhdpi-screen.png" />
     <splash density="port-xxhdpi" src="res/screen/android/drawable-port-xxhdpi-screen.png" />
     <splash density="port-xxxhdpi" src="res/screen/android/drawable-port-xxxhdpi-screen.png" />
-    <content src="https://shout.zooid.org" />
+    <content src="http://062bbd80.ngrok.io" />
     <allow-intent href="market:*" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="permissions" value="none" />

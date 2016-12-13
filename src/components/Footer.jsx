@@ -22,8 +22,7 @@ const nearbyIcon = <IconLocationOn />;
 const styles = {
   footerLabel: {
     height:'100%',
-    color:'black',
-    backgroundColor:'cyan'
+    color:'black'
   },
 };
 export default class Footer extends Component {

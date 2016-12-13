@@ -24,7 +24,7 @@ import Search from './Search.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
-
+import LandingPage from './LandingPage.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 import About from './About.jsx';
@@ -36,7 +36,7 @@ const styles = {
   },
 
   appbarsubtitle: {
-    fontSize: '20',
+    fontSize: '15',
     color: '#ffffff',
     divAlign:'left',
     textAlign:'center',
@@ -60,21 +60,33 @@ export default class App extends React.Component {
         showMenu: false,
         appbarState: false,
         selectedFooterIndex: 0,
+        appbarTitle: 'Shout',
+        hoveredMapRowIndex: '-1',
     };
   }
+  // Add a resource to the collection
+  addResource (res) {
+      this.setState({allResources: [...this.state.allResources, res]});
+      this.filterResources(this.state.searchString);
+  }
+
+
+  // onClick function for toggling menu state
+  appbarClick () {
+       if (!this.appbarState) {
+            this.setState({showMenu: !this.state.showMenu});
+       } else {
+           this.displaySearch();
+       }
+    }
+
   componentDidMount () {
-    this.displaySearch();
+    this.displayLandingPage();
   }
     // these are the app's actions, passed to and called by other components
 
-  displayAddResource () {
-    this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});
-    this.setState({showMenu: !this.state.showMenu});
-  }
-
-  displayAbout () {
-    this.setState({screen: <About displaySearch={(result)=>this.displaySearch()} />});
-    this.setState({showMenu: !this.state.showMenu});
+  displayLandingPage () {
+    this.setState({screen: <LandingPage displaySearch={() => this.displaySearch()}/>});
   }
 
   displayFeedback () {
@@ -83,18 +95,12 @@ export default class App extends React.Component {
   }
 
   displayResult (result) {
+    this.setState({appbarTitle:'ASDF'});
     this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
-    this.setState({appbarState: true});
   }
   displaySearch () {
     this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources}/>});
-    this.setState({appbarState: false});
-  }
-
-// Add a resource to the collection
-  addResource (res) {
-    this.setState({allResources: [...this.state.allResources, res]});
-    this.filterResources(this.state.searchString);
+    this.setState({appbarTitle:'Shout'});
   }
 
   filterResources (searchString) {
@@ -106,19 +112,25 @@ export default class App extends React.Component {
     this.setState({filteredResources, searchString});
   }
 
-  /*Change the footer index (this fxn is passed into footer)*/
+  /*Change the selected bottom navigation index (this function is passed as a prop to the footer)*/
   footerSelect(index) {
-    this.setState({selectedFooterIndex: index});
+      this.setState({selectedFooterIndex: index});
+      if(index===0) {
+        this.filterResources('children');
+      } else if(index===1){
+        this.filterResources('adolescent');
+      }else if(index===2){
+        this.filterResources('pregnancy');
+      }else if(index===4){
+        this.filterResources('');
+      }
   }
 
-  //onClick function for toggling menu
-  appbarClick () {
-     if (!this.appbarState) {
-          this.setState({showMenu: !this.state.showMenu});
-     } else {
-         this.displaySearch();
-     }
+
+  hoverTableRow(index) {
+       hoveredMapRowIndex: 'index';
   }
+
 
 
 
@@ -133,11 +145,11 @@ export default class App extends React.Component {
         <div id='wrapper'>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" titleStyle={styles.appbarTitle}>
+              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title='Shout' titleStyle={styles.appbarTitle}>
                 <div style={styles.appbarsubtitle}><h4>Find Accessible Healthcare.</h4></div>
-                <SearchInputs filterResources={(string) => this.filterResources(string)}/>
               </AppBar>
           </div>
+
 
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='push' transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>

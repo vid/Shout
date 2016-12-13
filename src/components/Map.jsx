@@ -15,7 +15,7 @@ export default class Map extends React.Component {
     this.defaults = {
       center: {lat: 33.7490, lng: -84.3880},
       zoom: 9,
-      greatPlaceCoords: {lat: 33.724465, lng: -83.080121}
+      greatPlaceCoords: {lat: 33.724465, lng: -83.080121},
     };
   }
 
@@ -45,7 +45,10 @@ export default class Map extends React.Component {
             language: 'en'}}
             onGoogleApiLoaded={this.onGoogleApiLoad}>
 
-            {filteredResources.map((result, i) => (<Place lat={result.lat} lng={result.lng} text={i+1} />))}
+            {filteredResources.map((result, i) =>
+                  (<Place lat={result.lat}
+                          lng={result.lng}
+                          text={i+1} />))}
         </GoogleMap>
       </div>
     );

@@ -240,5 +240,116 @@ export const resources = [{
     z: "Augusta",
     postal_code: "30909",
     phone: "706-733-5177"
-  }
+  }, {
+    name: "Adolescent Medicine Clinic, Children’s Healthcare at Hughes Spalding",
+    civic_address: "35 Jesse Hill Jr Dr SE, Atlanta, GA 30303",
+    phone: "(404) 785-5437",
+    hours: {
+      M: {
+        start: "8",
+        finish: "15"
+
+      },
+      T: {
+        start: "8",
+        finish: "15"
+      },
+      W: {
+        start: "8",
+        finish: "15"
+      },
+      Th: {},
+      F: {},
+      Sat: {},
+      Sun: {}
+    },
+    description: "In our clinic, we support teens by talking about their health with them and their parents or guardians. Because teens may be embarrassed to have an exam or talk about some things in front of their parents, we give all teens a chance to be seen privately.",
+    rating: {
+      overall: 2,
+      accessibility: 2,
+      qualityofcare: 5
+    },
+    reviews: [{
+      overall: 5,
+      accessibility: 5,
+      qualityofcare: 4,
+      text: "Free flu vaccines"
+    }, {
+      overall: 2,
+      accessibility: 2,
+      qualityofcare: 5,
+      text: "Great that this place is near a MARTA station"
+    }],
+    tags: ["children", "adolescent", "pregnancy", "std", "family planning"]
+
+  }, {
+    name: "Grady Family Planning/Teen Clinic",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "(404) 616-3678",
+    hours: {
+      M: {
+        start: "8",
+        finish: "15"
+
+      },
+      T: {
+        start: "8",
+        finish: "15"
+      },
+      W: {
+        start: "8",
+        finish: "15"
+      },
+      Th: {},
+      F: {},
+      Sat: {},
+      Sun: {}
+    },
+    description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
+    rating: {
+      overall: 2,
+      accessibility: 2,
+      qualityofcare: 5
+    },
+    reviews: [{
+      overall: 5,
+      accessibility: 5,
+      qualityofcare: 4,
+      text: "Free flu vaccines"
+    }, {
+      overall: 2,
+      accessibility: 2,
+      qualityofcare: 5,
+      text: "Great that this place is near a MARTA station"
+    }],
+    tags: ["women", "adolescent", "teen", "family", "sexual health",
+      "birth control", "pregnancy"
+    ]
+  }, {
+    name: "Planned Parenthood",
+    civic_address: "75 Piedmont Ave NE #800, Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: " (404) 688-9300",
+    description: "Planned Parenthood Southeast believes in the fundamental right of each individual, throughout our service area, to manage his or her fertility, regardless of the individual's income, marital status, race, ethnicity, gender identity or expression, sexual orientation, age, religion, disability, or residence.",
+    tags: ["women", "sexual health", "birth control", "pregnancy", ]
+  }, {
+    name: "Grady Family Planning/Teen Clinic",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "(404) 616-3678",
+    description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
+    tags: ["women", "adolescent", "teen", "family", "sexual health",
+      "birth control", "pregnancy"
+    ]
+  }, {
+    name: "Grady Family Planning/Teen Clinic",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "(404) 616-3678",
+    description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
+    tags: ["women", "adolescent", "teen", "family", "sexual health",
+      "birth control", "pregnancy"
+    ]
+  },
 ];

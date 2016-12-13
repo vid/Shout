@@ -29,7 +29,7 @@ const styles = {
      cardStyle: {
         display: 'flex',
         flex:1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         height:'100%',
     },
 
@@ -51,8 +51,9 @@ const styles = {
 export default class ClinicPage extends React.Component {
 constructor(props) {
     super(props);
-    this.state = {chipData: [
-      {key: 0, label: props.label
+    this.state = {
+    chipData: [
+      {key: 0, label: 'asdf'
       }
     ]};
     this.styles = {
@@ -107,7 +108,7 @@ constructor(props) {
         <CardText>
             <div style={styles.cardStyle}>
             <div style={styles.dataStyle}>
-              <img src="http://www.capn.org/uploads/1/9/7/5/19759919/_6502107.jpg" />
+              <img src="http://www.capn.org/uploads/1/9/7/5/19759919/_6502107.jpg" width="200"/>
               </div>
               <div style={styles.dataStyle}>
                 <h3> Address: </h3>
@@ -180,7 +181,7 @@ constructor(props) {
             <div>
               <h3>Tags:</h3>
                <div style={this.styles.wrapper}>
-                    {this.state.chipData.map(this.renderChip, this)}
+                    {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
                 </div>
             </div>
 
