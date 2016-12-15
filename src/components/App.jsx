@@ -57,6 +57,7 @@ export default class App extends React.Component {
         allResources: [...resources],
         filteredResources: resources,
         showMenu: false,
+        searchString: '',
         appbarState: false,
         selectedFooterIndex: 0,
         appbarTitle: 'Shout',
@@ -72,10 +73,10 @@ export default class App extends React.Component {
 
   // onClick function for toggling menu state
   appbarClick () {
-       if (!this.appbarState) {
-            this.setState({showMenu: !this.state.showMenu});
-       } else {
+       if (this.appbarState) {
            this.displaySearch();
+       } else {
+           this.setState({showMenu: !this.state.showMenu});
        }
     }
 
@@ -90,10 +91,12 @@ export default class App extends React.Component {
   }
 
   displayResult (result) {
-    this.setState({appbarTitle:'ASDF'});
+    this.setState({appbarState:true});
+    this.setState({appbarTitle:"Clinic"});
     this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
   }
   displaySearch () {
+    this.setState({appbarState:false});
     this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources}/>});
     this.setState({appbarTitle:'Shout'});
   }
@@ -140,7 +143,7 @@ export default class App extends React.Component {
         <div id='wrapper'>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title='Shout' titleStyle={styles.appbarTitle}>
+              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title={this.state.appbarTitle} titleStyle={styles.appbarTitle}>
                 <div style={styles.appbarsubtitle}><h4>Find Accessible Healthcare.</h4></div>
               </AppBar>
           </div>

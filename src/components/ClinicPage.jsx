@@ -21,7 +21,6 @@ const styles = {
 
         height: '100%',
         width: '100%',
-        padding: '2%',
         alignment: 'right',
         display: 'inline-block',
     },
@@ -108,7 +107,7 @@ constructor(props) {
         <CardText>
             <div style={styles.cardStyle}>
             <div style={styles.dataStyle}>
-              <img src="http://www.capn.org/uploads/1/9/7/5/19759919/_6502107.jpg" width="200"/>
+              <img src="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300" width="200"/>
               </div>
               <div style={styles.dataStyle}>
                 <h3> Address: </h3>
