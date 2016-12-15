@@ -11,6 +11,7 @@ const styles = {
   },
 }
 export default class Results extends React.Component {
+
   render () {
     const {getFilteredResources, displayResult} = this.props;
     const filteredResources = getFilteredResources();
@@ -22,18 +23,21 @@ export default class Results extends React.Component {
           <TableRow style={styles.headerStyle}>
             <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Address</h2></TableHeaderColumn>
+            <TableHeaderColumn><h2>Tags</h2></TableHeaderColumn>
 
           </TableRow>
         </TableHeader>
         <TableBody
+          stripedRows={true}
           displayRowCheckbox={false}
           showRowHover={true}>
           {filteredResources.map((result, i) => (
             <TableRow key={i} onClick={() => displayResult()}>
               <TableRowColumn>{1.1}</TableRowColumn>
-              <TableRowColumn>{(i+1)+". "+result.name}</TableRowColumn>
-              <TableRowColumn>{result.civic_address}</TableRowColumn>
+              <TableRowColumn style={styles.namesectionStyle}><h3>{result.name}</h3> {result.civic_address}</TableRowColumn>
+              <TableRowColumn style={styles.addresssectionStyle}>
+                  {result.tags}
+              </TableRowColumn>
             </TableRow>
           ))}
         </TableBody>

@@ -24,7 +24,7 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["women", "handicapped", "free", "homeless"]
+    tags: ["family", "housing", "homeless"]
 
   }, {
     name: "Community Advance Practice Nurses",
@@ -69,7 +69,7 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["women", "handicapped", "free", "homeless"]
+    tags: ["free", "homeless"]
   }, {
     name: "Mercy Care at The Gateway",
     civic_address: "275 Pryor St SW, Atlanta",
@@ -94,7 +94,7 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["women", "handicapped", "free", "homeless"]
+    tags: ["free", "homeless"]
   },
 
   {
@@ -141,7 +141,7 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["women", "handicapped", "free", "homeless"]
+    tags: ["women", "children", "free", "housing"]
   },
 
   {
