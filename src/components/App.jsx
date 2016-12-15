@@ -143,7 +143,7 @@ export default class App extends React.Component {
         <div id='wrapper'>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title={this.state.appbarTitle} titleStyle={styles.appbarTitle}>
+              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" titleStyle={styles.appbarTitle}>
                 <div style={styles.appbarsubtitle}><h4>Find Accessible Healthcare.</h4></div>
               </AppBar>
           </div>
