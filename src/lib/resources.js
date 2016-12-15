@@ -343,7 +343,7 @@ export const resources = [{
       "birth control", "pregnancy"
     ]
   }, {
-    name: "Grady Family Planning/Teen Clinic",
+    name: "Northside Mental Health Clinic",
     civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
     postal_code: "30303",
     phone: "(404) 616-3678",
@@ -351,5 +351,49 @@ export const resources = [{
     tags: ["women", "adolescent", "teen", "family", "sexual health",
       "birth control", "pregnancy"
     ]
+  }, {
+    name: "Clifton Springs Mental Health Center,",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "(404) 616-3678",
+    description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
+    tags: ["mental health", "counseling"]
+  }, {
+    name: "Grady Psychiatric Emergency Room",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "404-616-4762",
+    description: "description",
+    tags: ["women", "adolescent", "teen", "family", "sexual health",
+      "birth control", "pregnancy"
+    ]
+  }, {
+    name: "Georgia State University Community Clinic",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "404-413-6229",
+    description: "description",
+    tags: ["sliding scale", "family", "medicaid"]
+  }, {
+    name: "Asa G. Yancey Sr. Health Center",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "404-413-6229",
+    description: "description",
+    tags: ["sliding scale", "family", "medicaid"]
+  }, {
+    name: "HEALing Community Center",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "404-413-6229",
+    description: "description",
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
+  }, {
+    name: "Kirkwood Family Medicine",
+    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    postal_code: "30303",
+    phone: "404-413-6229",
+    description: "description",
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
   },
 ];
