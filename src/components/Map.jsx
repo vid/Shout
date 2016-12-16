@@ -21,7 +21,6 @@ export default class Map extends React.Component {
 
   onGoogleApiLoad(){
 
-    this.geocoder = new google.maps.Geocoder();
   }
 
   geocodeAddress(address){
@@ -43,7 +42,8 @@ export default class Map extends React.Component {
             bootstrapURLKeys={{
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
             language: 'en'}}
-            onGoogleApiLoaded={this.onGoogleApiLoad}>
+            onGoogleApiLoaded={this.onGoogleApiLoad}
+            yesIWantToUseGoogleMapApiInternals>
 
             {filteredResources.map((result, i) =>
                   (<Place lat={result.lat}

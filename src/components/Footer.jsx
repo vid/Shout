@@ -35,29 +35,29 @@ export default class Footer extends Component {
     return (
       <Paper zDepth={1} style={styles.footerLabel}>
         <BottomNavigation selectedIndex={selectedIndex}>
+        <BottomNavigationItem
+          label="View All"
+          icon={<ActionHome />}
+          onTouchTap={() => onSelect(0)}
+        />
           <BottomNavigationItem
-            label="Children"
+            label="Children & Adolescents"
             icon={<PlacesChildCare />}
-            onTouchTap={() => onSelect(0)}
+            onTouchTap={() => onSelect(1)}
           />
           <BottomNavigationItem
-            label="Adolescent"
+            label="Mental Health"
             icon={favoritesIcon}
-            onTouchTap={() => onSelect(1)}
+            onTouchTap={() => onSelect(2)}
           />
           <BottomNavigationItem
             label="Pregnancy"
             icon={<ActionPregnantWoman />}
-            onTouchTap={() => onSelect(2)}
+            onTouchTap={() => onSelect(3)}
           />
           <BottomNavigationItem
             label="Near Me"
             icon={nearbyIcon}
-            onTouchTap={() => onSelect(3)}
-          />
-          <BottomNavigationItem
-            label="Housing"
-            icon={<ActionHome />}
             onTouchTap={() => onSelect(4)}
           />
         </BottomNavigation>
