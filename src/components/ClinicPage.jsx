@@ -10,6 +10,7 @@ import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
 import Checkbox from 'material-ui/Checkbox';
 import StarRatingComponent from 'react-star-rating-component';
+import GoogleMap from 'google-map-react';
 
 import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
@@ -23,6 +24,12 @@ const styles = {
         width: '100%',
         alignment: 'right',
         display: 'inline-block',
+    },
+
+    mapStyle: {
+
+        height: '100px',
+        width: '100%',
     },
 
      cardStyle: {
@@ -43,6 +50,15 @@ const styles = {
    chipStyle: {
       height: '80%',
   },
+  chip: {
+    margin: 4,
+  },
+
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
 
 };
 
@@ -50,21 +66,17 @@ const styles = {
 export default class ClinicPage extends React.Component {
 constructor(props) {
     super(props);
+
+
     this.state = {
     chipData: [
       {key: 0, label: 'asdf'
       }
     ]};
-    this.styles = {
-      chip: {
-        margin: 4,
-      },
-      wrapper: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-      },
 
+    this.defaults = {
+      zoom: 16,
+      center: {lat: 33.7490, lng: -84.3880},
     };
   }
 
@@ -79,7 +91,7 @@ constructor(props) {
       <Chip
         key={data.key}
         onRequestDelete={() => this.handleRequestDelete(data.key)}
-        style={this.styles.chip}
+        style={styles.chip}
       >
         {data.label}
       </Chip>
@@ -91,6 +103,7 @@ constructor(props) {
   render () {
     const {result} = this.props;
     const {displaySearch} = this.props;
+
 
     return (
         <div id='clinicpage'>
@@ -107,8 +120,24 @@ constructor(props) {
         <CardText>
             <div style={styles.cardStyle}>
             <div style={styles.dataStyle}>
-              <img src="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300" width="200"/>
-              </div>
+              <img src="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300" width="100"/>
+
+              <div style={styles.mapStyle}>
+                 <GoogleMap
+                    defaultCenter={this.defaults.center}
+                    defaultZoom={this.defaults.zoom}
+                    hoverDistance={40}
+                    bootstrapURLKeys={{
+                    key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
+                    language: 'en'}}>
+
+                    <Place lat={result.lat}
+                                  lng={result.lng}
+                                  text={"a"} />
+                </GoogleMap>
+
+                </div>
+            </div>
               <div style={styles.dataStyle}>
                 <h3> Address: </h3>
                 {result.civic_address}
@@ -129,23 +158,12 @@ constructor(props) {
         </CardText>
 
       </Card>
-      <Card>
-          <CardHeader
-          title="Public Transit Routes"
-          actAsExpander={true}
-          showExpandableButton={true}
-        />
-        <CardText expandable={true}>
-         This feature is under construction.
-        </CardText>
-      </Card>
+    
       <Card>
           <CardHeader
           title="Feedback"
-          actAsExpander={true}
-          showExpandableButton={true}
         />
-        <CardText expandable={true}>
+        <CardText>
            <div className="rate-service">
               <h3>Service</h3>
 
@@ -179,7 +197,7 @@ constructor(props) {
             </div>
             <div>
               <h3>Tags:</h3>
-               <div style={this.styles.wrapper}>
+               <div style={styles.wrapper}>
                     {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
                 </div>
             </div>
@@ -238,7 +256,7 @@ constructor(props) {
                        onChange={(event) => this.submitFeedback(event)}/>
                 <br />
 
-                 <div style={this.styles.wrapper}>
+                 <div style={styles.wrapper}>
                      {this.state.chipData.map(this.renderChip, this)}
                  </div>
 
@@ -324,3 +342,53 @@ constructor(props) {
 ClinicPage.PropTypes={
   label:React.PropTypes.string,
 }
+
+class Place extends React.Component {
+ render() {
+   const K_WIDTH = 15;
+   const K_HEIGHT = 15;
+
+   const styleHover = {
+   // initially any map object has left top corner at lat lng coordinates
+   // it's on you to set object origin to 0,0 coordinates
+   position: 'absolute',
+   width: K_WIDTH,
+   height: K_HEIGHT,
+   left: -K_WIDTH / 2,
+   top: -K_HEIGHT / 2,
+
+   border: '5px solid #4DD0E1',
+   borderRadius: K_HEIGHT,
+   backgroundColor: '#B2EBF2',
+   textAlign: 'center',
+   color: '#F06292',
+   fontSize: 16,
+   fontWeight: 'bold',
+   padding: 4
+ };
+
+ const style = {
+ // initially any map object has left top corner at lat lng coordinates
+ // it's on you to set object origin to 0,0 coordinates
+ position: 'absolute',
+ width: K_WIDTH,
+ height: K_HEIGHT,
+ left: -K_WIDTH / 2,
+ top: -K_HEIGHT / 2,
+
+ border: '3px solid #F06292',
+ borderRadius: K_HEIGHT,
+ backgroundColor: 'white',
+ textAlign: 'center',
+ color: '#3f51b5',
+ fontSize: 12,
+ fontWeight: 'bold',
+ padding: 4
+};
+ return (
+    <div style={this.props.$hover ? styleHover : style}>
+       {this.props.text}
+    </div>
+   );
+ }
+};

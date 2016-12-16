@@ -31,7 +31,7 @@ import About from './About.jsx';
 
 const styles = {
   appbarTitle: {
-    fontSize: '36',
+    fontSize: '30',
   },
 
   appbarsubtitle: {
@@ -73,7 +73,7 @@ export default class App extends React.Component {
 
   // onClick function for toggling menu state
   appbarClick () {
-       if (this.appbarState) {
+       if (this.appbarState===true) {
            this.displaySearch();
        } else {
            this.setState({showMenu: !this.state.showMenu});
@@ -92,7 +92,8 @@ export default class App extends React.Component {
 
   displayResult (result) {
     this.setState({appbarState:true});
-    this.setState({appbarTitle:"Clinic"});
+    const clinicname=result.name;
+    this.setState({appbarTitle:clinicname});
     this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
   }
   displaySearch () {
