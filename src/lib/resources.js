@@ -6,8 +6,8 @@ export const resources = [{
     civic_address: "910 Ponce De Leon Ave NE",
     phone: "(404) 874-9652",
     description: "The Open Door Community is a residential community in the Catholic Worker tradition (we’re sometimes called a Protestant Catholic Worker House). We seek to dismantle racism, sexism and heterosexism, abolish the death penalty, and proclaim the Beloved Community through loving relationships with some of the most neglected and outcast of God’s children: the homeless and our sisters and brothers who are in prison. We serve breakfasts and soup-kitchen lunches, provide showers and changes of clothes, staff a free medical clinic, conduct worship services and meetings for the clarification of thought, and provide a prison ministry, including monthly trips for families to visit loved ones at the Hardwick Prisons in central Georgia. We also advocate on behalf of the oppressed, homeless and prisoners through non-violent protests, grassroots organizing and the publication of our monthly newspaper, Hospitality.",
-    lat: "33.724465",
-    lng: "-81.080121",
+    lat: "33.7744098",
+    lng: "-84.3575221",
     rating: {
       overall: 2,
       accessibility: 2,
@@ -30,8 +30,8 @@ export const resources = [{
     name: "Community Advance Practice Nurses",
     civic_address: "173 Boulevard NE, Atlanta",
     postal_code: "30312",
-    lat: "33.524465",
-    lng: "-83.090121",
+    lat: "33.7592659",
+    lng: "-84.3714725",
     phone: "(404) 658-1500",
     hours: {
       M: {
@@ -74,8 +74,8 @@ export const resources = [{
     name: "Mercy Care at The Gateway",
     civic_address: "275 Pryor St SW, Atlanta",
     postal_code: "30303",
-    lat: "33.724465",
-    lng: "-83.580121",
+    lat: "33.747959",
+    lng: "-84.39410119999999",
     phone: "(678) 843-8840",
     description: "We honor the healing mission of the Sisters of Mercy by providing excellent healthcare to the poor and marginalized.Our fundamentals are compassion, commitment to the poor, excellence, integrity, justice, stewardship and reverence for the dignity of each person. We are rich with workers, volunteers, board members, collaborators, funders; excellent facilities and vehicle fleets; and professional and technological expertise.",
     rating: {
@@ -101,6 +101,8 @@ export const resources = [{
     name: "Metro Atlanta Task Force for the Homeless",
     civic_address: "477 Peachtree St NE, Atlanta",
     postal_code: "30308",
+    lat: "33.7677824",
+    lng: "-84.3842002",
     phone: "(404) 787-5826",
     description: "",
     rating: {
@@ -124,7 +126,9 @@ export const resources = [{
     name: "Atlanta Day Shelter For Women & Children",
     civic_address: "655 Ethel St NW, Atlanta",
     postal_code: "30318",
-    description: "",
+    lat: "33.7848894",
+    lng: "-84.4087713",
+    description: "For homeless women, including mothers, The Atlanta Day Shelter for Women and Children provides a variety of services, including childcare, showers, laundry, lunch, MARTA cards for medical appointments, medical care, life-skills classes, recreational opportunities, documentation (birth certificates, state IDs), access to My Sister’s House (for overnight services), and much more.",
     rating: {
       overall: 2,
       accessibility: 2,
@@ -146,7 +150,12 @@ export const resources = [{
 
   {
     name: "Good Samaritan Health Center",
-    description: "",
+    description: "The Center offers medical, dental, health education, mental health, and social services. Patients pay on a reduced sliding fee scale based on income and household size with the remaining costs provided by donations. At The Good Samaritan Health Center, the entire family receives quality healthcare in an atmosphere of dignity and respect, regardless of race, ethnicity, or religion.",
+    phone: "(404) 523-6571",
+    civic_address: "1015 Donald Lee Hollowell Pkwy NW",
+    postal_code: "30318",
+    lat: "33.7739374",
+    lng: "-84.4204888",
     rating: {
       overall: 2,
       accessibility: 2,
@@ -168,6 +177,10 @@ export const resources = [{
     name: "Atlanta Childrens Shelter",
     phone: "(678) 843-8700",
     description: "",
+    civic_address: "607 Peachtree St NE",
+    postal_code: "30308",
+    lat: "33.7709437",
+    lng: "-84.3844309",
     rating: {
       overall: 2,
       accessibility: 2,
@@ -184,13 +197,13 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["women", "handicapped", "free", "homeless"]
+    tags: ["children", "free", "homeless"]
   }, {
     name: "Mercy Care North",
     civic_address: "Northeast Plaza, 3367 Buford Hwy NE #910",
     postal_code: "30319 ",
-    lat: "33.71004",
-    lng: "-84.090121",
+    lat: "33.8436393",
+    lng: "-84.3254455",
     description: "",
     rating: {
       overall: 4,
@@ -214,32 +227,72 @@ export const resources = [{
     civic_address: "One Park Tower, 34 Peachtree St NW #750",
     postal_code: "30303",
     phone: "(404) 681-0680",
-    lat: "33.71004",
-    lng: "-84.090121"
+    lat: "33.7551869",
+    lng: "-84.38913789999999",
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
   }, {
-    name: "Center for Black Women’s Wellness"
+    name: "Center for Black Women’s Wellness",
+    civic_address: "477 Windsor St SW",
+    postal_code: "30312",
+    phone: "(404) 688-9202",
+    lat: "33.7427217802915",
+    lng: "-84.39836401970848",
+    tags: ["women", "black", "pregnancy", "birth control"]
   }, {
     name: "Grant Park Clinic",
+    civic_address: "477 Windsor St SW",
+    postal_code: "30312",
+    phone: "(404) 688-9202",
     lat: "33.824465",
-    lng: "-84.090121"
+    lng: "-84.090121",
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
   }, {
     name: "Mercy Care",
+    civic_address: "477 Windsor St SW",
+    postal_code: "30312",
+    phone: "(404) 688-9202",
+    lat: "33.704465",
+    lng: "-84.190121",
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
+  }, {
+    name: "National AIDS Education and Services for Minorities Inc.",
+    civic_address: "477 Windsor St SW",
+    postal_code: "30312",
+    phone: "(404) 688-9202",
+    lat: "33.704465",
+    lng: "-84.190121",
+    tags: ["STD", "HIV", "minorities"]
+
+  }, {
+    name: "Richmond County Medical Society Project Access",
+    civic_address: "477 Windsor St SW",
+    postal_code: "30312",
+    phone: "(404) 688-9202",
     lat: "33.704465",
     lng: "-84.190121"
   }, {
-    name: "National AIDS Education and Services for Minorities Inc."
+    name: "Urban Health and Wellness",
+    civic_address: "477 Windsor St SW",
+    postal_code: "30312",
+    phone: "(404) 688-9202",
+    lat: "33.704465",
+    lng: "-84.190121",
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
   }, {
-    name: "Richmond County Medical Society Project Access"
-  }, {
-    name: "Urban Health and Wellness"
-  }, {
-    name: "The Center for Pan Asian Community Services, Inc."
+    name: "The Center for Pan Asian Community Services, Inc.",
+    civic_address: "477 Windsor St SW",
+    postal_code: "30312",
+    phone: "(404) 688-9202",
+    lat: "33.704465",
+    lng: "-84.190121",
+    tags: ["asian", "family", "medicaid", "dental", "vision"]
   }, {
     name: "Richmond County Medical Society Project Access",
     civic_address: "2612 Commons Boulevard",
     z: "Augusta",
     postal_code: "30909",
-    phone: "706-733-5177"
+    phone: "706-733-5177",
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
   }, {
     name: "Adolescent Medicine Clinic, Children’s Healthcare at Hughes Spalding",
     civic_address: "35 Jesse Hill Jr Dr SE, Atlanta, GA 30303",

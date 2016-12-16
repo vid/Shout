@@ -114,10 +114,12 @@ export default class App extends React.Component {
   footerSelect(index) {
       this.setState({selectedFooterIndex: index});
       if(index===0) {
-        this.filterResources('children');
+        this.filterResources('');
       } else if(index===1){
-        this.filterResources('adolescent');
+        this.filterResources('children');
       }else if(index===2){
+        this.filterResources('mental health');
+      }else if(index===3){
         this.filterResources('pregnancy');
       }else if(index===4){
         this.filterResources('');
@@ -143,7 +145,7 @@ export default class App extends React.Component {
         <div id='wrapper'>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" titleStyle={styles.appbarTitle}>
+              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title={this.state.appbarTitle} titleStyle={styles.appbarTitle}>
                 <div style={styles.appbarsubtitle}><h4>Find Accessible Healthcare.</h4></div>
               </AppBar>
           </div>

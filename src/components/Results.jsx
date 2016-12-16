@@ -34,7 +34,7 @@ export default class Results extends React.Component {
           {filteredResources.map((result, i) => (
             <TableRow key={i} onClick={() => displayResult()}>
               <TableRowColumn>{1.3+"mi"}</TableRowColumn>
-              <TableRowColumn style={styles.namesectionStyle}><h3>{result.name}</h3> {result.civic_address}</TableRowColumn>
+              <TableRowColumn style={styles.namesectionStyle}><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
               <TableRowColumn style={styles.addresssectionStyle}>
                   {result.tags}
               </TableRowColumn>

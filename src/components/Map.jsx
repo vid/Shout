@@ -11,15 +11,23 @@ export default class Map extends React.Component {
   constructor (props) {
     super(props);
 
+    this.map1 = null;
+    this.maps1 = null;
+    this.coords=null;
+
 
     this.defaults = {
       center: {lat: 33.7490, lng: -84.3880},
-      zoom: 9,
-      greatPlaceCoords: {lat: 33.724465, lng: -83.080121},
+      zoom: 11,
     };
   }
 
-  onGoogleApiLoad(){
+  onGoogleApiLoad(map, maps){
+
+  this.map1=map;
+  this.maps1=maps;
+
+  console.log(this.map1, this.maps1);
 
   }
 
@@ -42,7 +50,7 @@ export default class Map extends React.Component {
             bootstrapURLKeys={{
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
             language: 'en'}}
-            onGoogleApiLoaded={this.onGoogleApiLoad}
+            onGoogleApiLoaded={({map, maps}) => this.onGoogleApiLoad(map, maps)}
             yesIWantToUseGoogleMapApiInternals>
 
             {filteredResources.map((result, i) =>
@@ -58,8 +66,8 @@ export default class Map extends React.Component {
 
  class Place extends React.Component {
   render() {
-    const K_WIDTH = 20;
-    const K_HEIGHT = 20;
+    const K_WIDTH = 15;
+    const K_HEIGHT = 15;
 
     const styleHover = {
     // initially any map object has left top corner at lat lng coordinates
@@ -89,12 +97,12 @@ export default class Map extends React.Component {
   left: -K_WIDTH / 2,
   top: -K_HEIGHT / 2,
 
-  border: '5px solid #F06292',
+  border: '3px solid #F06292',
   borderRadius: K_HEIGHT,
   backgroundColor: 'white',
   textAlign: 'center',
   color: '#3f51b5',
-  fontSize: 16,
+  fontSize: 12,
   fontWeight: 'bold',
   padding: 4
 };
