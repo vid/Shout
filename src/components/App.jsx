@@ -61,6 +61,7 @@ export default class App extends React.Component {
         appbarState: false,
         selectedFooterIndex: 0,
         appbarTitle: 'Shout',
+        appbarSubtitle: 'Find Accessible Healthcare.',
         appbarIcon: <NavigationMenu />,
         hoveredMapRowIndex: '-1',
     };
@@ -95,12 +96,14 @@ export default class App extends React.Component {
     const clinicname=result.name;
     this.setState({appbarIcon:<NavigationChevronLeft />});
     this.setState({appbarTitle:clinicname});
+    this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
   }
   displaySearch () {
     this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources}/>});
     this.setState({appbarTitle:'Shout'});
+    this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
     this.setState({appbarIcon:<NavigationMenu />});
   }
@@ -147,7 +150,7 @@ render () {
 
           <div id='header'>
               <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title={this.state.appbarTitle} titleStyle={styles.appbarTitle}>
-                <div style={styles.appbarsubtitle}><h4>Find Accessible Healthcare.</h4></div>
+                <div style={styles.appbarsubtitle}><h4>{this.state.appbarSubtitle}</h4></div>
               </AppBar>
           </div>
 
