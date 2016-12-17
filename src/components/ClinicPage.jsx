@@ -40,7 +40,7 @@ const styles = {
     },
 
     dataStyle:{
-      margin:'10px',
+      margin:'5px',
       height:'100%',
     },
     chipSection: {
@@ -117,9 +117,6 @@ constructor(props) {
         <Paper style={styles.mainStyle} zDepth={1}>
 
 
-        <div className="hello" onClick={displaySearch}>
-          <h3>« Back to search</h3>
-        </div>
         <Card style ={styles.cardStyle}>
 
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300"/>
@@ -166,7 +163,7 @@ constructor(props) {
 
       <Card>
           <CardHeader
-          title="Feedback">{"("+numberReviews+" user opinions)"}</CardHeader>
+          title="Feedback"/>
         <CardText>
 
         <div style={styles.feedbackWrapper}>
@@ -212,7 +209,8 @@ constructor(props) {
             </div>
           </div>
           <div>
-            <h3> Reviews: </h3>
+            <h3> Reviews: {"("+numberReviews+" user reviews)"}</h3>
+            {reviews_.map((review)=>(<p>{'" '+review.text+'"'}</p>))}
           </div>
         </div>
 

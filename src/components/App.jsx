@@ -61,6 +61,7 @@ export default class App extends React.Component {
         appbarState: false,
         selectedFooterIndex: 0,
         appbarTitle: 'Shout',
+        appbarIcon: <NavigationMenu />,
         hoveredMapRowIndex: '-1',
     };
   }
@@ -73,10 +74,10 @@ export default class App extends React.Component {
 
   // onClick function for toggling menu state
   appbarClick () {
-       if (this.appbarState===true) {
-           this.displaySearch();
-       } else {
+       if (!this.state.appbarState) {
            this.setState({showMenu: !this.state.showMenu});
+       } else {
+          this.displaySearch();
        }
     }
 
@@ -91,15 +92,17 @@ export default class App extends React.Component {
   }
 
   displayResult (result) {
-    this.setState({appbarState:true});
     const clinicname=result.name;
+    this.setState({appbarIcon:<NavigationChevronLeft />});
     this.setState({appbarTitle:clinicname});
+    this.setState({appbarState:true});
     this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
   }
   displaySearch () {
-    this.setState({appbarState:false});
     this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources}/>});
     this.setState({appbarTitle:'Shout'});
+    this.setState({appbarState:false});
+    this.setState({appbarIcon:<NavigationMenu />});
   }
 
   filterResources (searchString) {
@@ -137,16 +140,13 @@ export default class App extends React.Component {
 
 // end of actions
 
-//old appbar with conditional iconbutton: //<AppBar iconElementLeft={<IconButton>{this.state.appbarState?<NavigationChevronLeft/>:<NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title="Shout" />
-//temporarily removed it and back button is within the page being rendered
-
-  render () {
+render () {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton><NavigationMenu />}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title={this.state.appbarTitle} titleStyle={styles.appbarTitle}>
+              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title={this.state.appbarTitle} titleStyle={styles.appbarTitle}>
                 <div style={styles.appbarsubtitle}><h4>Find Accessible Healthcare.</h4></div>
               </AppBar>
           </div>
