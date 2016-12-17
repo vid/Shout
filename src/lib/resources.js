@@ -419,34 +419,59 @@ export const resources = [{
     description: "description",
     tags: ["women", "adolescent", "teen", "family", "sexual health",
       "birth control", "pregnancy"
-    ]
+    ],
+    reviews: [],
   }, {
     name: "Georgia State University Community Clinic",
     civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
     postal_code: "30303",
     phone: "404-413-6229",
     description: "description",
-    tags: ["sliding scale", "family", "medicaid"]
+    tags: ["sliding scale", "family", "medicaid"],
+    reviews: [{
+      overall: 5,
+      accessibility: 5,
+      qualityofcare: 4,
+      text: "Free flu vaccines"
+    }],
   }, {
     name: "Asa G. Yancey Sr. Health Center",
     civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
     postal_code: "30303",
     phone: "404-413-6229",
     description: "description",
-    tags: ["sliding scale", "family", "medicaid"]
+    tags: ["sliding scale", "family", "medicaid"],
+    reviews: [{
+      overall: 5,
+      accessibility: 5,
+      qualityofcare: 4,
+      text: "Free flu vaccines"
+    }],
   }, {
     name: "HEALing Community Center",
     civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
     postal_code: "30303",
     phone: "404-413-6229",
     description: "description",
-    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"],
+    reviews: [{
+      overall: 5,
+      accessibility: 5,
+      qualityofcare: 4,
+      text: "Free flu vaccines"
+    }],
   }, {
     name: "Kirkwood Family Medicine",
     civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
     postal_code: "30303",
     phone: "404-413-6229",
     description: "description",
-    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
+    tags: ["sliding scale", "family", "medicaid", "dental", "vision"],
+    reviews: [{
+      overall: 5,
+      accessibility: 5,
+      qualityofcare: 4,
+      text: "Free flu vaccines"
+    }],
   },
 ];

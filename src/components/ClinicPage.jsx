@@ -53,6 +53,10 @@ const styles = {
   chip: {
     margin: 4,
   },
+  feedbackWrapper: {
+     display: 'flex',
+     flexDirection: 'row'
+ },
 
   wrapper: {
     display: 'flex',
@@ -103,6 +107,8 @@ constructor(props) {
   render () {
     const {result} = this.props;
     const {displaySearch} = this.props;
+    const reviews_=result.reviews;
+    const numberReviews=reviews_.length;
 
 
     return (
@@ -116,11 +122,10 @@ constructor(props) {
         </div>
         <Card style ={styles.cardStyle}>
 
-        <CardTitle title={result.name} subtitle={result.civic_address}/>
+        <CardHeader title={result.name} subtitle={result.civic_address} avatar="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300"/>
         <CardText>
             <div style={styles.cardStyle}>
             <div style={styles.dataStyle}>
-              <img src="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300" width="100"/>
 
               <div style={styles.mapStyle}>
                  <GoogleMap
@@ -158,13 +163,17 @@ constructor(props) {
         </CardText>
 
       </Card>
-    
+
       <Card>
           <CardHeader
-          title="Feedback"
-        />
+          title="Feedback">{"("+numberReviews+" user opinions)"}</CardHeader>
         <CardText>
-           <div className="rate-service">
+
+        <div style={styles.feedbackWrapper}>
+
+          <div style={styles.ratingsSection}>
+
+           <div>
               <h3>Service</h3>
 
               <StarRatingComponent
@@ -174,7 +183,7 @@ constructor(props) {
               />
             </div>
 
-            <div className="rate-transportation">
+            <div>
               <h3>Transportation</h3>
 
               <StarRatingComponent
@@ -185,7 +194,7 @@ constructor(props) {
 
             </div>
 
-            <div className="rate-qualitycare">
+            <div>
               <h3>Quality of Care</h3>
 
               <StarRatingComponent
@@ -201,7 +210,11 @@ constructor(props) {
                     {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
                 </div>
             </div>
-
+          </div>
+          <div>
+            <h3> Reviews: </h3>
+          </div>
+        </div>
 
         </CardText>
       </Card>
@@ -219,7 +232,7 @@ constructor(props) {
               <h3>Overall</h3>
               <StarRatingComponent
                 name="Service" /* name of the radio input, it is required */
-                value={result.rating.overall} /* number of selected icon (`0` - none, `1` - first) */
+                value={0} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
                 onStarClick={()=>this.setState(rating.accessibility)}
               />
@@ -231,7 +244,7 @@ constructor(props) {
               <p>How easy was it to get here via public transportation?</p>
               <StarRatingComponent
                 name="Service" /* name of the radio input, it is required */
-                value={result.rating.accessibility} /* number of selected icon (`0` - none, `1` - first) */
+                value={0} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
               />
 
@@ -242,7 +255,7 @@ constructor(props) {
               <p>Please rate the quality of service (waiting time, courtesy, explanation of your health/management)</p>
               <StarRatingComponent
                 name="Service" /* name of the radio input, it is required */
-                value={result.rating.qualityofcare} /* number of selected icon (`0` - none, `1` - first) */
+                value={0} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
               />
 
