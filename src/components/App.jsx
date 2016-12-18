@@ -29,6 +29,7 @@ import AddResource from './AddResource.jsx';
 import About from './About.jsx';
 
 
+// all of the CSS styles for this component defined here
 const styles = {
   appbarTitle: {
     fontSize: '30',
@@ -48,10 +49,13 @@ const styles = {
   },
 };
 
+//begin Component definition
 
 export default class App extends React.Component {
+
   constructor () {
     super();
+
     // this component's state acts as the overall store for now
     this.state = {
         allResources: [...resources],
@@ -64,7 +68,11 @@ export default class App extends React.Component {
         appbarSubtitle: 'Find Accessible Healthcare.',
         appbarIcon: <NavigationMenu />,
         hoveredMapRowIndex: '-1',
+        userLat: '33.7490',
+        userLng: '-84.3880',
     };
+
+
   }
   // Add a resource to the collection
   addResource (res) {
@@ -101,11 +109,12 @@ export default class App extends React.Component {
     this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
   }
   displaySearch () {
-    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources}/>});
+    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources} userLat={this.state.userLat} userLng={this.state.userLng} />});
     this.setState({appbarTitle:'Shout'});
     this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
     this.setState({appbarIcon:<NavigationMenu />});
+    this.requestCurrentPosition();
   }
 
   filterResources (searchString) {
@@ -133,11 +142,35 @@ export default class App extends React.Component {
       }
   }
 
-
   hoverTableRow(index) {
        hoveredMapRowIndex: 'index';
   }
 
+
+
+  error(err) {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+  }
+
+  requestCurrentPosition(){
+      var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+
+      if (navigator.geolocation)
+      {
+        navigator.geolocation.getCurrentPosition((pos)=>{
+                                                      var crd=pos.coords;
+                                                      const x=crd.latitude;
+                                                      const y=crd.longitude;
+                                                      this.setState({userLat:x});
+                                                      this.setState({userLng:y});
+                                                      console.log(x,y);
+                                                      }, this.error, options);
+      }
+  }
 
 
 

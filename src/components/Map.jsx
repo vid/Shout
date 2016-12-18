@@ -27,8 +27,6 @@ export default class Map extends React.Component {
   this.map1=map;
   this.maps1=maps;
 
-  console.log(this.map1, this.maps1);
-
   }
 
   geocodeAddress(address){
@@ -38,7 +36,7 @@ export default class Map extends React.Component {
 
   render() {
     const {width, height} = this.props;
-    const {getFilteredResources} = this.props;
+    const {getFilteredResources, userLat, userLng} = this.props;
     const filteredResources = getFilteredResources();
 
     const m = (
@@ -57,6 +55,9 @@ export default class Map extends React.Component {
                   (<Place lat={result.lat}
                           lng={result.lng}
                           text={i+1} />))}
+
+            <Place lat={userLat} lng={userLng} text={"You are here"} />
+
         </GoogleMap>
       </div>
     );
