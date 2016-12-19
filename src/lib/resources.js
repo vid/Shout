@@ -265,38 +265,37 @@ export const resources = [{
 
   }, {
     name: "Richmond County Medical Society Project Access",
-    civic_address: "477 Windsor St SW",
-    postal_code: "30312",
-    phone: "(404) 688-9202",
-    lat: "33.704465",
-    lng: "-84.190121"
+    description: "RCMS Project Access, Inc. is an outreach program of the Richmond County Medical Society which assists the uninsured indigent people of Richmond and Columbia Counties with accessing physician services and assists Richmond and Columbia County physicians with expanding their role in caring for these patients. RCMS Project Access, Inc. is a participant in the CSRA Partnership for Community Health and the Greater Augusta Healthcare Network (GAHN).",
+    civic_address: "2612 Commons Blvd",
+    postal_code: "30909",
+    phone: "(706) 733-5177",
+    lat: "33.5095012",
+    lng: "-82.0417082",
+    tags: ["Richmond", "uninsured", "medicaid", "free"]
   }, {
     name: "Urban Health and Wellness",
-    civic_address: "477 Windsor St SW",
+    description: "Urban Health and Wellness is a free medical clinic which serves residents of metro Atlanta who are uninsured or have Medicaid. Urban Health and Wellness provides quality medical care for routine primary care medical needs, chronic illness and/or disease, and help with prescription medications through the drug manufacturer’s Pharmaceutical Assistance Programs.",
+    civic_address: "645 Grant St SE, Atlanta",
     postal_code: "30312",
-    phone: "(404) 688-9202",
-    lat: "33.704465",
-    lng: "-84.190121",
-    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
+    phone: "404-618-6983",
+    lat: "33.7371122",
+    lng: "-84.37659579999999",
+    tags: ["adult", "free", "medicaid"]
   }, {
     name: "The Center for Pan Asian Community Services, Inc.",
-    civic_address: "477 Windsor St SW",
-    postal_code: "30312",
-    phone: "(404) 688-9202",
-    lat: "33.704465",
-    lng: "-84.190121",
-    tags: ["asian", "family", "medicaid", "dental", "vision"]
-  }, {
-    name: "Richmond County Medical Society Project Access",
-    civic_address: "2612 Commons Boulevard",
-    z: "Augusta",
-    postal_code: "30909",
-    phone: "706-733-5177",
-    tags: ["sliding scale", "family", "medicaid", "dental", "vision"]
+    description: "Center for Pan Asian Community Services(CPACS) is a private nonprofit located in Atlanta, Georgia. Our mission is to promote self-sufficiency and equity for immigrants, refugees, and the underprivileged through comprehensive health and social services, capacity building, and advocacy.",
+    civic_address: "3510 Shallowford Rd",
+    postal_code: "30341",
+    phone: "(770) 936-0969",
+    lat: "33.8914865",
+    lng: "-84.286951",
+    tags: ["asian", "immigrant", "refugee"]
   }, {
     name: "Adolescent Medicine Clinic, Children’s Healthcare at Hughes Spalding",
     civic_address: "35 Jesse Hill Jr Dr SE, Atlanta, GA 30303",
-    phone: "(404) 785-5437",
+    lat: "33.7539006",
+    lng: "-84.38200929999999",
+    phone: "404-785-9855",
     hours: {
       M: {
         start: "8",
@@ -339,6 +338,8 @@ export const resources = [{
     name: "Grady Family Planning/Teen Clinic",
     civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
     postal_code: "30303",
+    lat: "33.752519",
+    lng: "-84.3811922",
     phone: "(404) 616-3678",
     hours: {
       M: {
@@ -359,7 +360,7 @@ export const resources = [{
       Sat: {},
       Sun: {}
     },
-    description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
+    description: "Grady’s Family Planning Wellness Clinic provides education, counseling, medical and birth control services along with Sexually Transmitted Infections (STI) screenings for men and women. Services Offered: Physical Exams, Birth Control, HIV/STD Testing & Treatment, HPV Vaccine, Pap & Breast Exams, Pregnancy Testing",
     rating: {
       overall: 2,
       accessibility: 2,
@@ -383,38 +384,35 @@ export const resources = [{
     name: "Planned Parenthood",
     civic_address: "75 Piedmont Ave NE #800, Atlanta, GA 30303",
     postal_code: "30303",
+    lat: "33.7566635",
+    lng: "-84.3819613",
     phone: " (404) 688-9300",
     description: "Planned Parenthood Southeast believes in the fundamental right of each individual, throughout our service area, to manage his or her fertility, regardless of the individual's income, marital status, race, ethnicity, gender identity or expression, sexual orientation, age, religion, disability, or residence.",
     tags: ["women", "sexual health", "birth control", "pregnancy", ]
   }, {
-    name: "Grady Family Planning/Teen Clinic",
-    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
-    postal_code: "30303",
-    phone: "(404) 616-3678",
-    description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
-    tags: ["women", "adolescent", "teen", "family", "sexual health",
-      "birth control", "pregnancy"
-    ]
-  }, {
     name: "Northside Mental Health Clinic",
-    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
-    postal_code: "30303",
-    phone: "(404) 616-3678",
+    civic_address: "6105 Peachtree Dunwoody Rd #155",
+    postal_code: "30328",
+    lat: "33.922029",
+    lng: "-84.351258",
+    phone: "(404) 851-8960",
     description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
-    tags: ["women", "adolescent", "teen", "family", "sexual health",
-      "birth control", "pregnancy"
-    ]
+    tags: ["mental health"]
   }, {
-    name: "Clifton Springs Mental Health Center,",
-    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
-    postal_code: "30303",
-    phone: "(404) 616-3678",
+    name: "Clifton Springs Mental Health Center",
+    civic_address: "3110 Clifton Springs Rd Ste B",
+    postal_code: "30034",
+    phone: "(404) 243-9500",
+    lat: "33.693257",
+    lng: "-84.26244919999999",
     description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
     tags: ["mental health", "counseling"]
   }, {
     name: "Grady Psychiatric Emergency Room",
     civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
     postal_code: "30303",
+    lat: "33.752519",
+    lng: "-84.3811922",
     phone: "404-616-4762",
     description: "description",
     tags: ["women", "adolescent", "teen", "family", "sexual health",
@@ -422,12 +420,14 @@ export const resources = [{
     ],
     reviews: [],
   }, {
-    name: "Georgia State University Community Clinic",
-    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
+    name: "Georgia State University Student Health Clinic",
+    civic_address: "141 Piedmont Ave NE,",
     postal_code: "30303",
-    phone: "404-413-6229",
-    description: "description",
-    tags: ["sliding scale", "family", "medicaid"],
+    phone: "404-413-1930",
+    lat: "33.7574177",
+    lng: "-84.38201219999999",
+    description: "The Student Health Clinic is able to handle many of Georgia State students’ primary healthcare needs. Several of the primary care services are listed below. The clinic also offers a variety of other services, such as women’s healthcare, men’s healthcare, prescriptions, immunizations and testing to ensure their physical well-being.",
+    tags: ["student"],
     reviews: [{
       overall: 5,
       accessibility: 5,
@@ -436,10 +436,12 @@ export const resources = [{
     }],
   }, {
     name: "Asa G. Yancey Sr. Health Center",
-    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
-    postal_code: "30303",
-    phone: "404-413-6229",
-    description: "description",
+    civic_address: "1247 Donald Lee Hollowell Pkwy NW",
+    postal_code: "30318",
+    lat: "33.773671",
+    lng: "-84.4284067",
+    phone: "(404) 616-2265",
+    description: "Grady’s Neighborhood Health Centers offer primary care and more for men and women of all ages. Primary care is having one doctor (or clinic) for all of your general healthcare needs. It is an important part of staying healthy. Grady’s primary care doctors offer complete care for all parts of your body and for most diseases. If your doctor feels you need to see a specialist, they will refer you to one. Our primary care physicians and staff manage many common chronic illnesses, such as: High blood pressure, High cholesterol, Diabetes, Asthma",
     tags: ["sliding scale", "family", "medicaid"],
     reviews: [{
       overall: 5,
@@ -449,11 +451,15 @@ export const resources = [{
     }],
   }, {
     name: "HEALing Community Center",
-    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
-    postal_code: "30303",
-    phone: "404-413-6229",
-    description: "description",
-    tags: ["sliding scale", "family", "medicaid", "dental", "vision"],
+    description: "We are a Federally Qualified Health Center. We offer a sliding fee scale. Services: Adult Medicine, Behavioral Health, Cardiology, Dental, Health Education, Health Enrollment Assistance, HIV Testing and Counseling, OB/GYN, Otolaryngology (ENT), Pediatrics, Podiatry, Prescription Assistance, Social Services, Vision Care",
+    civic_address: "2600 M.L.K. Jr Dr SW #100",
+    postal_code: "30311",
+    lat: "33.7533304",
+    lng: "-84.47229949999999",
+    phone: "(404) 564-7749",
+    tags: ["sliding scale", "family", "pulmonology", "medicaid", "adult",
+      "children"
+    ],
     reviews: [{
       overall: 5,
       accessibility: 5,
@@ -462,11 +468,16 @@ export const resources = [{
     }],
   }, {
     name: "Kirkwood Family Medicine",
-    civic_address: "80 Jesse Hill Jr Drive SE Atlanta, GA 30303",
-    postal_code: "30303",
-    phone: "404-413-6229",
-    description: "description",
-    tags: ["sliding scale", "family", "medicaid", "dental", "vision"],
+    description: "We provide a variety of healthcare services right in your neighborhood so you don’t have to waste time, energy or money traveling all over town. Does your child need a check-up while you need an eye care appointment? You can do both at Kirkwood Neighborhood Health Center. Do you need to fill a prescription? Did the doctor order lab work? Both can be taken care of right inside our facility. Kirkwood Neighborhood Health Center also utilizes an electronic medical records system that allows your health information to be accessed, saving you time, and easily shared with other medical providers, should an emergency arise. We are here to make your healthcare experience as efficient as possible, while maintaining the highest standard of care.",
+    civic_address: "1863 Memorial Drive, SE Atlanta",
+    postal_code: "30317",
+    lat: "33.7458806",
+    lng: "-84.3277662",
+    phone: "(404) 616-9304",
+    tags: ["adult", "children", "immunizations", "pregnancy",
+      "family planning", "birth control", "diabetes", "interpretor",
+      "translation", "blood pressure", "prostate"
+    ],
     reviews: [{
       overall: 5,
       accessibility: 5,

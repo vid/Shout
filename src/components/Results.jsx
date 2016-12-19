@@ -12,6 +12,22 @@ const styles = {
 }
 export default class Results extends React.Component {
 
+calculateDistance(result){
+
+  var y_distance=69*Math.pow((result.lat-33.7490),2);
+  var x_distance=69*Math.pow((-84.3880-result.lng),2);
+  var distance=Math.round(100*Math.sqrt(x_distance+y_distance))/100;
+
+  return distance;
+
+}
+
+formatTags(arrTags){
+
+  return arrTags.join(', ');
+
+}
+
   render () {
     const {getFilteredResources, displayResult} = this.props;
     const filteredResources = getFilteredResources();
@@ -33,10 +49,10 @@ export default class Results extends React.Component {
           showRowHover={true}>
           {filteredResources.map((result, i) => (
             <TableRow key={i} onClick={() => displayResult()}>
-              <TableRowColumn>{1.3+"mi"}</TableRowColumn>
+              <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
               <TableRowColumn style={styles.namesectionStyle}><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
               <TableRowColumn style={styles.addresssectionStyle}>
-                  {result.tags}
+                  {this.formatTags(result.tags)}
               </TableRowColumn>
             </TableRow>
           ))}

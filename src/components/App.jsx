@@ -95,6 +95,15 @@ export default class App extends React.Component {
   }
     // these are the app's actions, passed to and called by other components
 
+  displayAddResource() {
+    this.setState({appbarIcon:<NavigationChevronLeft />});
+    this.setState({appbarTitle:"Add Resource"});
+    this.setState({appbarSubtitle:' '});
+    this.setState({appbarState:true});
+    this.setState({showMenu: false});
+    this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});
+  }
+
   displayFeedback () {
     this.setState({screen: <Feedback displaySearch={(result)=>this.displaySearch()} />});
     this.setState({showMenu: !this.state.showMenu});
@@ -122,7 +131,11 @@ export default class App extends React.Component {
       this.setState({filteredResources: this.state.allResources, searchString});
       return;
     }
-    const filteredResources = this.state.allResources.filter(resource => resource.name.toLowerCase().includes(searchString.toLowerCase()));
+    const filteredResources = this.state.allResources.filter(resource => {
+                                                                            if(resource.name.toLowerCase().includes(searchString.toLowerCase())||resource.tags.includes(searchString.toLowerCase())){
+                                                                              return resource;
+                                                                            }
+                                                                          });
     this.setState({filteredResources, searchString});
   }
 

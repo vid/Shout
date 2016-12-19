@@ -44,7 +44,7 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="" />
             <MenuItem primaryText="" />
             <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => this.setState({addResourceOpen: true})}/>
+            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>
@@ -97,21 +97,7 @@ export default class LeftMenu extends React.Component {
                 </p>
             </Dialog>
 
-            <Dialog
-                actions={
-                   <FlatButton
-                     label="Close"
-                     primary={true}
-                     onTouchTap={() => this.setState({addResourceOpen: false})}/>}
-                modal={false}
-                open={this.state.addResourceOpen}
-                autoScrollBodyContent={true}
-                onRequestClose={() => this.setState({addResourceOpen: false})}>
-
-                <AddResource />
-            </Dialog>
-
-
+          
             </div>
       )
     }
