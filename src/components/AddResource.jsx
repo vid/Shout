@@ -53,12 +53,16 @@ export default class AddResource extends React.Component {
 constructor() {
     super();
     this.state = {
-        value_Name:'A',
-        value_Type:'',
-        value_Address:'',
-        value_Phone:'',
-        value_Descript:'',
-        value_Tags:'',
+        value_Name:"Default",
+        value_Type:"asdf",
+        value_Phone:"default",
+        value_Address:"asdf",
+        value_Apt:"default",
+        value_zip:"default",
+        value_Website:"default",
+        value_Descript:"default",
+        value_Tags:[''],
+        value_Hours:'',
 
         chipData: [
     ]};
@@ -69,17 +73,18 @@ submitAll(){
 
     var temp={
         name: this.state.value_Name,
-        civic_address: this.state.value_Address+" "+this.state.value_Apt,
-        zip: this.state.value_zipcode,
-        phone: this.state.value_Phone,
-        description: this.state.value_Descript,
         type:this.state.value_Type,
-        website:this.state.value_Type,
-        tags:this.state.value_Type,
-        hours:this.state.value_Type,
+        phone: this.state.value_Phone,
+        civic_address: this.state.value_Address+" "+this.state.value_Apt,
+        zip: this.state.value_zip,
+        website:this.state.value_Website,
+        description: this.state.value_Descript,
+        tags:this.state.chipData,
+        hours:this.state.value_Hours,
     }
 
-    return temp;
+     console.log(temp);
+     return temp;
 }
 
 handleRequestDelete(key){
@@ -116,7 +121,7 @@ handleRequestDelete(key){
                        inputStyle={styles.input}
                        floatingLabelText="Resource Name"
                        floatingLabelFixed={true}
-                       onChange={() => this.setState({value_Name: event.target.value})}/><br />
+                       onChange={(event) => this.setState({value_Name: event.target.value})}/><br />
 
                        <SelectField
                            floatingLabelText="Select type *"
@@ -135,7 +140,7 @@ handleRequestDelete(key){
                        inputStyle={styles.input}
                        floatingLabelText="Street Address *"
                        floatingLabelFixed={true}
-                       onChange={() => this.setState({value_Address: event.target.value})}/><br />
+                       onChange={(event) => this.setState({value_Address: event.target.value})}/><br />
 
             <TextField hintText="Apt/Office #"
                        hintStyle={styles.hint}
@@ -143,7 +148,7 @@ handleRequestDelete(key){
                        inputStyle={styles.input}
                        floatingLabelText="Apt/Office # *"
                        floatingLabelFixed={true}
-                       onChange={() => this.setState({value_Address: event.target.value})}/><br />
+                       onChange={(event) => this.setState({value_Apt: event.target.value})}/><br />
 
             <TextField hintText="Zip Code"
                       hintStyle={styles.hint}
@@ -151,7 +156,7 @@ handleRequestDelete(key){
                       inputStyle={styles.input}
                       floatingLabelText="Zip code *"
                       floatingLabelFixed={true}
-                      onChange={() => this.setState({value_Address: event.target.value})}/><br />
+                      onChange={(event) => this.setState({value_zip: event.target.value})}/><br />
           </div>
 
             <TextField hintText="Phone Number"
@@ -160,7 +165,7 @@ handleRequestDelete(key){
                        inputStyle={styles.input}
                        floatingLabelText="Phone Number *"
                        floatingLabelFixed={true}
-                       onChange={() => this.setState({value_Phone: event.target.value})}/><br />
+                       onChange={(event) => this.setState({value_Phone: event.target.value})}/><br />
 
             <TextField hintText="Website"
                        hintStyle={styles.hint}
@@ -168,7 +173,7 @@ handleRequestDelete(key){
                        inputStyle={styles.input}
                        floatingLabelText="Website"
                        floatingLabelFixed={true}
-                       onChange={() => this.setState({value_Phone: event.target.value})}/><br />
+                       onChange={(event) => this.setState({value_Website: event.target.value})}/><br />
 
             <TextField hintText="Description"
                        inputStyle={styles.input}
@@ -178,7 +183,7 @@ handleRequestDelete(key){
                        multiLine={true}
                        rows={3}
                        rowsMax={10}
-                       onChange={() => this.setState({value_Descript: event.target.value})}/><br />
+                       onChange={(event) => this.setState({value_Descript: event.target.value})}/><br />
 
 
               <div style={styles.row}>
@@ -262,7 +267,10 @@ handleRequestDelete(key){
 
               <br />
               <br />
-                <RaisedButton label="Submit" primary={true} onClick={()=>this.submitAll()}/>
+                <RaisedButton label="Submit" primary={true} onClick={()=>{
+                                                                            var x=this.submitAll();
+                                                                            addResource(x)
+                                                                         }}/>
 
           </div>
         </Paper>

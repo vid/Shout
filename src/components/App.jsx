@@ -29,6 +29,13 @@ import AddResource from './AddResource.jsx';
 import About from './About.jsx';
 
 
+import PouchDB from 'pouchdb';
+
+var db = new PouchDB('resources');
+var remoteCouch = 'http://localhost:5984/resources';
+
+
+
 // all of the CSS styles for this component defined here
 const styles = {
   appbarTitle: {
@@ -76,7 +83,35 @@ export default class App extends React.Component {
   }
   // Add a resource to the collection
   addResource (res) {
-      this.setState({allResources: [...this.state.allResources, res]});
+     // this.setState({allResources: [...this.state.allResources, res]});
+      //this.filterResources(this.state.searchString);
+
+      //calculate latitude and longitude
+
+      var resource = {
+          _id: new Date().toISOString(),
+          name: res.name,
+          civic_address:res.civic_address,
+          phone:res.phone,
+          website:res.website,
+          description: res.description,
+          type: res.type,
+          tags:res.tags,
+          zip:res.zip,
+          reviews:[],
+          ratings:{}
+
+      };
+      db.put(resource, function callback(err, result) {
+          if (!err) {
+              console.log('Added resource');
+          }
+      });
+
+      if (remoteCouch) {
+          this.sync();
+      }
+
       this.filterResources(this.state.searchString);
   }
 
@@ -88,6 +123,7 @@ export default class App extends React.Component {
        } else {
           this.displaySearch();
        }
+
     }
 
   componentDidMount () {
@@ -101,7 +137,7 @@ export default class App extends React.Component {
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({showMenu: false});
-    this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});
+    this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} addResource={(res) => this.addResource(res)} />});
   }
 
   displayFeedback () {
@@ -116,15 +152,46 @@ export default class App extends React.Component {
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
-  }
+}
+
   displaySearch () {
+
+  db.allDocs({include_docs: true, descending: true}, (err, doc) => {
+            if (err) { return console.log(err); }
+            this.redrawResources(doc.rows);
+        });
+
     this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources} userLat={this.state.userLat} userLng={this.state.userLng} />});
     this.setState({appbarTitle:'Shout'});
     this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
     this.setState({appbarIcon:<NavigationMenu />});
     this.requestCurrentPosition();
-  }
+
+    
+}
+
+  redrawResources(resources){
+        //resources.forEach(function (res) {
+        //    console.log(res.doc);
+        //});
+
+        var resourcesdocs = {
+            results: []
+        };
+        resources.forEach(function (res) {
+            resourcesdocs.results.push(res.doc);
+            console.log(res.doc);
+            console.log(res.doc.name);
+        });
+       
+        this.setState({allResources:resourcesdocs.results});
+        this.setState({filteredResources:resourcesdocs.results});
+    }
+
+   getResources() {
+        
+    }
 
   filterResources (searchString) {
     if (!searchString || searchString.length < 1) {
@@ -185,9 +252,20 @@ export default class App extends React.Component {
       }
   }
 
+  sync() {
 
+      var opts = { live: true };
+      db.replicate.to(remoteCouch, opts, this.syncError);
+      db.replicate.from(remoteCouch, opts, this.syncError);
+  }
 
+  syncError() {
+     console.log('data-sync-state: error');
+  }
 // end of actions
+
+//sync the database
+  
 
 render () {
     return (
@@ -213,7 +291,7 @@ render () {
              style={styles.stylemenu}
              docked={false}
              onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()}/>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
             </Drawer>
          </div>
 

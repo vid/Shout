@@ -34,6 +34,8 @@ export default class LeftMenu extends React.Component {
     render(){
 
         const {displayAddResource} = this.props;
+ 
+        const {addResource} = this.props;
         const {displayAbout} = this.props;
 
 
@@ -44,7 +46,7 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="" />
             <MenuItem primaryText="" />
             <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
+            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()} addResource={addResource}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>

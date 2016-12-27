@@ -149,7 +149,7 @@ constructor(props) {
                 <div style={styles.chipSection}>
 
                 <h3> Popular Tags: </h3>
-                {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
+                {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag.label}</Chip>))}
                 </div>
                                   <h3> Description </h3>
                   {result.description}
@@ -204,7 +204,7 @@ constructor(props) {
             <div>
               <h3>Tags:</h3>
                <div style={styles.wrapper}>
-                    {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
+                    {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag.label}</Chip>))}
                 </div>
             </div>
           </div>

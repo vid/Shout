@@ -23,8 +23,11 @@ calculateDistance(result){
 }
 
 formatTags(arrTags){
-
-  return arrTags.join(', ');
+    var arrLabels=[];
+    arrTags.forEach(function(element) {
+        arrLabels.push(element.label);
+    });
+  return arrLabels.join(', ');
 
 }
 
