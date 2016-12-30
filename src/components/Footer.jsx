@@ -23,10 +23,13 @@ const styles = {
     color:'black'
   },
 };
+
 export default class Footer extends Component {
 
-  render() {
+render() {
 
+
+  const {displayAddResource} = this.props;
   const {selectedIndex}=this.props;
   const {onSelect}=this.props;
 
@@ -62,7 +65,7 @@ export default class Footer extends Component {
           <BottomNavigationItem
             label="Add New Place"
             icon={<ContentAdd />}
-            onTouchTap={() => onSelect(4)}
+            onTouchTap={() => displayAddResource()}
           />
         </BottomNavigation>
       </Paper>

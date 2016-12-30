@@ -101,7 +101,7 @@ export default class App extends React.Component {
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({showMenu: false});
-    this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} />});
+    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} />});
   }
 
   displayFeedback () {
@@ -115,7 +115,7 @@ export default class App extends React.Component {
     this.setState({appbarTitle:clinicname});
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
-    this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
+    this.setState({screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} result={result} />});
   }
   displaySearch () {
     this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources} userLat={this.state.userLat} userLng={this.state.userLng} />});
@@ -219,7 +219,7 @@ render () {
 
 
           <div ref='footer' id='footer'>
-            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
+            <Footer displayAddResource={() => this.displayAddResource()} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
           </div>
 
         </div>

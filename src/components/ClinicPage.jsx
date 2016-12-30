@@ -11,6 +11,10 @@ import Chip from 'material-ui/Chip';
 import Checkbox from 'material-ui/Checkbox';
 import StarRatingComponent from 'react-star-rating-component';
 import GoogleMap from 'google-map-react';
+import Divider from 'material-ui/Divider';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
@@ -18,6 +22,29 @@ import FlagContent from '../components/FlagContent.jsx';
 
 
 const styles = {
+
+    button:{
+      margin:'5',
+      padding:'5'
+    },
+
+   cardStyle: {
+        display: 'flex',
+        flex:1,
+        flexDirection: 'column',
+        margin:'5'
+    },
+
+    chip: {
+      margin: 4,
+      height: '80%'
+    },
+
+    dataStyle:{
+      margin:'5',
+      height:'100%',
+    },
+
     mainStyle: {
 
         height: '100%',
@@ -32,57 +59,48 @@ const styles = {
         width: '100%',
     },
 
-     cardStyle: {
-        display: 'flex',
-        flex:1,
-        flexDirection: 'column',
-        height:'100%',
-    },
-
-    dataStyle:{
-      margin:'5px',
+    reviews:{
+      margin:'10',
       height:'100%',
     },
-    chipSection: {
-       display: 'flex',
-       flexDirection: 'row'
-   },
-   chipStyle: {
-      height: '80%',
-  },
-  chip: {
-    margin: 4,
-  },
-  feedbackWrapper: {
+
+    feedbackWrapper: {
      display: 'flex',
      flexDirection: 'row'
- },
+     },
 
-  wrapper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-  },
+   wrapper: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      flexDirection: 'row',
+    },
 
 };
 
 
 export default class ClinicPage extends React.Component {
+
+//constructor
 constructor(props) {
     super(props);
 
-
     this.state = {
-    chipData: [
-      {key: 0, label: 'asdf'
-      }
-    ]};
+      chipData: [],
+      availabilityRating: 0,
+      qualityRating: 0,
+      affordabilityRating: 0,
+      submitfeedbackOpen: false,
+      flagcontentOpen: false
+    };
 
     this.defaults = {
       zoom: 16,
       center: {lat: 33.7490, lng: -84.3880},
     };
   }
+
+
+//Begin actions
 
   submitFeedback(event){
     this.setState({
@@ -102,9 +120,50 @@ constructor(props) {
     );
   }
 
+  getRating(result, id){
 
+    if(results.reviews.length()===0){
+      return 0;
+    }
+      if(id==='0'){
+        return result.ratings.overall;
+      }
+      if(id==='1'){
+        return result.ratings.quality;
+      }
+      if(id==='2'){
+        return result.ratings.availability;
+      }
+      if(id==='3'){
+        return result.ratings.affordability;
+      }
+      return 0;
+
+  }
+
+  searchSizer () {
+    const {container, footer} = this.props;
+    const {offsetHeight, offsetWidth} = container;
+    const footerOffsetHeight = footer.offsetHeight;
+    this.setState({offsetHeight, offsetWidth, footerOffsetHeight});
+  }
+
+  componentDidMount () {
+    this.searchSizer();
+    window.addEventListener('resize', () => this.searchSizer(), false);
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.searchSizer, false);
+  }
 
   render () {
+
+
+    const {offsetWidth, offsetHeight, footerOffsetHeight} = this.state;
+    if (offsetHeight === undefined) {
+      return null;
+    }
     const {result} = this.props;
     const {displaySearch} = this.props;
     const reviews_=result.reviews;
@@ -112,15 +171,14 @@ constructor(props) {
 
 
     return (
-        <div id='clinicpage'>
+    <div style={{height: (offsetHeight), overflow: 'auto'}}>
+      <Paper style={styles.mainStyle} zDepth={1}>
 
-        <Paper style={styles.mainStyle} zDepth={1}>
 
-
+{/* Section 1 */}
         <Card style ={styles.cardStyle}>
-
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300"/>
-        <CardText>
+          <CardText>
             <div style={styles.cardStyle}>
             <div style={styles.dataStyle}>
 
@@ -132,227 +190,232 @@ constructor(props) {
                     bootstrapURLKeys={{
                     key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
                     language: 'en'}}>
-
                     <Place lat={result.lat}
                                   lng={result.lng}
                                   text={"a"} />
                 </GoogleMap>
-
                 </div>
             </div>
               <div style={styles.dataStyle}>
                 <h3> Address: </h3>
                 {result.civic_address}
-
                 <h3> Phone: </h3>
                 {result.phone}
-                <div style={styles.chipSection}>
-
-                <h3> Popular Tags: </h3>
-                {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
-                </div>
-                                  <h3> Description </h3>
-                  {result.description}
-                </div>
-
+              </div>
             </div>
-
         </CardText>
-
       </Card>
 
-      <Card>
+{/* Section 2: List of tags */}
+      <Card style ={styles.cardStyle}>
+      <CardHeader title="Tags"/>
+        <CardText>
+          {result.tags.map((tag)=>(<div style={styles.wrapper}><Chip style={styles.chip}>{tag.label}</Chip><div style={styles.dataStyle}>{"  ("+tag.count+" users tagged this)"}</div></div>))}
+        </CardText>
+      </Card>
+
+
+{/* Section 3: Short Description*/}
+      <Card style ={styles.cardStyle}>
+      <CardHeader title="Description"/>
+        <CardText>
+          {result.description}
+        </CardText>
+      </Card>
+
+
+
+{/* Section 4: Feedback */}
+      <Card style ={styles.cardStyle}>
           <CardHeader
           title="Feedback"/>
-        <CardText>
-
-        <div style={styles.feedbackWrapper}>
-
-          <div style={styles.ratingsSection}>
-
-           <div>
-              <h3>Service</h3>
-
-              <StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
-                value={3} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              />
-            </div>
-
+          <CardText>
+            <div style={styles.feedbackWrapper}>
+            <div style={styles.ratingsSection}>
             <div>
-              <h3>Transportation</h3>
-
+              <h3>Waiting Time</h3>
+              <p> Reflects waiting time for appointments/walk-in. </p>
               <StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
-                value={3} /* number of selected icon (`0` - none, `1` - first) */
+                name="Availability" /* name of the radio input, it is required */
+                value={()=>this.getRating("0")} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
               />
-
             </div>
-
             <div>
               <h3>Quality of Care</h3>
-
+              <p> Reflects waiting time for appointments/walk-in. </p>
               <StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
-                value={3} /* number of selected icon (`0` - none, `1` - first) */
+                name="Quality" /* name of the radio input, it is required */
+                value={()=>this.getRating("1")} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
               />
-
+            </div>
+            <div>
+              <h3>Affordability</h3>
+              <StarRatingComponent
+                name="Affordability" /* name of the radio input, it is required */
+                value={()=>this.getRating("2")} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              />
+            </div>
+            <div>
+              <h3>Overall</h3>
+              <StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={()=>this.getRating("3")} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+                onStarClick={()=>this.setState(rating.accessibility)}
+              />
             </div>
             <div>
               <h3>Tags:</h3>
                <div style={styles.wrapper}>
-                    {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag}</Chip>))}
+                    {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag.label}</Chip>))}
                 </div>
             </div>
           </div>
-          <div>
-            <h3> Reviews: {"("+numberReviews+" user reviews)"}</h3>
-            {reviews_.map((review)=>(<p>{'" '+review.text+'"'}</p>))}
+          <div style={styles.reviews}>
+            <h3> Recent Reviews: {"("+numberReviews+" user reviews)"}</h3>
+            {reviews_.map((review)=>(<div>
+                                        <p><b>{"Name: "+review.author}</b></p>
+                                        <p>{'" '+review.text+'"'}</p>
+                                        <Divider /></div>
+                                        ))}
+
+            <RaisedButton
+              style={styles.button}
+              label="Submit Feedback"
+              primary={true}
+              onTouchTap={() => this.setState({submitfeedbackOpen: true})}/>
+
+            <RaisedButton
+              label="Flag this Content"
+              style={styles.button}
+              secondary={true}
+              onTouchTap={() => this.setState({flagcontentOpen: true})}/>
           </div>
         </div>
 
         </CardText>
       </Card>
-      <Card>
-          <CardHeader
-          title="Submit Feedback"
-          actAsExpander={true}
-          showExpandableButton={true}
-          />
-      <CardText expandable={true}>
 
+{/* Section 5: Submit Feedback */}
+<Dialog
+    title="Submit Feedback"
+    actions={[
+       <FlatButton
+         label="Cancel"
+         primary={true}
+         onTouchTap={() => this.setState({submitfeedbackOpen: false})}/>,
+       <FlatButton
+         label="Submit"
+         primary={true}
+         keyboardFocused={true}
+         onTouchTap={() => this.setState({submitfeedbackOpen: false})}/>]}
+    modal={false}
+    open={this.state.submitfeedbackOpen}
+    onRequestClose={() => this.setState({submitfeedbackOpen: false})}>
+
+      <CardHeader title="Submit Feedback"/>
+      <CardText>
+        <div> Fields marked by an asterisk * are required </div>
         <div className="feedback-container">
-
-            <div className="rate-service">
-              <h3>Overall</h3>
+            <div>
+              <h3>Availability *</h3>
+              <p>How easy was it to book an appointment or walk-in for services?</p>
+              <StarRatingComponent
+                name="Availability" /* name of the radio input, it is required */
+                value={this.state.availabilityRating} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+                onStarClick={(nextValue, prevValue, name)=>this.setState({availabilityRating: nextValue})}
+              />
+            </div>
+            <div>
+              <h3>Quality of Care *</h3>
+              <p>Please rate the quality of service (confidentiality, professionalism, explanation of your health/management)</p>
+              <StarRatingComponent
+                name="Quality" /* name of the radio input, it is required */
+                value={this.state.qualityRating} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+                onStarClick={(nextValue, prevValue, name)=>this.setState({qualityRating: nextValue})}
+              />
+            </div>
+            <div>
+              <h3>Affordability *</h3>
+              <p>Please rate the quality of service (confidentiality, professionalism, explanation of your health/management)</p>
               <StarRatingComponent
                 name="Service" /* name of the radio input, it is required */
-                value={0} /* number of selected icon (`0` - none, `1` - first) */
+                value={this.state.affordabilityRating} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
-                onStarClick={()=>this.setState(rating.accessibility)}
+                onStarClick={(nextValue, prevValue, name)=>this.setState({affordabilityRating: nextValue})}
               />
-
             </div>
+            <div>
+              <h3>Services and Tags</h3>
+              <p> Would you like to endorse {result.name} for any of the following services or specialties?</p>
+              {result.tags.map((tag)=>(<div style={styles.wrapper}><Chip style={styles.chipStyle}>{tag.label}</Chip><div style={styles.dataStyle}>{"  ("+tag.count+" users tagged this)"}</div></div>))}
+           </div>
+           <div>
+              <h3> Comments </h3>
+              <p> Enter any details that might help others who are looking for healthcare. (Limit 160 char)</p>
 
-            <div className="rate-transportation">
-              <h3>Accessibility</h3>
-              <p>How easy was it to get here via public transportation?</p>
-              <StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
-                value={0} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              />
+              <TextField hintText="Limit 160 char"
+                         inputStyle={styles.input}
+                         floatingLabelStyle={styles.floatinglabel}
+                         floatingLabelText="Comments "
+                         floatingLabelFixed={true}
+                         multiLine={true}
+                         rows={3}
+                         rowsMax={10}
+                         onChange={(event) => this.setState({value_Descript: event.target.value})}/><br />
 
-            </div>
-
-            <div className="rate-qualitycare">
-              <h3>Quality of Care</h3>
-              <p>Please rate the quality of service (waiting time, courtesy, explanation of your health/management)</p>
-              <StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
-                value={0} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              />
-
-            </div>
-
-            <h3> Comments </h3>
-            <p> Please leave any comments that might help others who are looking for healthcare. Limit 160 char. </p>
-
-                <input type="text"
-                         value={this.state.label}
-                       onChange={(event) => this.submitFeedback(event)}/>
-                <br />
-
-                 <div style={styles.wrapper}>
-                     {this.state.chipData.map(this.renderChip, this)}
-                 </div>
-
-          <button onClick={this.submitFeedback.bind(this)} className="btn btn-primary">Submit</button>
+                  <br />
+                   <div style={styles.wrapper}>
+                       {this.state.chipData.map(this.renderChip, this)}
+                   </div>
+           </div>
+          <button onClick={()=>this.submitFeedback} className="btn btn-primary">Submit</button>
           </div>
       </CardText>
-    </Card>
-    <Card>
-          <CardHeader
-      title="Update"
-      actAsExpander={true}
-      showExpandableButton={true}
-    />
+    </Dialog>
 
+{/* Section 6: Flag Content */}
+<Dialog
+    title="Submit Feedback"
+    actions={[
+       <FlatButton
+         label="Cancel"
+         primary={true}
+         onTouchTap={() => this.setState({flagcontentOpen: false})}/>,
+       <FlatButton
+         label="Submit"
+         primary={true}
+         keyboardFocused={true}
+         onTouchTap={() => this.setState({flagcontentOpen: false})}/>]}
+    modal={false}
+    open={this.state.flagcontentOpen}
+    onRequestClose={() => this.setState({flagcontentOpen: false})}>
+            <CardHeader title="Flag this content"/>
+            <CardText>
+            <FlagContent />
+            </CardText>
+    </Dialog>
 
-    <CardText expandable={true}>
-      <UpdateResource/>
-       <div className="update-container">
-        <h4> Please select all that are applicable </h4>
-        <div style={styles.block}>
-            <Checkbox
-              label="Simple"
-              style={styles.checkbox}
-            />
-            </div>
-            <div style={styles.block}>
-            <Checkbox
-              label="Simple"
-              style={styles.checkbox}
-            />
-            </div>
-             <TextField
-              hintText="Hint Text"
-              floatingLabelText="Fixed Floating Label Text"
-              floatingLabelFixed={true}
-            /><br />
-            <div style={styles.block}>
-            <Checkbox
-              label="Simple"
-              style={styles.checkbox}
-            />
-            </div>
-             <TextField
-              hintText="Hint Text"
-              floatingLabelText="Fixed Floating Label Text"
-              floatingLabelFixed={true}
-            /><br />
-            <div style={styles.block}>
-            <Checkbox
-              label="Simple"
-              style={styles.checkbox}
-            />
-            </div>
-             <TextField
-              hintText="Hint Text"
-              floatingLabelText="Fixed Floating Label Text"
+    </Paper>
+  </div>
 
-              floatingLabelFixed={true}
-            /><br />
-
-
-
-    </div>
-    </CardText>
-  </Card>
-  <Card>
-          <CardHeader
-    title="Flag this content"
-    actAsExpander={true}
-    showExpandableButton={true}
-  />
-  <CardText expandable={true}>
-    <FlagContent />
-  </CardText>
-</Card>
-
-            </Paper>
-      </div>
     );
   }
 }
 
+//Typechecking
+
 ClinicPage.PropTypes={
   label:React.PropTypes.string,
 }
+
+
+//Class Place for placing component onto map
 
 class Place extends React.Component {
  render() {
