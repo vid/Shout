@@ -1,10 +1,10 @@
 'use strict';
 
-import React,  {Component} from 'react';
+import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
-import {Card, CardActions, CardHeader, CardText, CardTitle, CardMedia} from 'material-ui/Card';
-import {cyan200} from 'material-ui/styles/colors';
+import { Card, CardActions, CardHeader, CardText, CardTitle, CardMedia } from 'material-ui/Card';
+import { cyan200 } from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
@@ -23,26 +23,26 @@ import FlagContent from '../components/FlagContent.jsx';
 
 const styles = {
 
-    button:{
-      margin:'5',
-      padding:'5'
+    button: {
+        margin: '5',
+        padding: '5'
     },
 
-   cardStyle: {
+    cardStyle: {
         display: 'flex',
-        flex:1,
+        flex: 1,
         flexDirection: 'column',
-        margin:'5'
+        margin: '5'
     },
 
     chip: {
-      margin: 4,
-      height: '80%'
+        margin: 4,
+        height: '80%'
     },
 
-    dataStyle:{
-      margin:'5',
-      height:'100%',
+    dataStyle: {
+        margin: '5',
+        height: '100%',
     },
 
     mainStyle: {
@@ -59,20 +59,20 @@ const styles = {
         width: '100%',
     },
 
-    reviews:{
-      margin:'10',
-      height:'100%',
+    reviews: {
+        margin: '10',
+        height: '100%',
     },
 
     feedbackWrapper: {
-     display: 'flex',
-     flexDirection: 'row'
-     },
+        display: 'flex',
+        flexDirection: 'row'
+    },
 
-   wrapper: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      flexDirection: 'row',
+    wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
     },
 
 };
@@ -80,98 +80,98 @@ const styles = {
 
 export default class ClinicPage extends React.Component {
 
-//constructor
-constructor(props) {
-    super(props);
+    //constructor
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      chipData: [],
-      availabilityRating: 0,
-      qualityRating: 0,
-      affordabilityRating: 0,
-      submitfeedbackOpen: false,
-      flagcontentOpen: false
-    };
+        this.state = {
+            chipData: [],
+            availabilityRating: 0,
+            qualityRating: 0,
+            affordabilityRating: 0,
+            submitfeedbackOpen: false,
+            flagcontentOpen: false
+        };
 
-    this.defaults = {
-      zoom: 16,
-      center: {lat: 33.7490, lng: -84.3880},
-    };
-  }
+        this.defaults = {
+            zoom: 16,
+            center: { lat: 33.7490, lng: -84.3880 },
+        };
+    }
 
 
-//Begin actions
+    //Begin actions
 
-  submitFeedback(event){
-    this.setState({
-    label:event.target.value
-    });
-  }
+    submitFeedback(event) {
+        this.setState({
+            label: event.target.value
+        });
+    }
 
-  renderChip(data) {
-    return (
-      <Chip
+    renderChip(data) {
+        return (
+            <Chip
         key={data.key}
         onRequestDelete={() => this.handleRequestDelete(data.key)}
         style={styles.chip}
       >
         {data.label}
       </Chip>
-    );
-  }
-
-  getRating(result, id){
-
-    if(results.reviews.length()===0){
-      return 0;
+        );
     }
-      if(id==='0'){
-        return result.ratings.overall;
-      }
-      if(id==='1'){
-        return result.ratings.quality;
-      }
-      if(id==='2'){
-        return result.ratings.availability;
-      }
-      if(id==='3'){
-        return result.ratings.affordability;
-      }
-      return 0;
 
-  }
+    getRating(result, id) {
 
-  searchSizer () {
-    const {container, footer} = this.props;
-    const {offsetHeight, offsetWidth} = container;
-    const footerOffsetHeight = footer.offsetHeight;
-    this.setState({offsetHeight, offsetWidth, footerOffsetHeight});
-  }
+        if (results.reviews.length() === 0) {
+            return 0;
+        }
+        if (id === '0') {
+            return result.ratings.overall;
+        }
+        if (id === '1') {
+            return result.ratings.quality;
+        }
+        if (id === '2') {
+            return result.ratings.availability;
+        }
+        if (id === '3') {
+            return result.ratings.affordability;
+        }
+        return 0;
 
-  componentDidMount () {
-    this.searchSizer();
-    window.addEventListener('resize', () => this.searchSizer(), false);
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('resize', this.searchSizer, false);
-  }
-
-  render () {
-
-
-    const {offsetWidth, offsetHeight, footerOffsetHeight} = this.state;
-    if (offsetHeight === undefined) {
-      return null;
     }
-    const {result} = this.props;
-    const {displaySearch} = this.props;
-    const reviews_=result.reviews;
-    const numberReviews=reviews_.length;
+
+    searchSizer() {
+        const { container, footer } = this.props;
+        const { offsetHeight, offsetWidth } = container;
+        const footerOffsetHeight = footer.offsetHeight;
+        this.setState({ offsetHeight, offsetWidth, footerOffsetHeight });
+    }
+
+    componentDidMount() {
+        this.searchSizer();
+        window.addEventListener('resize', () => this.searchSizer(), false);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.searchSizer, false);
+    }
+
+    render() {
 
 
-    return (
-    <div style={{height: (offsetHeight), overflow: 'auto'}}>
+        const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
+        if (offsetHeight === undefined) {
+            return null;
+        }
+        const { result } = this.props;
+        const { displaySearch } = this.props;
+        const reviews_ = result.reviews;
+        const numberReviews = reviews_.length;
+
+
+        return (
+            <div style={{height: (offsetHeight), overflow: 'auto'}}>
       <Paper style={styles.mainStyle} zDepth={1}>
 
 
@@ -210,7 +210,7 @@ constructor(props) {
       <Card style ={styles.cardStyle}>
       <CardHeader title="Tags"/>
         <CardText>
-          {result.tags.map((tag)=>(<div style={styles.wrapper}><Chip style={styles.chip}>{tag.label}</Chip><div style={styles.dataStyle}>{"  ("+tag.count+" users tagged this)"}</div></div>))}
+          {result.tags.map((tag)=>(<div style={styles.wrapper}><Chip style={styles.chip}>{tag.label}</Chip><div style={styles.dataStyle}>{"  ("+tag.count+" users vouched for this)"}</div></div>))}
         </CardText>
       </Card>
 
@@ -278,6 +278,9 @@ constructor(props) {
             <h3> Recent Reviews: {"("+numberReviews+" user reviews)"}</h3>
             {reviews_.map((review)=>(<div>
                                         <p><b>{"Name: "+review.author}</b></p>
+                                        <p>{"Availability: "+review.availability+"/5"}</p>
+                                        <p>{"Quality: "+review.quality+"/5"}</p>
+                                        <p>{"Affordability: "+review.affordability+"/5"}</p>
                                         <p>{'" '+review.text+'"'}</p>
                                         <Divider /></div>
                                         ))}
@@ -381,7 +384,7 @@ constructor(props) {
 
 {/* Section 6: Flag Content */}
 <Dialog
-    title="Submit Feedback"
+    title="Flag Content"
     actions={[
        <FlatButton
          label="Cancel"
@@ -395,7 +398,6 @@ constructor(props) {
     modal={false}
     open={this.state.flagcontentOpen}
     onRequestClose={() => this.setState({flagcontentOpen: false})}>
-            <CardHeader title="Flag this content"/>
             <CardText>
             <FlagContent />
             </CardText>
@@ -404,65 +406,65 @@ constructor(props) {
     </Paper>
   </div>
 
-    );
-  }
+        );
+    }
 }
 
 //Typechecking
 
-ClinicPage.PropTypes={
-  label:React.PropTypes.string,
+ClinicPage.PropTypes = {
+    label: React.PropTypes.string,
 }
 
 
 //Class Place for placing component onto map
 
 class Place extends React.Component {
- render() {
-   const K_WIDTH = 15;
-   const K_HEIGHT = 15;
+    render() {
+        const K_WIDTH = 15;
+        const K_HEIGHT = 15;
 
-   const styleHover = {
-   // initially any map object has left top corner at lat lng coordinates
-   // it's on you to set object origin to 0,0 coordinates
-   position: 'absolute',
-   width: K_WIDTH,
-   height: K_HEIGHT,
-   left: -K_WIDTH / 2,
-   top: -K_HEIGHT / 2,
+        const styleHover = {
+            // initially any map object has left top corner at lat lng coordinates
+            // it's on you to set object origin to 0,0 coordinates
+            position: 'absolute',
+            width: K_WIDTH,
+            height: K_HEIGHT,
+            left: -K_WIDTH / 2,
+            top: -K_HEIGHT / 2,
 
-   border: '5px solid #4DD0E1',
-   borderRadius: K_HEIGHT,
-   backgroundColor: '#B2EBF2',
-   textAlign: 'center',
-   color: '#F06292',
-   fontSize: 16,
-   fontWeight: 'bold',
-   padding: 4
- };
+            border: '5px solid #4DD0E1',
+            borderRadius: K_HEIGHT,
+            backgroundColor: '#B2EBF2',
+            textAlign: 'center',
+            color: '#F06292',
+            fontSize: 16,
+            fontWeight: 'bold',
+            padding: 4
+        };
 
- const style = {
- // initially any map object has left top corner at lat lng coordinates
- // it's on you to set object origin to 0,0 coordinates
- position: 'absolute',
- width: K_WIDTH,
- height: K_HEIGHT,
- left: -K_WIDTH / 2,
- top: -K_HEIGHT / 2,
+        const style = {
+            // initially any map object has left top corner at lat lng coordinates
+            // it's on you to set object origin to 0,0 coordinates
+            position: 'absolute',
+            width: K_WIDTH,
+            height: K_HEIGHT,
+            left: -K_WIDTH / 2,
+            top: -K_HEIGHT / 2,
 
- border: '3px solid #F06292',
- borderRadius: K_HEIGHT,
- backgroundColor: 'white',
- textAlign: 'center',
- color: '#3f51b5',
- fontSize: 12,
- fontWeight: 'bold',
- padding: 4
-};
- return (
-    <div style={this.props.$hover ? styleHover : style}>
+            border: '3px solid #F06292',
+            borderRadius: K_HEIGHT,
+            backgroundColor: 'white',
+            textAlign: 'center',
+            color: '#3f51b5',
+            fontSize: 12,
+            fontWeight: 'bold',
+            padding: 4
+        };
+        return (
+            <div style={this.props.$hover ? styleHover : style}>
        {this.props.text}
     </div>
-   );
- }
+        );
+    }
 };

@@ -8,7 +8,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import {cyan200} from 'material-ui/styles/colors';
+import { cyan200 } from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
 import Chip from 'material-ui/Chip';
 import IconButton from 'material-ui/IconButton';
@@ -16,121 +16,118 @@ import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Divider from 'material-ui/Divider';
 
-import {resources} from '../lib/resources.js';
+import { resources } from '../lib/resources.js';
 
 const ENTER_KEY = 13;
 const styles = {
-main: {
-    padding: '1% 2% 5% 5%',
-    alignment: 'right',
-    overflow: 'auto'
-},
-
-row: {
-    display: 'flex',
-    flexDirection: 'row'
-},
-
-hint: {
-  },
-
-input: {
-    fontColor: 'black',
-  },
-
-button: {
-      fontSize: '12',
-      padding: '2px'
+    main: {
+        padding: '1% 2% 5% 5%',
+        alignment: 'right',
+        overflow: 'auto'
     },
 
-floatinglabel: {
-    color: 'black',
-  },
+    row: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+    
+    input: {
+        fontColor: 'black',
+    },
+
+    button: {
+        fontSize: '12',
+        padding: '2px'
+    },
+
+    floatinglabel: {
+        color: 'black',
+    },
 
 };
 
 export default class AddResource extends React.Component {
 
-constructor() {
-    super();
-    this.state = {
-        value_Name:"",
-        value_Type:"Not entered",
-        value_Phone:"Not entered",
-        value_Address:"Not entered",
-        value_Apt:"",
-        value_zip:"",
-        value_Website:"",
-        value_Descript:"",
-        value_Tags:[],
-        value_Hours:'',
+    constructor() {
+        super();
+        this.state = {
+            value_Name: "",
+            value_Type: "Not entered",
+            value_Phone: "Not entered",
+            value_Address: "Not entered",
+            value_Apt: "",
+            value_zip: "",
+            value_Website: "",
+            value_Descript: "",
+            value_Tags: [],
+            value_Hours: '',
 
-        chipData: []
+            chipData: []
 
-    };
-}
-
-
-submitAll(){
-
-  var temp={
-      name: this.state.value_Name,
-      type:this.state.value_Type,
-      phone: this.state.value_Phone,
-      civic_address: this.state.value_Address+" "+this.state.value_Apt,
-      zip: this.state.value_zip,
-      website:this.state.value_Website,
-      description: this.state.value_Descript,
-      tags:this.state.chipData,
-      hours:this.state.value_Hours,
-  }
-
-   console.log(temp);
-   return temp;
-
-}
-
-handleRequestDelete(key){
-    this.chipData = this.state.chipData;
-    const chipToDelete = this.chipData.map((chip) => chip.key).indexOf(key);
-    this.chipData.splice(chipToDelete, 1);
-    this.setState({chipData: this.chipData});
-}
-
-renderChip(data) {
-    return (
-      <Chip key={data.key} onRequestDelete={() =>this.handleRequestDelete(data.key)}>
-          {data.label}
-      </Chip>
-    );
-}
-
-searchSizer () {
-  const {container, footer} = this.props;
-  const {offsetHeight, offsetWidth} = container;
-  const footerOffsetHeight = footer.offsetHeight;
-  this.setState({offsetHeight, offsetWidth, footerOffsetHeight});
-}
-
-componentDidMount () {
-  this.searchSizer();
-  window.addEventListener('resize', () => this.searchSizer(), false);
-}
-
-componentWillUnmount () {
-  window.removeEventListener('resize', this.searchSizer, false);
-}
-
-render () {
-    const {addResource} = this.props;
-    const {offsetWidth, offsetHeight, footerOffsetHeight} = this.state;
-    if (offsetHeight === undefined) {
-      return null;
+        };
     }
 
-    return (
 
-      <div style={{height: (offsetHeight), overflow: 'auto'}}>
+    submitAll() {
+
+        var temp = {
+            name: this.state.value_Name,
+            type: this.state.value_Type,
+            phone: this.state.value_Phone,
+            civic_address: this.state.value_Address + " " + this.state.value_Apt,
+            zip: this.state.value_zip,
+            website: this.state.value_Website,
+            description: this.state.value_Descript,
+            tags: this.state.chipData,
+            hours: this.state.value_Hours,
+        }
+
+        console.log(temp);
+        return temp;
+
+    }
+
+    handleRequestDelete(key) {
+        this.chipData = this.state.chipData;
+        const chipToDelete = this.chipData.map((chip) => chip.key).indexOf(key);
+        this.chipData.splice(chipToDelete, 1);
+        this.setState({ chipData: this.chipData });
+    }
+
+    renderChip(data) {
+        return (
+            <Chip key={data.key} onRequestDelete={() =>this.handleRequestDelete(data.key)}>
+          {data.label}
+      </Chip>
+        );
+    }
+
+    searchSizer() {
+        const { container, footer } = this.props;
+        const { offsetHeight, offsetWidth } = container;
+        const footerOffsetHeight = footer.offsetHeight;
+        this.setState({ offsetHeight, offsetWidth, footerOffsetHeight });
+    }
+
+    componentDidMount() {
+        this.searchSizer();
+        window.addEventListener('resize', () => this.searchSizer(), false);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.searchSizer, false);
+    }
+
+    render() {
+        const { addResource } = this.props;
+        const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
+        if (offsetHeight === undefined) {
+            return null;
+        }
+
+        return (
+
+            <div style={{height: (offsetHeight), overflow: 'auto'}}>
         <div style={styles.main}>
 
             <h3> Add Resource (fields denoted by * are mandatory)</h3>
@@ -155,7 +152,7 @@ render () {
                          <MenuItem value={2} primaryText="Hospital" />
                          <MenuItem value={3} primaryText="Housing" />
                        </SelectField>
-                       
+
           </div>
           <div style={styles.addressSection}>
             <TextField hintText="Address"
@@ -309,6 +306,6 @@ render () {
           </div>
         </div>
       </div>
-    );
-  }
+        );
+    }
 }
