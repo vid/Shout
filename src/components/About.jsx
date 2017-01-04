@@ -29,7 +29,10 @@ export default class About extends React.Component {
                 <h1> About </h1>
             <p>
             We believe that the best way to spread healthcare information among marginalized communities is to empower them to inform themselves and each other.
-            Read more about our missiong at www.shoutforhealth.org
+            Read more about our mission at www.shoutforhealth.org
+
+            Facebook: facebook.com/shouthealthapp
+            Instagram: @shouthealth
             </p>
         </Paper>
     </div>

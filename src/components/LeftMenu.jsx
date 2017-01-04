@@ -34,7 +34,7 @@ export default class LeftMenu extends React.Component {
     render(){
 
         const {displayAddResource} = this.props;
- 
+
         const {addResource} = this.props;
         const {displayAbout} = this.props;
 
@@ -45,8 +45,7 @@ export default class LeftMenu extends React.Component {
         <div id='menu'>
             <MenuItem primaryText="" />
             <MenuItem primaryText="" />
-            <MenuItem primaryText="New Search" leftIcon={<ActionSearch />}/>
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()} addResource={addResource}/>
+            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
                 <Divider />
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>
@@ -95,11 +94,11 @@ export default class LeftMenu extends React.Component {
                 </h1>
                 <p>
                 We believe that the best way to spread healthcare information among marginalized communities is to empower them to inform themselves and each other.
-                Read more about our missiong at www.shoutforhealth.org
+                Read more about our mission at www.shoutforhealth.org
                 </p>
             </Dialog>
 
-          
+
             </div>
       )
     }

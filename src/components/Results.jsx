@@ -55,7 +55,7 @@ formatTags(arrTags){
               <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
               <TableRowColumn style={styles.namesectionStyle}><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
               <TableRowColumn style={styles.addresssectionStyle}>
-                  {this.formatTags(result.tags)}
+                   {this.formatTags(result.tags)}
               </TableRowColumn>
             </TableRow>
           ))}

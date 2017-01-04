@@ -137,7 +137,7 @@ export default class App extends React.Component {
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({showMenu: false});
-    this.setState({screen: <AddResource displaySearch={(result) => this.displaySearch()} addResource={(res) => this.addResource(res)} />});
+    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} />});
   }
 
   displayFeedback () {
@@ -151,9 +151,8 @@ export default class App extends React.Component {
     this.setState({appbarTitle:clinicname});
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
-    this.setState({screen: <ClinicPage displaySearch={(result) => this.displaySearch()} result={result} />});
-}
-
+    this.setState({screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} result={result} />});
+  }
   displaySearch () {
 
   db.allDocs({include_docs: true, descending: true}, (err, doc) => {
@@ -168,7 +167,7 @@ export default class App extends React.Component {
     this.setState({appbarIcon:<NavigationMenu />});
     this.requestCurrentPosition();
 
-    
+
 }
 
   redrawResources(resources){
@@ -184,13 +183,13 @@ export default class App extends React.Component {
             console.log(res.doc);
             console.log(res.doc.name);
         });
-       
+
         this.setState({allResources:resourcesdocs.results});
         this.setState({filteredResources:resourcesdocs.results});
     }
 
    getResources() {
-        
+
     }
 
   filterResources (searchString) {
@@ -265,7 +264,7 @@ export default class App extends React.Component {
 // end of actions
 
 //sync the database
-  
+
 
 render () {
     return (
@@ -297,7 +296,7 @@ render () {
 
 
           <div ref='footer' id='footer'>
-            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
+            <Footer displayAddResource={() => this.displayAddResource()} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
           </div>
 
         </div>

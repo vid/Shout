@@ -17,15 +17,24 @@ export const resources = [{
       overall: 5,
       accessibility: 5,
       qualityofcare: 4,
+      author: "Anonymous",
       text: "Free flu vaccines"
     }, {
       overall: 2,
       accessibility: 2,
       qualityofcare: 5,
+      author: "Anonymous",
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["family", "housing", "homeless"]
-
+    tags: [{
+      key: 0,
+      label: 'free',
+      count: '1'
+    }, {
+      key: 1,
+      label: 'homeless',
+      count: '1'
+    }, ]
   }, {
     name: "Community Advance Practice Nurses",
     civic_address: "173 Boulevard NE, Atlanta",
@@ -55,21 +64,32 @@ export const resources = [{
     description: "The CAPN Clinic is a free clinic offering basic physical and mental health care and prevention education to the homeless and medically underserved in metropolitan Atlanta. It is an independent nonprofit funded by grants, businesses, and individuals.CAPN provides walk-in clinics for infants, children, teens and adults in need of medical attention for primary and acute care needs. CAPN also offers social service referrals, mental health services and healthy lifestyle counseling as well.",
     rating: {
       overall: 2,
-      accessibility: 2,
-      qualityofcare: 5
+      availability: 2,
+      quality: 5,
+      affordability: 4,
     },
     reviews: [{
-      overall: 5,
       accessibility: 5,
-      qualityofcare: 4,
+      quality: 4,
+      affordability: 4,
+      author: "Anonymous",
       text: "Free flu vaccines"
     }, {
-      overall: 2,
       accessibility: 2,
       qualityofcare: 5,
+      affordability: 4,
+      author: "Anonymous",
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["free", "homeless"]
+    tags: [{
+      key: 0,
+      label: 'free',
+      count: '1'
+    }, {
+      key: 1,
+      label: 'homeless',
+      count: '1'
+    }, ]
   }, {
     name: "Mercy Care at The Gateway",
     civic_address: "275 Pryor St SW, Atlanta",
@@ -94,7 +114,15 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["free", "homeless"]
+    tags: [{
+      key: 0,
+      label: 'free',
+      count: '1'
+    }, {
+      key: 1,
+      label: 'homeless',
+      count: '1'
+    }, ]
   },
 
   {
@@ -145,7 +173,15 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["women", "children", "free", "housing"]
+    tags: [{
+      key: 0,
+      label: 'women',
+      count: '1'
+    }, {
+      key: 1,
+      label: 'children',
+      count: '1'
+    }, ]
   },
 
   {
@@ -197,7 +233,19 @@ export const resources = [{
       qualityofcare: 5,
       text: "Great that this place is near a MARTA station"
     }],
-    tags: ["children", "free", "homeless"]
+    tags: [{
+      key: 0,
+      label: 'free',
+      count: '1'
+    }, {
+      key: 1,
+      label: 'homeless',
+      count: '1'
+    }, {
+      key: 2,
+      label: 'children',
+      count: '1'
+    }, ]
   }, {
     name: "Mercy Care North",
     civic_address: "Northeast Plaza, 3367 Buford Hwy NE #910",
@@ -415,9 +463,27 @@ export const resources = [{
     lng: "-84.3811922",
     phone: "404-616-4762",
     description: "description",
-    tags: ["women", "adolescent", "teen", "family", "sexual health",
-      "birth control", "pregnancy"
-    ],
+    tags: [{
+      key: 0,
+      label: 'women',
+      count: '1'
+    }, {
+      key: 1,
+      label: 'adolescent',
+      count: '1'
+    }, {
+      key: 2,
+      label: 'family',
+      count: '1'
+    }, {
+      key: 3,
+      label: 'pregnancy',
+      count: '1'
+    }, {
+      key: 4,
+      label: 'birth control',
+      count: '1'
+    }, ],
     reviews: [],
   }, {
     name: "Georgia State University Student Health Clinic",
