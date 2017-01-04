@@ -48,7 +48,7 @@ const styles = {
 
 export default class AddResource extends React.Component {
 
-<<<<<<< HEAD
+
 constructor() {
     super();
     this.state = {
