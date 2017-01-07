@@ -17,8 +17,6 @@ import Drawer from 'material-ui/Drawer';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 
-import {resources} from '../lib/resources.js';
-
 //import other components & pages
 import Search from './Search.jsx';
 import SearchInputs from './SearchInputs.jsx';
@@ -39,11 +37,11 @@ var remoteCouch = 'http://localhost:5984/resources';
 // all of the CSS styles for this component defined here
 const styles = {
   appbarTitle: {
-    fontSize: '30',
+    fontSize: 30,
   },
 
   appbarsubtitle: {
-    fontSize: '15',
+    fontSize: 15,
     color: '#ffffff',
     divAlign:'left',
     textAlign:'center',
@@ -65,8 +63,8 @@ export default class App extends React.Component {
 
     // this component's state acts as the overall store for now
     this.state = {
-        allResources: [...resources],
-        filteredResources: resources,
+        allResources: [],
+        filteredResources: [],
         showMenu: false,
         searchString: '',
         appbarState: false,
@@ -77,29 +75,28 @@ export default class App extends React.Component {
         hoveredMapRowIndex: '-1',
         userLat: '33.7490',
         userLng: '-84.3880',
+
+        clinicpageTags:[],
+        clinicpageFeedbacks:[]
     };
 
 
   }
   // Add a resource to the collection
   addResource (res) {
-     // this.setState({allResources: [...this.state.allResources, res]});
-      //this.filterResources(this.state.searchString);
 
       //calculate latitude and longitude
 
       var resource = {
-          _id: new Date().toISOString(),
+          _id: "Resource"+"_"+res.zip+"_"+new Date().toISOString()+"_"+res.name,
+          type: "resource",
           name: res.name,
           civic_address:res.civic_address,
           phone:res.phone,
           website:res.website,
           description: res.description,
-          type: res.type,
-          tags:res.tags,
-          zip:res.zip,
-          reviews:[],
-          ratings:{}
+          resourcetype: res.type,
+          zip:res.zip
 
       };
       db.put(resource, function callback(err, result) {
@@ -108,11 +105,70 @@ export default class App extends React.Component {
           }
       });
 
+      this.addTags(res.tags, res.name);
+
       if (remoteCouch) {
           this.sync();
       }
 
       this.filterResources(this.state.searchString);
+  }
+
+  addFeedback (rev){
+
+    var review = {
+        _id: "Feedback"+"_"+rev.name+"_"+new Date().toISOString(),
+        type: "feedback",
+        name: rev.name,
+        author: rev.author,
+        accessibility:rev.accessibility,
+        quality:rev.quality,
+        affordability:rev.affordability,
+        text: rev.text,
+
+    };
+
+    db.put(review, function callback(err, result) {
+        if (!err) {
+            console.log('Added review');
+        }
+    });
+
+    if (remoteCouch) {
+        this.sync();
+    }
+
+    this.filterResources(this.state.searchString);
+
+  }
+
+  addTags(tags, res_name) {
+
+    tags.forEach(function(element) {
+
+                    var tag = {
+                        _id: "tag"+"_"+res_name+"_"+element.label,
+                        type: "tag",
+                        name: res_name,
+                        value: element.label,
+                        count: 1
+
+                    };
+                    console.log("Creating tag object:"+tag._id);
+
+                    db.put(tag, function callback(err, result) {
+                        if (err) {
+                            return console.log(err);
+                        }
+                    });
+
+
+      });
+
+    if (remoteCouch) {
+        this.sync();
+    }
+
   }
 
 
@@ -137,7 +193,7 @@ export default class App extends React.Component {
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({showMenu: false});
-    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} />});
+    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)}/>});
   }
 
   displayFeedback () {
@@ -148,19 +204,25 @@ export default class App extends React.Component {
   displayResult (result) {
     const clinicname=result.name;
     this.setState({appbarIcon:<NavigationChevronLeft />});
+
+    this.updatePageTags(result.name);
+    this.updateFeedbacks(result.name);
+
     this.setState({appbarTitle:clinicname});
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
-    this.setState({screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} result={result} />});
+    this.setState({screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} />});
   }
+
+
   displaySearch () {
 
-  db.allDocs({include_docs: true, descending: true}, (err, doc) => {
+    db.allDocs({startkey : 'Resource_', endkey : 'Resource_\uffff', include_docs: true}, (err, doc) => {
             if (err) { return console.log(err); }
             this.redrawResources(doc.rows);
         });
 
-    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources} userLat={this.state.userLat} userLng={this.state.userLng} />});
+    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.getTags(name)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources} userLat={this.state.userLat} userLng={this.state.userLng} />});
     this.setState({appbarTitle:'Shout'});
     this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
@@ -170,27 +232,38 @@ export default class App extends React.Component {
 
 }
 
-  redrawResources(resources){
-        //resources.forEach(function (res) {
-        //    console.log(res.doc);
-        //});
+  updatePageTags(name){
 
-        var resourcesdocs = {
-            results: []
-        };
-        resources.forEach(function (res) {
-            resourcesdocs.results.push(res.doc);
-            console.log(res.doc);
-            console.log(res.doc.name);
+    db.allDocs({startkey : 'tag_'+name, endkey : 'tag_'+name+'_\uffff', include_docs: true}, (err, doc) => {
+
+        if (err) { return console.log(err); }
+
+        var tags=[];
+
+        doc.rows.forEach(function(tag){
+          tags.push(tag.doc);
         });
+        this.setState({clinicpageTags:tags});
+    });
 
-        this.setState({allResources:resourcesdocs.results});
-        this.setState({filteredResources:resourcesdocs.results});
-    }
+  }
 
-   getResources() {
+  updateFeedbacks(name){
 
-    }
+
+      db.allDocs({startkey : 'Feedback_'+name, endkey : 'Feedback_'+name+'_\uffff', include_docs: true}, (err, doc) => {
+
+          if (err) { return console.log(err); }
+
+          var feedbacks=[];
+
+          doc.rows.forEach(function(feedback){
+            feedbacks.push(feedback.doc);
+          });
+          this.setState({clinicpageFeedbacks:feedbacks});
+      });
+
+  }
 
   filterResources (searchString) {
     if (!searchString || searchString.length < 1) {
@@ -230,6 +303,21 @@ export default class App extends React.Component {
   error(err) {
     console.warn('ERROR(' + err.code + '): ' + err.message);
   }
+
+
+  redrawResources(resources){
+
+        var resourcesdocs = {
+            results: []
+        };
+        resources.forEach(function (res) {
+            resourcesdocs.results.push(res.doc);
+        });
+
+        this.setState({allResources:resourcesdocs.results});
+        this.setState({filteredResources:resourcesdocs.results});
+    }
+
 
   requestCurrentPosition(){
       var options = {

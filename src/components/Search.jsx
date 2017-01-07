@@ -24,7 +24,7 @@ export default class Search extends React.Component {
       <SearchInputs filterResources={filterResources} searchString={searchString}/>
         <Map width={offsetWidth} height={(offsetHeight / 2) - footerOffsetHeight} getFilteredResources={getFilteredResources} userLat={userLat} userLng={userLng}/>
         <div style={{height: (offsetHeight / 2), overflow: 'auto'}}>
-          <Results getFilteredResources={getFilteredResources} displayResult={displayResult} />
+          <Results getFilteredResources={getFilteredResources} displayResult={displayResult}/>
         </div>
       </div>
     );

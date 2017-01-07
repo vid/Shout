@@ -23,16 +23,22 @@ calculateDistance(result){
 }
 
 formatTags(arrTags){
+
+console.log("Tags to format are:"+arrTags);
+  if(arrTags){
     var arrLabels=[];
     arrTags.forEach(function(element) {
         arrLabels.push(element.label);
     });
   return arrLabels.join(', ');
+  }
+
+  return "No tags yet";
 
 }
 
   render () {
-    const {getFilteredResources, displayResult} = this.props;
+    const {getFilteredResources, displayResult, getTags} = this.props;
     const filteredResources = getFilteredResources();
     return (
       <Table
@@ -55,7 +61,7 @@ formatTags(arrTags){
               <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
               <TableRowColumn style={styles.namesectionStyle}><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
               <TableRowColumn style={styles.addresssectionStyle}>
-                   {this.formatTags(result.tags)}
+                   
               </TableRowColumn>
             </TableRow>
           ))}

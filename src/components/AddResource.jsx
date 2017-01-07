@@ -16,7 +16,6 @@ import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Divider from 'material-ui/Divider';
 
-import { resources } from '../lib/resources.js';
 
 const ENTER_KEY = 13;
 const styles = {
@@ -36,7 +35,7 @@ const styles = {
     },
 
     button: {
-        fontSize: '12',
+        fontSize: 12,
         padding: '2px'
     },
 
@@ -302,7 +301,7 @@ constructor() {
               <br />
                 <RaisedButton label="Submit" primary={true} onClick={()=>{
                                                                             var x=this.submitAll();
-                                                                            addResource(x)
+                                                                            addResource(x);
                                                                          }}/>
 
           </div>

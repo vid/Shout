@@ -1,10 +1,21 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, {
+    Component
+} from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
-import { Card, CardActions, CardHeader, CardText, CardTitle, CardMedia } from 'material-ui/Card';
-import { cyan200 } from 'material-ui/styles/colors';
+import {
+    Card,
+    CardActions,
+    CardHeader,
+    CardText,
+    CardTitle,
+    CardMedia
+} from 'material-ui/Card';
+import {
+    cyan200
+} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
@@ -20,19 +31,22 @@ import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
 
 
+//* ***************************************** *//
+//* all styles defined here
+//* ***************************************** *//
 
 const styles = {
 
     button: {
-        margin: '5',
-        padding: '5'
+        margin: '5px',
+        padding: '5px'
     },
 
     cardStyle: {
         display: 'flex',
         flex: 1,
         flexDirection: 'column',
-        margin: '5'
+        margin: '5px'
     },
 
     chip: {
@@ -41,7 +55,7 @@ const styles = {
     },
 
     dataStyle: {
-        margin: '5',
+        margin: '5px',
         height: '100%',
     },
 
@@ -62,6 +76,10 @@ const styles = {
     reviews: {
         margin: '10',
         height: '100%',
+    },
+
+    list: {
+        listStyle: 'none',
     },
 
     feedbackWrapper: {
@@ -85,28 +103,32 @@ export default class ClinicPage extends React.Component {
         super(props);
 
         this.state = {
-            chipData: [],
-            availabilityRating: 0,
+            submitfeedbackOpen: false,
+            flagcontentOpen: false,
+            feedbackExpanded:false,
+
+            value_Author: "",
+            accessibilityRating: 0,
             qualityRating: 0,
             affordabilityRating: 0,
-            submitfeedbackOpen: false,
-            flagcontentOpen: false
+            value_Descript: "",
+            previous_Tags: [],
+            chipData: []
         };
 
         this.defaults = {
             zoom: 16,
-            center: { lat: 33.7490, lng: -84.3880 },
+            center: {
+                lat: 33.7490,
+                lng: -84.3880
+            },
         };
     }
 
-
+//* ***************************************** *//
     //Begin actions
+//* ***************************************** *//
 
-    submitFeedback(event) {
-        this.setState({
-            label: event.target.value
-        });
-    }
 
     renderChip(data) {
         return (
@@ -118,6 +140,63 @@ export default class ClinicPage extends React.Component {
         {data.label}
       </Chip>
         );
+    }
+
+    formatFeedbacks(revs) {
+
+        if (revs.length === 0) {
+            return "No feedback yet. Would you like to add one?";
+        }
+        else if(revs.length<3){
+
+        return revs.map((feedback, i) =>
+            <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
+            <div>Accessibility: {feedback.accessibility+"/5"} </div>
+            <div>Quality: {feedback.quality+"/5"} </div>
+            <div>Affordability: {feedback.affordability+"/5"}</div>
+            <div><b>Comments:</b>{feedback.text}</div></li>);
+            <br />
+        }
+        else {
+
+        var revs_a=revs.slice(0,3);
+        return revs_a.map((feedback, i) =>
+            <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
+            <div>Accessibility: {feedback.accessibility+"/5"} </div>
+            <div>Quality: {feedback.quality+"/5"} </div>
+            <div>Affordability: {feedback.affordability+"/5"}</div>
+            <div><b>Comments:</b>{feedback.text}</div></li>);
+            <br />
+
+        }
+
+    }
+
+    viewAllFeedbacks(revs) {
+
+    if(this.state.feedbackExpanded){
+
+        if(revs.length>=3){
+
+            var revs_a=revs.slice(3,revs.length);
+            return revs_a.map((feedback, i) =>
+                <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
+                <div>Accessibility: {feedback.accessibility+"/5"} </div>
+                <div>Quality: {feedback.quality+"/5"} </div>
+                <div>Affordability: {feedback.affordability+"/5"}</div>
+                <div><b>Comments:</b>{feedback.text}</div></li>);
+                <br />
+        }
+
+        else {
+
+        return "No more feedback to show";
+
+        }
+    }
+
+    else return "";
+
     }
 
     getRating(result, id) {
@@ -132,7 +211,7 @@ export default class ClinicPage extends React.Component {
             return result.ratings.quality;
         }
         if (id === '2') {
-            return result.ratings.availability;
+            return result.ratings.accessibility;
         }
         if (id === '3') {
             return result.ratings.affordability;
@@ -142,10 +221,35 @@ export default class ClinicPage extends React.Component {
     }
 
     searchSizer() {
-        const { container, footer } = this.props;
-        const { offsetHeight, offsetWidth } = container;
+        const {
+            container,
+            footer
+        } = this.props;
+        const {
+            offsetHeight,
+            offsetWidth
+        } = container;
         const footerOffsetHeight = footer.offsetHeight;
-        this.setState({ offsetHeight, offsetWidth, footerOffsetHeight });
+        this.setState({
+            offsetHeight,
+            offsetWidth,
+            footerOffsetHeight
+        });
+    }
+
+    formatSubmission(name) {
+
+        var temp = {
+            name: name,
+            author: this.state.value_Author,
+            accessibility:this.state.accessibilityRating,
+            quality:this.state.qualityRating,
+            affordability:this.state.affordabilityRating,
+            text: this.state.value_Descript
+        }
+
+        return temp;
+
     }
 
     componentDidMount() {
@@ -159,23 +263,27 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-
-        const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
+        const {addTags,getTags,getFeedbacks} = this.props;
+        const previousTags = getTags();
+        const allFeedbacks = getFeedbacks();
+        const {offsetWidth,offsetHeight,footerOffsetHeight} = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
-        const { result } = this.props;
-        const { displaySearch } = this.props;
-        const reviews_ = result.reviews;
-        const numberReviews = reviews_.length;
-
+        const {result} = this.props;
+        const {displaySearch} = this.props;
+        const {addFeedback} = this.props;
+        var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
 
         return (
+
             <div style={{height: (offsetHeight), overflow: 'auto'}}>
       <Paper style={styles.mainStyle} zDepth={1}>
 
-
+{/* ***************************************** */}
 {/* Section 1 */}
+{/* ***************************************** */}
+
         <Card style ={styles.cardStyle}>
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300"/>
           <CardText>
@@ -207,16 +315,25 @@ export default class ClinicPage extends React.Component {
         </CardText>
       </Card>
 
+{/* ***************************************** */}
 {/* Section 2: List of tags */}
+{/* ***************************************** */}
       <Card style ={styles.cardStyle}>
       <CardHeader title="Tags"/>
         <CardText>
-          {result.tags.map((tag)=>(<div style={styles.wrapper}><Chip style={styles.chip}>{tag.label}</Chip><div style={styles.dataStyle}>{"  ("+tag.count+" users vouched for this)"}</div></div>))}
+          <ul style={styles.list}>
+        {previousTags.map((tag, i) =>
+              <li style={styles.list} key={i}>
+              <Chip>{tag.value} {"("+tag.count+" users vouched for this"+")"}</Chip>
+                      </li>
+                      )}
+          </ul>
         </CardText>
       </Card>
 
-
+{/* ***************************************** */}
 {/* Section 3: Short Description*/}
+{/* ***************************************** */}
       <Card style ={styles.cardStyle}>
       <CardHeader title="Description"/>
         <CardText>
@@ -225,8 +342,9 @@ export default class ClinicPage extends React.Component {
       </Card>
 
 
-
+{/* ***************************************** */}
 {/* Section 4: Feedback */}
+{/* ***************************************** */}
       <Card style ={styles.cardStyle}>
           <CardHeader
           title="Feedback"/>
@@ -234,17 +352,17 @@ export default class ClinicPage extends React.Component {
             <div style={styles.feedbackWrapper}>
             <div style={styles.ratingsSection}>
             <div>
-              <h3>Waiting Time</h3>
+              <h3>Average Accessibility</h3>
               <p> Reflects waiting time for appointments/walk-in. </p>
               <StarRatingComponent
-                name="Availability" /* name of the radio input, it is required */
+                name="accessibility" /* name of the radio input, it is required */
                 value={()=>this.getRating("0")} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
               />
             </div>
             <div>
-              <h3>Quality of Care</h3>
-              <p> Reflects waiting time for appointments/walk-in. </p>
+              <h3>Average Quality of Care</h3>
+              <p> Reflects  </p>
               <StarRatingComponent
                 name="Quality" /* name of the radio input, it is required */
                 value={()=>this.getRating("1")} /* number of selected icon (`0` - none, `1` - first) */
@@ -252,7 +370,7 @@ export default class ClinicPage extends React.Component {
               />
             </div>
             <div>
-              <h3>Affordability</h3>
+              <h3>Average Affordability</h3>
               <StarRatingComponent
                 name="Affordability" /* name of the radio input, it is required */
                 value={()=>this.getRating("2")} /* number of selected icon (`0` - none, `1` - first) */
@@ -269,41 +387,46 @@ export default class ClinicPage extends React.Component {
               />
             </div>
             <div>
-              <h3>Tags:</h3>
-               <div style={styles.wrapper}>
-                    {result.tags.map((tag)=>(<Chip style={styles.chipStyle}>{tag.label}</Chip>))}
-                </div>
+
+                                  <RaisedButton
+                                    style={styles.button}
+                                    label="Submit Feedback"
+                                    primary={true}
+                                    onTouchTap={() => this.setState({submitfeedbackOpen: true})}/>
+
+                                  <RaisedButton
+                                    label="Flag this Content"
+                                    style={styles.button}
+                                    secondary={true}
+                                    onTouchTap={() => this.setState({flagcontentOpen: true})}/>
             </div>
           </div>
           <div style={styles.reviews}>
-            <h3> Recent Reviews: {"("+numberReviews+" user reviews)"}</h3>
-            {reviews_.map((review)=>(<div>
-                                        <p><b>{"Name: "+review.author}</b></p>
-                                        <p>{"Availability: "+review.availability+"/5"}</p>
-                                        <p>{"Quality: "+review.quality+"/5"}</p>
-                                        <p>{"Affordability: "+review.affordability+"/5"}</p>
-                                        <p>{'" '+review.text+'"'}</p>
-                                        <Divider /></div>
-                                        ))}
 
-            <RaisedButton
-              style={styles.button}
-              label="Submit Feedback"
-              primary={true}
-              onTouchTap={() => this.setState({submitfeedbackOpen: true})}/>
 
-            <RaisedButton
-              label="Flag this Content"
-              style={styles.button}
-              secondary={true}
-              onTouchTap={() => this.setState({flagcontentOpen: true})}/>
+
+
+            <div style={styles.reviews}>
+            {this.formatFeedbacks(allFeedbacks)}
+            </div>
+
+            <FlatButton onClick={()=>this.setState({feedbackExpanded:!this.state.feedbackExpanded})} label={">> Click to expand/collapse all ("+allFeedbacks.length+")"}/>
+
+            <div>
+            {expandedFeedback}
+            </div>
+
           </div>
         </div>
 
         </CardText>
       </Card>
 
+{/* ***************************************** */}
 {/* Section 5: Submit Feedback */}
+{/* ***************************************** */}
+{/* ***************************************** */}
+{/* ***************************************** */}
 <Dialog
     title="Submit Feedback"
     actions={[
@@ -315,7 +438,12 @@ export default class ClinicPage extends React.Component {
          label="Submit"
          primary={true}
          keyboardFocused={true}
-         onTouchTap={() => this.setState({submitfeedbackOpen: false})}/>]}
+         onTouchTap={() =>{
+                            var x=this.formatSubmission(result.name);
+                            addFeedback(x);
+                            this.setState({submitfeedbackOpen: false})
+                            }}/>]}
+
     modal={false}
     open={this.state.submitfeedbackOpen}
     onRequestClose={() => this.setState({submitfeedbackOpen: false})}>
@@ -324,14 +452,20 @@ export default class ClinicPage extends React.Component {
       <CardText>
         <div> Fields marked by an asterisk * are required </div>
         <div className="feedback-container">
+        <TextField hintText="Your name"
+                   inputStyle={styles.input}
+                   floatingLabelStyle={styles.floatinglabel}
+                   floatingLabelText="author "
+                   floatingLabelFixed={true}
+                   onChange={(event) => this.setState({value_Author: event.target.value})}/><br />
             <div>
-              <h3>Availability *</h3>
+              <h3> Accessibility*</h3>
               <p>How easy was it to book an appointment or walk-in for services?</p>
               <StarRatingComponent
-                name="Availability" /* name of the radio input, it is required */
-                value={this.state.availabilityRating} /* number of selected icon (`0` - none, `1` - first) */
+                name="accessibility" /* name of the radio input, it is required */
+                value={this.state.accessibilityRating} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
-                onStarClick={(nextValue, prevValue, name)=>this.setState({availabilityRating: nextValue})}
+                onStarClick={(nextValue, prevValue, name)=>this.setState({accessibilityRating: nextValue})}
               />
             </div>
             <div>
@@ -357,7 +491,6 @@ export default class ClinicPage extends React.Component {
             <div>
               <h3>Services and Tags</h3>
               <p> Would you like to endorse {result.name} for any of the following services or specialties?</p>
-              {result.tags.map((tag)=>(<div style={styles.wrapper}><Chip style={styles.chipStyle}>{tag.label}</Chip><div style={styles.dataStyle}>{"  ("+tag.count+" users tagged this)"}</div></div>))}
            </div>
            <div>
               <h3> Comments </h3>
@@ -378,12 +511,14 @@ export default class ClinicPage extends React.Component {
                        {this.state.chipData.map(this.renderChip, this)}
                    </div>
            </div>
-          <button onClick={()=>this.submitFeedback} className="btn btn-primary">Submit</button>
+
           </div>
       </CardText>
     </Dialog>
 
+{/* ***************************************** */}
 {/* Section 6: Flag Content */}
+{/* ***************************************** */}
 <Dialog
     title="Flag Content"
     actions={[
@@ -411,7 +546,9 @@ export default class ClinicPage extends React.Component {
     }
 }
 
+//* ***************************************** *//
 //Typechecking
+//* ***************************************** *//
 
 ClinicPage.PropTypes = {
     label: React.PropTypes.string,

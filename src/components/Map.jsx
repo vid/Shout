@@ -52,9 +52,12 @@ export default class Map extends React.Component {
             yesIWantToUseGoogleMapApiInternals>
 
             {filteredResources.map((result, i) =>
-                  (<Place lat={result.lat}
+                  <li key={i}>
+                  <Place lat={result.lat}
                           lng={result.lng}
-                          text={i+1} />))}
+                          text={i+1} />
+                          </li>
+                          )}
 
             <Place lat={userLat} lng={userLng} text={"You are here"} />
 
