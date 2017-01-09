@@ -13,9 +13,7 @@ import {
     CardTitle,
     CardMedia
 } from 'material-ui/Card';
-import {
-    cyan200
-} from 'material-ui/styles/colors';
+import {cyan300, indigo900} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
@@ -23,6 +21,7 @@ import Checkbox from 'material-ui/Checkbox';
 import StarRatingComponent from 'react-star-rating-component';
 import GoogleMap from 'google-map-react';
 import Divider from 'material-ui/Divider';
+import Avatar from 'material-ui/Avatar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -51,7 +50,14 @@ const styles = {
 
     chip: {
         margin: 4,
-        height: '80%'
+        height: '80%',
+        backgroundColor: cyan300,
+        fontColor: '#FFFFFF'
+    },
+
+    chipInfo: {
+        padding: 6,
+        height: '80%',
     },
 
     dataStyle: {
@@ -323,8 +329,12 @@ export default class ClinicPage extends React.Component {
         <CardText>
           <ul style={styles.list}>
         {previousTags.map((tag, i) =>
-              <li style={styles.list} key={i}>
-              <Chip>{tag.value} {"("+tag.count+" users vouched for this"+")"}</Chip>
+              <li style={styles.list} key={i}><div style={styles.wrapper}>
+              <Chip style={styles.chip}>
+              <b>{tag.value+"  "}</b>
+              </Chip>
+              <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
+              </div>
                       </li>
                       )}
           </ul>

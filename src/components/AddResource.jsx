@@ -15,6 +15,20 @@ import IconButton from 'material-ui/IconButton';
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Divider from 'material-ui/Divider';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import Formsy from 'formsy-react';
+import {
+    FormsyCheckbox,
+    FormsyDate,
+    FormsyRadio,
+    FormsyRadioGroup,
+    FormsySelect,
+    FormsyText,
+    FormsyTime,
+    FormsyToggle,
+    FormsyAutoComplete
+} from 'formsy-material-ui/lib';
 
 
 const ENTER_KEY = 13;
@@ -48,23 +62,43 @@ const styles = {
 export default class AddResource extends React.Component {
 
 
-constructor() {
-    super();
-    this.state = {
-        value_Name:"Default",
-        value_Type:"asdf",
-        value_Phone:"default",
-        value_Address:"asdf",
-        value_Apt:"default",
-        value_zip:"default",
-        value_Website:"default",
-        value_Descript:"default",
-        value_Tags:[''],
-        value_Hours:'',
+    constructor() {
+        super();
+        this.state = {
 
-        chipData: [
-    ]};
-}
+            canSubmit: false,
+            completedOpen: false,
+
+            value_Name: "Default",
+            value_Type: "asdf",
+            value_Phone: "default",
+            value_Address: "asdf",
+            value_Apt: "default",
+            value_zip: "default",
+            value_Website: "default",
+            value_Descript: "default",
+            value_Tags: [''],
+            value_Hours: '',
+
+            chipData: []
+        };
+
+        this.errorMessages = {
+            wordsError: "Please only use letters",
+            numericError: "Please provide a number",
+            urlError: "Please provide a valid URL",
+        };
+    }
+
+
+    submitForm(data) {
+        alert(JSON.stringify(data, null, 4));
+    }
+
+    notifyFormError(data) {
+        console.error('Form error:', data);
+    }
+
 
 
     submitAll() {
@@ -82,6 +116,7 @@ constructor() {
         }
 
         console.log(temp);
+
         return temp;
 
     }
@@ -117,6 +152,8 @@ constructor() {
     }
 
     render() {
+
+        const { wordsError, numericError, urlError } = this.errorMessages;
         const { addResource } = this.props;
         const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
         if (offsetHeight === undefined) {
@@ -125,7 +162,14 @@ constructor() {
 
         return (
 
-            <div style={{height: (offsetHeight), overflow: 'auto'}}>
+
+            <Formsy.Form
+              onValid={()=>this.setState({ canSubmit: true })}
+              onInvalid={()=>this.setState({ canSubmit: false })}
+              onValidSubmit={()=>this.submitForm}
+              onInvalidSubmit={()=>this.notifyFormError}
+            >
+        <div style={{height: (offsetHeight), overflow: 'auto'}}>
         <div style={styles.main}>
 
             <h3> Add Resource (fields denoted by * are mandatory)</h3>
@@ -133,14 +177,24 @@ constructor() {
           <div>
 
           <div style={styles.row}>
-            <TextField hintText="Name"
-                       hintStyle={styles.hint}
-                       floatingLabelStyle={styles.floatinglabel}
-                       inputStyle={styles.input}
-                       floatingLabelText="Resource Name"
-                       floatingLabelFixed={true}
-                       onChange={(event) => this.setState({value_Name: event.target.value})}/><br />
 
+            <FormsyText
+              name="name"
+              validations="isWords"
+              validationError={wordsError}
+              required
+              hintText="Resource Name"
+              floatingLabelText="Resource Name *"
+              floatingLabelFixed={true}
+              hintStyle={styles.hint}
+              floatingLabelStyle={styles.floatinglabel}
+              inputStyle={styles.input}
+              onChange={(event) => this.setState({value_Name: event.target.value})}
+            />
+            <br />
+
+            </div>
+            <div>
                        <SelectField
                            floatingLabelText="Select type *"
                            floatingLabelStyle={styles.floatinglabel}
@@ -152,57 +206,99 @@ constructor() {
                        </SelectField>
 
           </div>
-          <div style={styles.addressSection}>
-            <TextField hintText="Address"
-                       hintStyle={styles.hint}
-                       floatingLabelStyle={styles.floatinglabel}
-                       inputStyle={styles.input}
-                       floatingLabelText="Street Address *"
-                       floatingLabelFixed={true}
-                       onChange={(event) => this.setState({value_Address: event.target.value})}/><br />
+          <div>
 
-            <TextField hintText="Apt/Office #"
-                       hintStyle={styles.hint}
-                       floatingLabelStyle={styles.floatinglabel}
-                       inputStyle={styles.input}
-                       floatingLabelText="Apt/Office # *"
-                       floatingLabelFixed={true}
-                       onChange={(event) => this.setState({value_Apt: event.target.value})}/><br />
+          <FormsyText
+            name="addressline1"
+            validations="isAlphanumeric"
+            validationError={wordsError}
+            required
+            floatingLabelText="Street Address"
+            floatingLabelFixed={true}
+            hintText="12 Grimmauld Place"
+            hintStyle={styles.hint}
+            floatingLabelStyle={styles.floatinglabel}
+            inputStyle={styles.input}
+            onChange={(event) => this.setState({value_Address: event.target.value})}
+          />
+          </div>
+          <div>
 
-            <TextField hintText="Zip Code"
-                      hintStyle={styles.hint}
-                      floatingLabelStyle={styles.floatinglabel}
-                      inputStyle={styles.input}
-                      floatingLabelText="Zip code *"
-                      floatingLabelFixed={true}
-                      onChange={(event) => this.setState({value_zip: event.target.value})}/><br />
+          <FormsyText
+            name="aptnumber"
+            validations="isAlphanumeric"
+            validationError={wordsError}
+            required
+            floatingLabelText="Apt/Office#"
+            floatingLabelFixed={true}
+            hintText="#45"
+            hintStyle={styles.hint}
+            floatingLabelStyle={styles.floatinglabel}
+            inputStyle={styles.input}
+            onChange={(event) => this.setState({value_Apt: event.target.value})}
+          />
+
+          </div>
+          <div>
+
+            <FormsyText
+                         name="zip"
+                         validations="isNumeric"
+                         validationError={numericError}
+                         hintText="31415"
+                         hintStyle={styles.hint}
+                         floatingLabelStyle={styles.floatinglabel}
+                         inputStyle={styles.input}
+                         floatingLabelText="Zip code *"
+                         floatingLabelFixed={true}
+                         onChange={(event) => this.setState({value_zip: event.target.value})}
+                         /> <br />
           </div>
 
-            <TextField hintText="Phone Number"
+          <FormsyText
+                       name="PhoneNumber"
+                       validations="isNumeric"
+                       validationError={numericError}
+                       hintText="3225550100"
                        hintStyle={styles.hint}
                        floatingLabelStyle={styles.floatinglabel}
                        inputStyle={styles.input}
-                       floatingLabelText="Phone Number *"
+                       floatingLabelText="Phone *"
                        floatingLabelFixed={true}
-                       onChange={(event) => this.setState({value_Phone: event.target.value})}/><br />
+                       onChange={(event) => this.setState({value_Phone: event.target.value})}
+                       /> <br />
 
-            <TextField hintText="Website"
-                       hintStyle={styles.hint}
-                       floatingLabelStyle={styles.floatinglabel}
-                       inputStyle={styles.input}
-                       floatingLabelText="Website"
-                       floatingLabelFixed={true}
-                       onChange={(event) => this.setState({value_Website: event.target.value})}/><br />
 
-            <TextField hintText="Description"
-                       inputStyle={styles.input}
-                       floatingLabelStyle={styles.floatinglabel}
-                       floatingLabelText="Description *"
-                       floatingLabelFixed={true}
-                       multiLine={true}
-                       rows={3}
-                       rowsMax={10}
-                       onChange={(event) => this.setState({value_Descript: event.target.value})}/><br />
+            <FormsyText
+              name="url"
+              validations="isUrl"
+              validationError={urlError}
+              hintText="http://www.example.com"
+              floatingLabelText="website URL"
+              floatingLabelFixed={true}
+              updateImmediately
+              hintStyle={styles.hint}
+              floatingLabelStyle={styles.floatinglabel}
+              inputStyle={styles.input}
+            />
+
+            <div>
+            <FormsyText
+              name="Description"
+              validations="isWords"
+              validationError={wordsError}
+              required
+              hintText="A summary of the facility/founders/background info"
+              floatingLabelText="Description *"
+              floatingLabelFixed={true}
+              hintStyle={styles.hint}
+              floatingLabelStyle={styles.floatinglabel}
+              inputStyle={styles.input}
+              onChange={(event) => this.setState({value_Descript: event.target.value})}
+              multiLine={true}
+              rows={3}/>
+
+              </div>
 
 
               <div style={styles.row}>
@@ -299,14 +395,34 @@ constructor() {
 
               <br />
               <br />
-                <RaisedButton label="Submit" primary={true} onClick={()=>{
-                                                                            var x=this.submitAll();
-                                                                            addResource(x);
-                                                                         }}/>
+                <RaisedButton
+                    label="Submit"
+                    primary={true}
+                    disabled={!this.state.canSubmit}
+                    onClick={()=>{
+                                  this.setState({completedOpen:true});
+                                  var x=this.submitAll();
+                                  addResource(x);
+                                  }}/>
 
+                <Dialog
+                  title="Completed"
+                    actions={<FlatButton
+                    label="Close"
+                    primary={true}
+                    keyboardFocused={true}
+                    onTouchTap={() => this.setState({completedOpen: false})}/>}
+                    modal={false}
+                    open={this.state.completedOpen}
+                    onRequestClose={()=>this.setState({completedOpen:false})}
+                    >
+                  Thank you. Your entry has been submitted.
+                </Dialog>
           </div>
         </div>
       </div>
+
+      </Formsy.Form>
         );
     }
 }
