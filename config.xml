@@ -89,7 +89,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <platform name="android">
-        <content src="http://10.0.2.2:8080/index.html" />
+        <content src="https://shout.zooid.org" />
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">

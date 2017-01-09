@@ -10,7 +10,31 @@
     <div id="app"></div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="./bundle.js"></script>
+    <script type="text/javascript" charset="utf-8">
 
-    <body onload="onLoad()">
+    // Wait for device API libraries to load
+    //
+    function onLoad() {
+        alert("onLoad works");
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+        // Register the event listener
+        alert("onDeviceReady works");
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    // Handle the back button
+    //
+    function onBackKeyDown() {
+      alert("YO TRIED TO PRESS EXIT");
+    }
+
+    </script>
+
+    <body onload="onLoad()" onDeviceReady="onDeviceReady()">
   </body>
 </html>
