@@ -30,7 +30,7 @@ import About from './About.jsx';
 import PouchDB from 'pouchdb';
 
 var db = new PouchDB('resources');
-var remoteCouch = 'generaluser:pass@localhost:5984/resources';
+var remoteCouch = 'http://generaluser:pass@45.56.115.40:5984/resources';
 
 
 
@@ -191,11 +191,11 @@ export default class App extends React.Component {
     }
 
   componentDidMount () {
-    this.displaySearch();
     if (remoteCouch) {
         var opts = { live: true };
         db.replicate.from(remoteCouch, opts, this.syncError);
     }
+    this.displaySearch();
   }
     // these are the app's actions, passed to and called by other components
 
