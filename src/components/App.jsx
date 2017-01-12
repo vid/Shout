@@ -30,7 +30,7 @@ import About from './About.jsx';
 import PouchDB from 'pouchdb';
 
 var db = new PouchDB('resources');
-var remoteCouch = 'http://localhost:5984/resources';
+var remoteCouch = 'http://generaluser:pass@45.56.115.40:5984/resources';
 
 
 
@@ -87,31 +87,39 @@ export default class App extends React.Component {
 
       //calculate latitude and longitude
 
-      var resource = {
-          _id: "Resource"+"_"+res.zip+"_"+new Date().toISOString()+"_"+res.name,
-          type: "resource",
-          name: res.name,
-          civic_address:res.civic_address,
-          phone:res.phone,
-          website:res.website,
-          description: res.description,
-          resourcetype: res.type,
-          zip:res.zip
-
-      };
-      db.put(resource, function callback(err, result) {
-          if (!err) {
-              console.log('Added resource');
-          }
-      });
-
-      this.addTags(res.tags, res.name);
-
-      if (remoteCouch) {
-          this.sync();
+      if(!position)
+      {
+        return "ERROR"
       }
+      else{
+          return "OK"
+          //create json object
+          var resource = {
+              _id: "Resource"+"_"+res.zip+"_"+new Date().toISOString()+"_"+res.name,
+              type: "resource",
+              name: res.name,
+              civic_address:res.civic_address,
+              phone:res.phone,
+              website:res.website,
+              description: res.description,
+              resourcetype: res.type,
+              zip:res.zip
 
-      this.filterResources(this.state.searchString);
+          };
+          db.put(resource, function callback(err, result) {
+              if (!err) {
+                  console.log('Added resource');
+              }
+          });
+
+          this.addTags(res.tags, res.name);
+
+          if (remoteCouch) {
+              this.sync();
+          }
+
+          this.filterResources(this.state.searchString);
+        }
   }
 
   addFeedback (rev){
@@ -184,6 +192,10 @@ export default class App extends React.Component {
 
   componentDidMount () {
     this.displaySearch();
+    if (remoteCouch) {
+        this.sync();
+        alert("There is remote couch");
+    }
   }
     // these are the app's actions, passed to and called by other components
 
@@ -193,7 +205,7 @@ export default class App extends React.Component {
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({showMenu: false});
-    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)}/>});
+    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} getGeocoder={()=>this.state.geocoder}/>});
   }
 
   displayFeedback () {
@@ -222,7 +234,7 @@ export default class App extends React.Component {
             this.redrawResources(doc.rows);
         });
 
-    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.getTags(name)} searchString={this.state.searchString} getFilteredResources={() => this.state.filteredResources} userLat={this.state.userLat} userLng={this.state.userLng} />});
+    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.getTags(name)} searchString={this.state.searchString} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} />});
     this.setState({appbarTitle:'Shout'});
     this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
@@ -231,6 +243,98 @@ export default class App extends React.Component {
 
 
 }
+
+
+  filterResources (searchString) {
+    if (!searchString || searchString.length < 1) {
+      this.setState({filteredResources: this.state.allResources, searchString});
+      return;
+    }
+    const filteredResources = this.state.allResources.filter(resource => {
+                                                                            if(resource.name.toLowerCase().includes(searchString.toLowerCase())||resource.tags.includes(searchString.toLowerCase())){
+                                                                              return resource;
+                                                                            }
+                                                                          });
+    this.setState({filteredResources, searchString});
+  }
+
+  error(err) {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+  }
+
+  /*Change the selected bottom navigation index (this function is passed as a prop to the footer)*/
+  footerSelect(index) {
+      this.setState({selectedFooterIndex: index});
+      if(index===0) {
+        this.filterResources('');
+      } else if(index===1){
+        this.filterResources('children');
+      }else if(index===2){
+        this.filterResources('mental health');
+      }else if(index===3){
+        this.filterResources('pregnancy');
+      }else if(index===4){
+        this.filterResources('');
+      }
+  }
+
+  hoverTableRow(index) {
+       hoveredMapRowIndex: 'index';
+  }
+
+  onGoogleApiLoad(map, maps){
+
+    var geo = new google.maps.Geocoder();
+    this.setState({geocoder:geo});
+    this.setState({googlemap:map});
+    this.setState({googlemaps:maps});
+
+  }
+
+  redrawResources(resources){
+
+        var resourcesdocs = {
+            results: []
+        };
+        resources.forEach(function (res) {
+            resourcesdocs.results.push(res.doc);
+        });
+
+        this.setState({allResources:resourcesdocs.results});
+        this.setState({filteredResources:resourcesdocs.results});
+    }
+
+
+  requestCurrentPosition(){
+      var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+
+      if (navigator.geolocation)
+      {
+        navigator.geolocation.getCurrentPosition((pos)=>{
+                                                      var crd=pos.coords;
+                                                      const x=crd.latitude;
+                                                      const y=crd.longitude;
+                                                      this.setState({userLat:x});
+                                                      this.setState({userLng:y});
+                                                      console.log("Current location:",x,y);
+                                                      }, this.error, options);
+      }
+  }
+
+  syncError() {
+     console.log('data-sync-state: error');
+  }
+
+  sync() {
+
+      var opts = { live: true };
+      db.replicate.to(remoteCouch, opts, this.syncError);
+      db.replicate.from(remoteCouch, opts, this.syncError);
+  }
 
   updatePageTags(name){
 
@@ -263,91 +367,6 @@ export default class App extends React.Component {
           this.setState({clinicpageFeedbacks:feedbacks});
       });
 
-  }
-
-  filterResources (searchString) {
-    if (!searchString || searchString.length < 1) {
-      this.setState({filteredResources: this.state.allResources, searchString});
-      return;
-    }
-    const filteredResources = this.state.allResources.filter(resource => {
-                                                                            if(resource.name.toLowerCase().includes(searchString.toLowerCase())||resource.tags.includes(searchString.toLowerCase())){
-                                                                              return resource;
-                                                                            }
-                                                                          });
-    this.setState({filteredResources, searchString});
-  }
-
-  /*Change the selected bottom navigation index (this function is passed as a prop to the footer)*/
-  footerSelect(index) {
-      this.setState({selectedFooterIndex: index});
-      if(index===0) {
-        this.filterResources('');
-      } else if(index===1){
-        this.filterResources('children');
-      }else if(index===2){
-        this.filterResources('mental health');
-      }else if(index===3){
-        this.filterResources('pregnancy');
-      }else if(index===4){
-        this.filterResources('');
-      }
-  }
-
-  hoverTableRow(index) {
-       hoveredMapRowIndex: 'index';
-  }
-
-
-
-  error(err) {
-    console.warn('ERROR(' + err.code + '): ' + err.message);
-  }
-
-
-  redrawResources(resources){
-
-        var resourcesdocs = {
-            results: []
-        };
-        resources.forEach(function (res) {
-            resourcesdocs.results.push(res.doc);
-        });
-
-        this.setState({allResources:resourcesdocs.results});
-        this.setState({filteredResources:resourcesdocs.results});
-    }
-
-
-  requestCurrentPosition(){
-      var options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      }
-
-      if (navigator.geolocation)
-      {
-        navigator.geolocation.getCurrentPosition((pos)=>{
-                                                      var crd=pos.coords;
-                                                      const x=crd.latitude;
-                                                      const y=crd.longitude;
-                                                      this.setState({userLat:x});
-                                                      this.setState({userLng:y});
-                                                      console.log(x,y);
-                                                      }, this.error, options);
-      }
-  }
-
-  sync() {
-
-      var opts = { live: true };
-      db.replicate.to(remoteCouch, opts, this.syncError);
-      db.replicate.from(remoteCouch, opts, this.syncError);
-  }
-
-  syncError() {
-     console.log('data-sync-state: error');
   }
 // end of actions
 
@@ -384,7 +403,7 @@ render () {
 
 
           <div ref='footer' id='footer'>
-            <Footer displayAddResource={() => this.displayAddResource()} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
+            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
           </div>
 
         </div>

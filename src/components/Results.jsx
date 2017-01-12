@@ -4,11 +4,19 @@
 import React from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
+import RaisedButton from 'material-ui/RaisedButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
 
 const styles = {
   headerStyle: {
   fontColor:'black'
   },
+
+  addResButton:{
+  padding:7,
+  margin:4
+  }
 }
 export default class Results extends React.Component {
 
@@ -38,7 +46,8 @@ console.log("Tags to format are:"+arrTags);
 }
 
   render () {
-    const {getFilteredResources, displayResult, getTags} = this.props;
+
+    const {getFilteredResources, displayResult, getTags, displayAddResource} = this.props;
     const filteredResources = getFilteredResources();
     return (
       <Table
@@ -49,7 +58,10 @@ console.log("Tags to format are:"+arrTags);
             <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Tags</h2></TableHeaderColumn>
-
+            <div style={styles.addResButton}>
+            <RaisedButton onTouchTap={() => displayAddResource()}> {" "+"Add New"} <ContentAdd /></RaisedButton>
+            </div>
+            />
           </TableRow>
         </TableHeader>
         <TableBody
@@ -61,7 +73,7 @@ console.log("Tags to format are:"+arrTags);
               <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
               <TableRowColumn style={styles.namesectionStyle}><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
               <TableRowColumn style={styles.addresssectionStyle}>
-                   
+
               </TableRowColumn>
             </TableRow>
           ))}

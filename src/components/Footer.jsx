@@ -28,8 +28,6 @@ export default class Footer extends Component {
 
 render() {
 
-
-  const {displayAddResource} = this.props;
   const {selectedIndex}=this.props;
   const {onSelect}=this.props;
 
@@ -62,11 +60,6 @@ render() {
             onTouchTap={() => onSelect(4)}
           />
 
-          <BottomNavigationItem
-            label="Add New Place"
-            icon={<ContentAdd />}
-            onTouchTap={() => displayAddResource()}
-          />
         </BottomNavigation>
       </Paper>
     );

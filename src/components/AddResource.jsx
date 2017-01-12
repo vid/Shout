@@ -3,21 +3,25 @@
 
 // JavaScript source code
 import React from 'react';
+import Formsy from 'formsy-react';
+
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import { cyan200 } from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
 import Chip from 'material-ui/Chip';
-import IconButton from 'material-ui/IconButton';
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import Divider from 'material-ui/Divider';
 import Dialog from 'material-ui/Dialog';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
+import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
-import Formsy from 'formsy-react';
+
+import { cyan200 } from 'material-ui/styles/colors';
+
+
 import {
     FormsyCheckbox,
     FormsyDate,
@@ -68,6 +72,7 @@ export default class AddResource extends React.Component {
 
             canSubmit: false,
             completedOpen: false,
+            errorOpen: false,
 
             value_Name: "Default",
             value_Type: "asdf",
@@ -80,6 +85,8 @@ export default class AddResource extends React.Component {
             value_Tags: [''],
             value_Hours: '',
 
+            geoResult: "Waiting",
+
             chipData: []
         };
 
@@ -88,8 +95,9 @@ export default class AddResource extends React.Component {
             numericError: "Please provide a number",
             urlError: "Please provide a valid URL",
         };
-    }
 
+        this.setGeoResult = this.setGeoResult.bind(this);
+    }
 
     submitForm(data) {
         alert(JSON.stringify(data, null, 4));
@@ -103,7 +111,7 @@ export default class AddResource extends React.Component {
 
     submitAll() {
 
-        var temp = {
+      var temp = {
             name: this.state.value_Name,
             type: this.state.value_Type,
             phone: this.state.value_Phone,
@@ -115,11 +123,54 @@ export default class AddResource extends React.Component {
             hours: this.state.value_Hours,
         }
 
-        console.log(temp);
-
         return temp;
 
     }
+
+    findAddress(geo){
+
+      this.geocodeAddress(this.value_Address, geo, this.setGeoResult);
+
+    }
+
+    geocodeAddress(address, geo, callback){
+
+      this.setState({canSubmit:false});
+
+      if(geo){
+         var address = "1000 Northside Dr NW 30318";
+         geo.geocode({'address': address}, function(results, status) {
+           if (status === 'OK') {
+              var response=results[0].geometry.location;
+              callback(response);
+           } else {
+             alert('Geocode was not successful for the following reason: ' + status);
+           }
+         });
+       }
+
+       else{
+       console.log("Geocoder not found");
+       }
+
+   }
+
+   setGeoResult(x){
+      this.setState({geoResult:x});
+      this.setState({canSubmit:true});
+   }
+
+    getApiResult()
+    {
+      if(!this.state.geoResult){
+      return "Waiting";
+      }
+      else{
+      return "Success";
+      }
+    }
+
+
     handleRequestDelete(key) {
         this.chipData = this.state.chipData;
         const chipToDelete = this.chipData.map((chip) => chip.key).indexOf(key);
@@ -154,14 +205,15 @@ export default class AddResource extends React.Component {
     render() {
 
         const { wordsError, numericError, urlError } = this.errorMessages;
-        const { addResource } = this.props;
+        const { addResource, getGeocoder} = this.props;
+        var geo = getGeocoder();
+
         const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
 
         return (
-
 
             <Formsy.Form
               onValid={()=>this.setState({ canSubmit: true })}
@@ -239,6 +291,8 @@ export default class AddResource extends React.Component {
           />
 
           </div>
+          <RaisedButton onTouchTap={()=>this.findAddress(geo)}> Find this address </RaisedButton>
+          <div>{"Coordinates: "+this.state.geoResult}</div>
           <div>
 
             <FormsyText
@@ -254,6 +308,7 @@ export default class AddResource extends React.Component {
                          onChange={(event) => this.setState({value_zip: event.target.value})}
                          /> <br />
           </div>
+
 
           <FormsyText
                        name="PhoneNumber"
@@ -400,9 +455,14 @@ export default class AddResource extends React.Component {
                     primary={true}
                     disabled={!this.state.canSubmit}
                     onClick={()=>{
-                                  this.setState({completedOpen:true});
-                                  var x=this.submitAll();
-                                  addResource(x);
+                                  if(!this.geoResult){
+                                    var x=this.submitAll();
+                                    this.setState({completedOpen:true});
+                                    addResource(x, response);
+                                  }
+                                  else{
+                                    this.setState({errorOpen:true});
+                                  }
                                   }}/>
 
                 <Dialog
@@ -417,6 +477,20 @@ export default class AddResource extends React.Component {
                     onRequestClose={()=>this.setState({completedOpen:false})}
                     >
                   Thank you. Your entry has been submitted.
+                </Dialog>
+
+                <Dialog
+                  title="Error"
+                    actions={<FlatButton
+                    label="Close"
+                    primary={true}
+                    keyboardFocused={true}
+                    onTouchTap={() => this.setState({errorOpen: false})}/>}
+                    modal={false}
+                    open={this.state.errorOpen}
+                    onRequestClose={()=>this.setState({errorOpen:false})}
+                    >
+                  Error
                 </Dialog>
           </div>
         </div>

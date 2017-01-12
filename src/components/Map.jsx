@@ -22,21 +22,11 @@ export default class Map extends React.Component {
     };
   }
 
-  onGoogleApiLoad(map, maps){
-
-  this.map1=map;
-  this.maps1=maps;
-
-  }
-
-  geocodeAddress(address){
-
- }
 
 
   render() {
     const {width, height} = this.props;
-    const {getFilteredResources, userLat, userLng} = this.props;
+    const {getFilteredResources, userLat, userLng, onGoogleApiLoad} = this.props;
     const filteredResources = getFilteredResources();
 
     const m = (
@@ -48,7 +38,7 @@ export default class Map extends React.Component {
             bootstrapURLKeys={{
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
             language: 'en'}}
-            onGoogleApiLoaded={({map, maps}) => this.onGoogleApiLoad(map, maps)}
+            onGoogleApiLoaded={({map, maps}) => onGoogleApiLoad(map, maps)}
             yesIWantToUseGoogleMapApiInternals>
 
             {filteredResources.map((result, i) =>
