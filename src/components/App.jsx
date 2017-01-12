@@ -194,7 +194,6 @@ export default class App extends React.Component {
     this.displaySearch();
     if (remoteCouch) {
         this.sync();
-        alert("There is remote couch");
     }
   }
     // these are the app's actions, passed to and called by other components
