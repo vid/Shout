@@ -59,7 +59,7 @@ console.log("Tags to format are:"+arrTags);
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Tags</h2></TableHeaderColumn>
             <div style={styles.addResButton}>
-            <RaisedButton onTouchTap={() => displayAddResource()}> {" "+"Add New"} <ContentAdd /></RaisedButton>
+            <RaisedButton onTouchTap={() => displayAddResource()}> <ContentAdd /></RaisedButton>
             </div>
             />
           </TableRow>
