@@ -30,7 +30,7 @@ import About from './About.jsx';
 import PouchDB from 'pouchdb';
 
 var db = new PouchDB('resources');
-var remoteCouch = 'http://generaluser:pass@localhost:5984/resources';
+var remoteCouch = 'generaluser:pass@localhost:5984/resources';
 
 
 
