@@ -14,7 +14,10 @@ const PATHS = {
 process.env.BABEL_ENV = ENV;
 
 const common = {
-  entry: PATHS.src,
+    entry: [
+    'webpack-dev-server/client?http://0.0.0.0:80',
+     PATHS.src,
+ ],
   output: {
     path: PATHS.build,
     filename: 'bundle.js',
