@@ -15,7 +15,7 @@ process.env.BABEL_ENV = ENV;
 
 const common = {
     entry: [
-    'webpack-dev-server/client?http://0.0.0.0:80',
+   //'webpack-dev-server/client?http://0.0.0.0:80',
      PATHS.src,
  ],
   output: {

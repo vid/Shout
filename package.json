@@ -41,7 +41,7 @@
     "ios": "cordova run ios",
     "prepare": "node config && webpack && cordova prepare",
     "build": "node config && webpack && cordova build",
-    "start": "node config && webpack-dev-server --port 80 --host 0.0.0.0",
+    "start": "node config && webpack-dev-server --host 0.0.0.0",
     "test": "echo \"No tests (yet!) -- submit a PR?\" && exit 0"
   },
   "keywords": [],
