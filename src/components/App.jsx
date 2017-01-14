@@ -32,7 +32,7 @@ import PouchDB from 'pouchdb';
 var db = new PouchDB('resources');
 var remoteCouch = 'https://generaluser:pass@shout.zooid.org:6984/resources';
 
-
+PouchDB.sync('db', 'remoteCouch');
 
 // all of the CSS styles for this component defined here
 const styles = {
@@ -87,12 +87,7 @@ export default class App extends React.Component {
 
       //calculate latitude and longitude
 
-      if(!position)
-      {
-        return "ERROR"
-      }
-      else{
-          return "OK"
+
           //create json object
           var resource = {
               _id: "Resource"+"_"+res.zip+"_"+new Date().toISOString()+"_"+res.name,
@@ -110,16 +105,17 @@ export default class App extends React.Component {
               if (!err) {
                   console.log('Added resource');
               }
+              else{
+              console.log('Error putting'+err);
+              }
           });
 
           this.addTags(res.tags, res.name);
 
-          if (remoteCouch) {
-              this.sync();
-          }
+          PouchDB.sync('db', 'remoteCouch');
 
           this.filterResources(this.state.searchString);
-        }
+        
   }
 
   addFeedback (rev){
@@ -141,10 +137,6 @@ export default class App extends React.Component {
             console.log('Added review');
         }
     });
-
-    if (remoteCouch) {
-        this.sync();
-    }
 
     this.filterResources(this.state.searchString);
 
@@ -192,8 +184,7 @@ export default class App extends React.Component {
 
   componentDidMount () {
     if (remoteCouch) {
-        var opts = { live: true };
-        db.replicate.from(remoteCouch, opts, this.syncError);
+        this.sync();
     }
     this.displaySearch();
   }

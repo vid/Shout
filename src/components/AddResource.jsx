@@ -63,6 +63,17 @@ const styles = {
 
 };
 
+const validators = {
+  customvalid: {
+    regexp: /^[a-zA-Z0-9,.!? ]*$/,
+    message: 'Not valid time'
+  },
+  phone: {
+    regexp: /^([A-Za-z0-9-]+)/,
+    message: 'Not a valid format'
+  }
+};
+
 export default class AddResource extends React.Component {
 
 
@@ -91,6 +102,7 @@ export default class AddResource extends React.Component {
         };
 
         this.errorMessages = {
+            customError: "Incorrect format",
             wordsError: "Please only use letters",
             numericError: "Please provide a number",
             urlError: "Please provide a valid URL",
@@ -204,7 +216,7 @@ export default class AddResource extends React.Component {
 
     render() {
 
-        const { wordsError, numericError, urlError } = this.errorMessages;
+        const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { addResource, getGeocoder} = this.props;
         var geo = getGeocoder();
 
@@ -232,8 +244,8 @@ export default class AddResource extends React.Component {
 
             <FormsyText
               name="name"
-              validations="isWords"
-              validationError={wordsError}
+              validations="isCustom"
+              validationError={customError}
               required
               hintText="Resource Name"
               floatingLabelText="Resource Name *"
@@ -262,8 +274,8 @@ export default class AddResource extends React.Component {
 
           <FormsyText
             name="addressline1"
-            validations="isAlphanumeric"
-            validationError={wordsError}
+            validations="isCustom"
+            validationError={customError}
             required
             floatingLabelText="Street Address"
             floatingLabelFixed={true}
@@ -278,8 +290,8 @@ export default class AddResource extends React.Component {
 
           <FormsyText
             name="aptnumber"
-            validations="isAlphanumeric"
-            validationError={wordsError}
+            validations="isCustom"
+            validationError={customError}
             required
             floatingLabelText="Apt/Office#"
             floatingLabelFixed={true}
@@ -312,8 +324,8 @@ export default class AddResource extends React.Component {
 
           <FormsyText
                        name="PhoneNumber"
-                       validations="isNumeric"
-                       validationError={numericError}
+                       validations="isCustom"
+                       validationError={customError}
                        hintText="3225550100"
                        hintStyle={styles.hint}
                        floatingLabelStyle={styles.floatinglabel}
@@ -340,8 +352,8 @@ export default class AddResource extends React.Component {
             <div>
             <FormsyText
               name="Description"
-              validations="isWords"
-              validationError={wordsError}
+              validations="isCustom"
+              validationError={customError}
               required
               hintText="A summary of the facility/founders/background info"
               floatingLabelText="Description *"
@@ -458,7 +470,7 @@ export default class AddResource extends React.Component {
                                   if(!this.geoResult){
                                     var x=this.submitAll();
                                     this.setState({completedOpen:true});
-                                    addResource(x, response);
+                                    addResource(x);
                                   }
                                   else{
                                     this.setState({errorOpen:true});

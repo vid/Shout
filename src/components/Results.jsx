@@ -58,9 +58,7 @@ console.log("Tags to format are:"+arrTags);
             <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Tags</h2></TableHeaderColumn>
-            <div style={styles.addResButton}>
-            <RaisedButton onTouchTap={() => displayAddResource()}> <ContentAdd /></RaisedButton>
-            </div>
+            <RaisedButton style = {styles.addResButton} onTouchTap={() => displayAddResource()}> <ContentAdd /></RaisedButton>
             />
           </TableRow>
         </TableHeader>
