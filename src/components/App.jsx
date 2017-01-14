@@ -115,7 +115,7 @@ export default class App extends React.Component {
           PouchDB.sync('db', 'remoteCouch');
 
           this.filterResources(this.state.searchString);
-        
+
   }
 
   addFeedback (rev){
@@ -392,7 +392,7 @@ render () {
             </Drawer>
          </div>
 
-
+         
           <div ref='footer' id='footer'>
             <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
           </div>

@@ -85,10 +85,10 @@ export default class AddResource extends React.Component {
             completedOpen: false,
             errorOpen: false,
 
-            value_Name: "Default",
-            value_Type: "asdf",
-            value_Phone: "default",
-            value_Address: "asdf",
+            value_Name: "",
+            value_Type: "default",
+            value_Phone: "",
+            value_Address: "default",
             value_Apt: "default",
             value_zip: "default",
             value_Website: "default",
@@ -225,9 +225,15 @@ export default class AddResource extends React.Component {
             return null;
         }
 
+        Formsy.addValidationRule('isCustom', (values, value) => {
+
+          var regobj=/^[a-zA-Z0-9,.!? ]*$/;
+          return regobj.test(value);
+        });
+
         return (
 
-            <Formsy.Form
+          <Formsy.Form
               onValid={()=>this.setState({ canSubmit: true })}
               onInvalid={()=>this.setState({ canSubmit: false })}
               onValidSubmit={()=>this.submitForm}
@@ -292,7 +298,6 @@ export default class AddResource extends React.Component {
             name="aptnumber"
             validations="isCustom"
             validationError={customError}
-            required
             floatingLabelText="Apt/Office#"
             floatingLabelFixed={true}
             hintText="#45"
