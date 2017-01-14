@@ -30,7 +30,7 @@ import About from './About.jsx';
 import PouchDB from 'pouchdb';
 
 var db = new PouchDB('resources');
-var remoteCouch = 'http://generaluser:pass@shoutapp.org:5984/resources';
+var remoteCouch = 'https://generaluser:pass@shout.zooid.org:6984/resources';
 
 
 
