@@ -21,13 +21,14 @@ const styles = {
 export default class Results extends React.Component {
 
 calculateDistance(result){
-
+  if(result&&result.lat&&result.lng){
   var y_distance=69*Math.pow((result.lat-33.7490),2);
   var x_distance=69*Math.pow((-84.3880-result.lng),2);
   var distance=Math.round(100*Math.sqrt(x_distance+y_distance))/100;
 
   return distance;
-
+  }
+  else return "?";
 }
 
 formatTags(arrTags){
@@ -59,7 +60,6 @@ console.log("Tags to format are:"+arrTags);
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Tags</h2></TableHeaderColumn>
             <RaisedButton style = {styles.addResButton} onTouchTap={() => displayAddResource()}> <ContentAdd /></RaisedButton>
-            />
           </TableRow>
         </TableHeader>
         <TableBody

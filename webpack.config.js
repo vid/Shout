@@ -4,6 +4,8 @@
 const merge = require('webpack-merge');
 const path = require('path');
 const webpack = require('webpack');
+var PouchDB = require('pouchdb');
+PouchDB.plugin(require('pouchdb-quick-search'));
 
 const ENV = require('./env');
 const PATHS = {

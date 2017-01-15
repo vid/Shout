@@ -6,7 +6,24 @@ import React from 'react';
 import Map from './Map.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Results from './Results.jsx';
+import {cyan500} from 'material-ui/styles/colors';
 
+const styles = {
+    main: {
+        padding: '1% 2% 5% 5%',
+        alignment: 'right',
+        overflow: 'auto'
+    },
+
+    row: {
+        display: 'flex',
+        flexDirection: 'row',
+        height:'100%',
+        backgroundColor:cyan500,
+        height:'100%',
+        color:'white'
+    },
+}
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -21,7 +38,10 @@ export default class Search extends React.Component {
     }
     return (
       <div>
-      <SearchInputs filterResources={filterResources} searchString={searchString}/>
+        <div style={styles.row}>
+        <SearchInputs filterResources={filterResources} searchString={searchString}/>
+        <div style={styles.blurb}>Shout(beta) is a free, open-source tool to empower minorities and disenfranchised healthcare users by allowing them to share tips on where to find accessible healthcare. Click <a href='http://eepurl.com/cvWx3b'>here</a> to join our mailing list and get involved. </div>
+        </div>
         <Map width={offsetWidth} height={(offsetHeight / 2) - footerOffsetHeight} getFilteredResources={getFilteredResources} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng}/>
         <div style={{height: (offsetHeight / 2), overflow: 'auto'}}>
           <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displayAddResource={displayAddResource}/>

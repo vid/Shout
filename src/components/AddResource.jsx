@@ -217,7 +217,7 @@ export default class AddResource extends React.Component {
     render() {
 
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
-        const { addResource, getGeocoder} = this.props;
+        const { addResource, getGeocoder, displaySearch} = this.props;
         var geo = getGeocoder();
 
         const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
@@ -307,10 +307,6 @@ export default class AddResource extends React.Component {
             onChange={(event) => this.setState({value_Apt: event.target.value})}
           />
 
-          </div>
-          <RaisedButton onTouchTap={()=>this.findAddress(geo)}> Find this address </RaisedButton>
-          <div>{"Coordinates: "+this.state.geoResult}</div>
-          <div>
 
             <FormsyText
                          name="zip"
@@ -488,12 +484,15 @@ export default class AddResource extends React.Component {
                     label="Close"
                     primary={true}
                     keyboardFocused={true}
-                    onTouchTap={() => this.setState({completedOpen: false})}/>}
+                    onTouchTap={() => {
+                                        this.setState({completedOpen: false});
+                                        displaySearch();
+                                        }}/>}
                     modal={false}
                     open={this.state.completedOpen}
                     onRequestClose={()=>this.setState({completedOpen:false})}
                     >
-                  Thank you. Your entry has been submitted.
+                  Thanks! Your entry has been submitted for approval by a moderator.
                 </Dialog>
 
                 <Dialog

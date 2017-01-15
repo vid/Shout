@@ -28,11 +28,15 @@ import About from './About.jsx';
 
 
 import PouchDB from 'pouchdb';
+import PouchDBQuickSearch from 'pouchdb-quick-search';
+
+PouchDB.plugin(PouchDBQuickSearch);
 
 var db = new PouchDB('resources');
 var remoteCouch = 'https://generaluser:pass@shout.zooid.org:6984/resources';
 
 PouchDB.sync('db', 'remoteCouch');
+
 
 // all of the CSS styles for this component defined here
 const styles = {
@@ -93,6 +97,8 @@ export default class App extends React.Component {
               _id: "Resource"+"_"+res.zip+"_"+new Date().toISOString()+"_"+res.name,
               type: "resource",
               name: res.name,
+              lat: res.lat,
+              lng: res.lng,
               civic_address:res.civic_address,
               phone:res.phone,
               website:res.website,
@@ -182,6 +188,7 @@ export default class App extends React.Component {
 
     }
 
+
   componentDidMount () {
     if (remoteCouch) {
         this.sync();
@@ -196,7 +203,7 @@ export default class App extends React.Component {
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
     this.setState({showMenu: false});
-    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} getGeocoder={()=>this.state.geocoder}/>});
+    this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} getGeocoder={()=>this.state.geocoder} displaySearch={()=>this.displaySearch}/>});
   }
 
   displayFeedback () {
@@ -236,17 +243,40 @@ export default class App extends React.Component {
 }
 
 
-  filterResources (searchString) {
-    if (!searchString || searchString.length < 1) {
-      this.setState({filteredResources: this.state.allResources, searchString});
-      return;
+filterResources (searchString) {
+
+  if (!searchString || searchString.length < 1) {
+    this.setState({filteredResources:this.state.allResources});
+  }else{
+    db.search({
+      query: searchString,
+      fields: ['name', 'description','_id','text'],
+      include_docs: true
+      },(err,list)=>{
+
+        if(err){return console.log(err);}
+
+        var matches= {
+            results: []
+        };
+
+          list.rows.forEach(function (res) {
+              if(res.id.startsWith('Tag')){
+                console.log("started with tag");
+                matches.results.push(res);
+              }
+              else if(res.id.startsWith('Resource')){
+                matches.results.push(res);
+              }
+              else{
+                console.log("started with neither");
+              }
+          });
+          this.redrawFilteredResources(matches.results);
+
+      });
     }
-    const filteredResources = this.state.allResources.filter(resource => {
-                                                                            if(resource.name.toLowerCase().includes(searchString.toLowerCase())||resource.tags.includes(searchString.toLowerCase())){
-                                                                              return resource;
-                                                                            }
-                                                                          });
-    this.setState({filteredResources, searchString});
+
   }
 
   error(err) {
@@ -265,8 +295,32 @@ export default class App extends React.Component {
       }else if(index===3){
         this.filterResources('pregnancy');
       }else if(index===4){
-        this.filterResources('');
+        this.filterNearMe();
       }
+  }
+
+  filterNearMe(){
+
+    console.log("chose select near me");
+    var arr=this.state.allResources;
+    console.log(arr);
+    arr.sort((a, b)=>{
+        if(a.lat&&b.lat){
+
+        var y_distance=69*Math.pow((a.lat-this.state.userLat),2);
+        var x_distance=69*Math.pow((this.state.userLng-a.lng),2);
+        var a_distance=Math.round(100*Math.sqrt(x_distance+y_distance))/100;
+
+        y_distance=69*Math.pow((b.lat-this.state.userLat),2);
+        x_distance=69*Math.pow((this.state.userLng-b.lng),2);
+        var b_distance=Math.round(100*Math.sqrt(x_distance+y_distance))/100;
+
+        return (a_distance-b_distance);
+        }
+        else return 0;
+    });
+
+      this.setState({filteredResources:arr});
   }
 
   hoverTableRow(index) {
@@ -294,6 +348,18 @@ export default class App extends React.Component {
         this.setState({allResources:resourcesdocs.results});
         this.setState({filteredResources:resourcesdocs.results});
     }
+
+    redrawFilteredResources(resources){
+
+          var resourcesdocs = {
+              results: []
+          };
+          resources.forEach(function (res) {
+              resourcesdocs.results.push(res.doc);
+          });
+
+          this.setState({filteredResources:resourcesdocs.results});
+      }
 
 
   requestCurrentPosition(){
@@ -377,7 +443,7 @@ render () {
 
 
           <div ref='content' id='content'>
-          <CSSTransitionGroup transitionName='push' transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
+          <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 200 } transitionLeaveTimeout={ 300 }>
             {this.state.screen}
           </CSSTransitionGroup>
           </div>
@@ -392,7 +458,7 @@ render () {
             </Drawer>
          </div>
 
-         
+
           <div ref='footer' id='footer'>
             <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
           </div>
