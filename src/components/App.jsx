@@ -40,22 +40,44 @@ PouchDB.sync('db', 'remoteCouch');
 
 // all of the CSS styles for this component defined here
 const styles = {
-  appbarTitle: {
-    fontSize: 30,
+
+  appbar: {
+    minHeight:100
   },
 
-  appbarsubtitle: {
+  appbarTitle:{
+   paddingTop:5,
+   color:'#ffffff',
+   fontSize:30,
+  },
+
+  appbarSubtitle: {
+    paddingTop:13,
     fontSize: 15,
-    color: '#ffffff',
-    divAlign:'left',
-    textAlign:'center',
-    width: '60%'
+    color:'#ffffff',
+    marginLeft:10
+  },
+
+  search:{
+    paddingTop:5,
+    width:'60%'
   },
 
   stylemenu:{
       position: 'fixed',
       height: '100%',
   },
+
+  row: {
+      display: 'flex',
+      flexDirection: 'row'
+  },
+  column: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%'
+  },
+
 };
 
 //begin Component definition
@@ -94,7 +116,7 @@ export default class App extends React.Component {
 
           //create json object
           var resource = {
-              _id: "Resource"+"_"+res.zip+"_"+new Date().toISOString()+"_"+res.name,
+              _id: "Resource"+"_"+res.zip+"_"+res.name,
               type: "resource",
               name: res.name,
               lat: res.lat,
@@ -436,8 +458,17 @@ render () {
         <div id='wrapper'>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()} title={this.state.appbarTitle} titleStyle={styles.appbarTitle}>
-                <div style={styles.appbarsubtitle}><h4>{this.state.appbarSubtitle}</h4></div>
+              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()}
+              titleStyle={styles.appbar}>
+              <div style={styles.column}>
+              <div style={styles.row}>
+                <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
+                <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
+              </div>
+              <div styles={styles.search}>
+                <SearchInputs filterResources={()=>this.filterResources} searchString={this.state.searchString}/>
+                </div>
+                </div>
               </AppBar>
           </div>
 

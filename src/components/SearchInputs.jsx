@@ -14,13 +14,9 @@ const styles = {
   hintStyle: {
     color:'#01579B',
   },
-  backgroundStyle:{
-    backgroundColor:cyan500,
-    height:'100%',
-  },
   inputStyle: {
-    margin: '0px 10px 10px 10px',
-    borderColor: blue500,
+    marginTop:7,
+    width:'100%'
   },
   };
 

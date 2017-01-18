@@ -86,15 +86,17 @@ export default class AddResource extends React.Component {
             errorOpen: false,
 
             value_Name: "",
-            value_Type: "default",
+            value_Type: "clinic",
             value_Phone: "",
-            value_Address: "default",
-            value_Apt: "default",
+            value_Address: "",
+            value_Apt: "",
             value_zip: "default",
             value_Website: "default",
             value_Descript: "default",
             value_Tags: [''],
             value_Hours: '',
+            value_Lat:'',
+            value_Lng:'',
 
             geoResult: "Waiting",
 
@@ -133,6 +135,8 @@ export default class AddResource extends React.Component {
             description: this.state.value_Descript,
             tags: this.state.chipData,
             hours: this.state.value_Hours,
+            lat: this.state.value_Lat,
+            lng: this.state.value_Lng
         }
 
         return temp;
@@ -280,8 +284,6 @@ export default class AddResource extends React.Component {
 
           <FormsyText
             name="addressline1"
-            validations="isCustom"
-            validationError={customError}
             required
             floatingLabelText="Street Address"
             floatingLabelFixed={true}
@@ -292,7 +294,6 @@ export default class AddResource extends React.Component {
             onChange={(event) => this.setState({value_Address: event.target.value})}
           />
           </div>
-          <div>
 
           <FormsyText
             name="aptnumber"
@@ -305,6 +306,30 @@ export default class AddResource extends React.Component {
             floatingLabelStyle={styles.floatinglabel}
             inputStyle={styles.input}
             onChange={(event) => this.setState({value_Apt: event.target.value})}
+          />
+
+          <FormsyText
+            name="lat"
+            required
+            floatingLabelText="Lat"
+            floatingLabelFixed={true}
+            hintText="12 Grimmauld Place"
+            hintStyle={styles.hint}
+            floatingLabelStyle={styles.floatinglabel}
+            inputStyle={styles.input}
+            onChange={(event) => this.setState({value_Lat: event.target.value})}
+          />
+
+          <FormsyText
+            name="lng"
+            required
+            floatingLabelText="Lng"
+            floatingLabelFixed={true}
+            hintText="12 Grimmauld Place"
+            hintStyle={styles.hint}
+            floatingLabelStyle={styles.floatinglabel}
+            inputStyle={styles.input}
+            onChange={(event) => this.setState({value_Lng: event.target.value})}
           />
 
 
@@ -320,13 +345,11 @@ export default class AddResource extends React.Component {
                          floatingLabelFixed={true}
                          onChange={(event) => this.setState({value_zip: event.target.value})}
                          /> <br />
-          </div>
+
 
 
           <FormsyText
                        name="PhoneNumber"
-                       validations="isCustom"
-                       validationError={customError}
                        hintText="3225550100"
                        hintStyle={styles.hint}
                        floatingLabelStyle={styles.floatinglabel}
@@ -353,8 +376,6 @@ export default class AddResource extends React.Component {
             <div>
             <FormsyText
               name="Description"
-              validations="isCustom"
-              validationError={customError}
               required
               hintText="A summary of the facility/founders/background info"
               floatingLabelText="Description *"
