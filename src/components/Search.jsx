@@ -10,8 +10,6 @@ import {cyan500} from 'material-ui/styles/colors';
 
 const styles = {
     main: {
-        padding: '1% 2% 5% 5%',
-        alignment: 'right',
         overflow: 'auto'
     },
 
@@ -33,10 +31,8 @@ export default class Search extends React.Component {
       return null;
     }
     return (
-      <div>
-        <div style={styles.row}>
-        </div>
-        <Map width={offsetWidth} height={(offsetHeight / 2) - footerOffsetHeight} getFilteredResources={getFilteredResources} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng}/>
+      <div width={offsetWidth}>
+        <Map height={(offsetHeight / 2)} getFilteredResources={getFilteredResources} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng}/>
         <div style={{height: (offsetHeight / 2), overflow: 'auto'}}>
           <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displayAddResource={displayAddResource}/>
         </div>

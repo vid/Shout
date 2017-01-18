@@ -322,6 +322,16 @@ export default class ClinicPage extends React.Component {
       </Card>
 
 {/* ***************************************** */}
+{/* Section 3: Short Description*/}
+{/* ***************************************** */}
+      <Card style ={styles.cardStyle}>
+        <CardHeader title="Description"/>
+          <CardText>
+            {result.description}
+          </CardText>
+        </Card>
+
+{/* ***************************************** */}
 {/* Section 2: List of tags */}
 {/* ***************************************** */}
       <Card style ={styles.cardStyle}>
@@ -338,16 +348,6 @@ export default class ClinicPage extends React.Component {
                       </li>
                       )}
           </ul>
-        </CardText>
-      </Card>
-
-{/* ***************************************** */}
-{/* Section 3: Short Description*/}
-{/* ***************************************** */}
-      <Card style ={styles.cardStyle}>
-      <CardHeader title="Description"/>
-        <CardText>
-          {result.description}
         </CardText>
       </Card>
 
