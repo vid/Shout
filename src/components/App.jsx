@@ -98,6 +98,7 @@ export default class App extends React.Component {
         appbarTitle: 'Shout',
         appbarSubtitle: 'Find Accessible Healthcare.',
         appbarIcon: <NavigationMenu />,
+        searchBar: "",
         hoveredMapRowIndex: '-1',
         userLat: '33.7490',
         userLng: '-84.3880',
@@ -239,7 +240,7 @@ export default class App extends React.Component {
 
     this.updatePageTags(result.name);
     this.updateFeedbacks(result.name);
-
+    this.setState({searchBar:""});
     this.setState({appbarTitle:clinicname});
     this.setState({appbarSubtitle:' '});
     this.setState({appbarState:true});
@@ -258,6 +259,7 @@ export default class App extends React.Component {
     this.setState({appbarTitle:'Shout'});
     this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
+    this.setState({searchBar: <SearchInputs filterResources={()=>this.filterResources} searchString={this.state.searchString}/>});
     this.setState({appbarIcon:<NavigationMenu />});
     this.requestCurrentPosition();
 
@@ -453,6 +455,7 @@ filterResources (searchString) {
 
 
 render () {
+
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
@@ -466,10 +469,10 @@ render () {
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
               </div>
               <div styles={styles.search}>
-                <SearchInputs filterResources={()=>this.filterResources} searchString={this.state.searchString}/>
-                </div>
-                </div>
-              </AppBar>
+                {this.state.searchBar}
+              </div>
+            </div>
+          </AppBar>
           </div>
 
 

@@ -25,7 +25,7 @@ import Avatar from 'material-ui/Avatar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-
+import {Tabs, Tab} from 'material-ui/Tabs';
 import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
 
@@ -283,7 +283,15 @@ export default class ClinicPage extends React.Component {
 
         return (
 
-            <div style={{height: (offsetHeight), overflow: 'auto'}}>
+    <div style={{height: (offsetHeight), overflow: 'auto'}}>
+    <Tabs
+          onChange={this.handleTabChange}
+          value={this.state.slideIndex}
+        >
+          <Tab label="Info" value={0} />
+          <Tab label="User Feedback" value={1} />
+        </Tabs>
+        
       <Paper style={styles.mainStyle} zDepth={1}>
 
 {/* ***************************************** */}
@@ -351,6 +359,15 @@ export default class ClinicPage extends React.Component {
         </CardText>
       </Card>
 
+{/* ***************************************** */}
+{/* Section 4: services*/}
+{/* ***************************************** */}
+      <Card style ={styles.cardStyle}>
+        <CardHeader title="Services"/>
+          <CardText>
+            Placeholder
+          </CardText>
+        </Card>
 
 {/* ***************************************** */}
 {/* Section 4: Feedback */}

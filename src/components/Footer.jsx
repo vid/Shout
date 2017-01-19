@@ -40,12 +40,12 @@ render() {
           onTouchTap={() => onSelect(0)}
         />
           <BottomNavigationItem
-            label="Children & Adolescents"
+            label="Children"
             icon={<PlacesChildCare />}
             onTouchTap={() => onSelect(1)}
           />
           <BottomNavigationItem
-            label="Mental Health"
+            label="Psychiatric"
             icon={favoritesIcon}
             onTouchTap={() => onSelect(2)}
           />
