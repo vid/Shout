@@ -28,6 +28,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
+import { browserHistory } from 'react-router';
 
 
 //* ***************************************** *//
@@ -49,8 +50,9 @@ const styles = {
     },
 
     chip: {
-        margin: 4,
-        height: '80%',
+        margin: 2,
+        height: '50%',
+        fontSize:8,
         backgroundColor: cyan300,
         fontColor: '#FFFFFF'
     },
@@ -205,6 +207,14 @@ export default class ClinicPage extends React.Component {
 
     }
 
+    formatServices(services)
+    {
+      if(services){
+      return <p>services</p>
+      }
+      else return <p>None specified</p>;
+    }
+
     getRating(result, id) {
 
         if (results.reviews.length() === 0) {
@@ -265,9 +275,12 @@ export default class ClinicPage extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.searchSizer, false);
+        browserHistory.goBack();
     }
 
     render() {
+
+        browserHistory.push('/clinicpage');
 
         const {addTags,getTags,getFeedbacks} = this.props;
         const previousTags = getTags();
@@ -281,17 +294,10 @@ export default class ClinicPage extends React.Component {
         const {addFeedback} = this.props;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
 
+
         return (
 
     <div style={{height: (offsetHeight), overflow: 'auto'}}>
-    <Tabs
-          onChange={this.handleTabChange}
-          value={this.state.slideIndex}
-        >
-          <Tab label="Info" value={0} />
-          <Tab label="User Feedback" value={1} />
-        </Tabs>
-        
       <Paper style={styles.mainStyle} zDepth={1}>
 
 {/* ***************************************** */}
@@ -302,11 +308,9 @@ export default class ClinicPage extends React.Component {
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300"/>
           <CardText>
             <div style={styles.cardStyle}>
-            <div style={styles.dataStyle}>
-
               <div style={styles.mapStyle}>
                  <GoogleMap
-                    defaultCenter={this.defaults.center}
+                    defaultCenter={[result.lat, result.lng]}
                     defaultZoom={this.defaults.zoom}
                     hoverDistance={40}
                     bootstrapURLKeys={{
@@ -315,14 +319,15 @@ export default class ClinicPage extends React.Component {
                     <Place lat={result.lat}
                                   lng={result.lng}
                                   text={"a"} />
-                </GoogleMap>
+                 </GoogleMap>/*}
                 </div>
-            </div>
               <div style={styles.dataStyle}>
                 <h3> Address: </h3>
                 {result.civic_address}
                 <h3> Phone: </h3>
                 {result.phone}
+                <h3> Description: </h3>
+                {result.description}
 
               </div>
             </div>
@@ -332,12 +337,7 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 {/* Section 3: Short Description*/}
 {/* ***************************************** */}
-      <Card style ={styles.cardStyle}>
-        <CardHeader title="Description"/>
-          <CardText>
-            {result.description}
-          </CardText>
-        </Card>
+
 
 {/* ***************************************** */}
 {/* Section 2: List of tags */}
@@ -365,13 +365,14 @@ export default class ClinicPage extends React.Component {
       <Card style ={styles.cardStyle}>
         <CardHeader title="Services"/>
           <CardText>
-            Placeholder
+            {()=>this.formatServices(result.services)}
           </CardText>
         </Card>
 
 {/* ***************************************** */}
 {/* Section 4: Feedback */}
 {/* ***************************************** */}
+<div id="feedback">
       <Card style ={styles.cardStyle}>
           <CardHeader
           title="Feedback"/>
@@ -448,7 +449,7 @@ export default class ClinicPage extends React.Component {
 
         </CardText>
       </Card>
-
+</div>
 {/* ***************************************** */}
 {/* Section 5: Submit Feedback */}
 {/* ***************************************** */}

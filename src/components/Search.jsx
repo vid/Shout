@@ -32,7 +32,7 @@ export default class Search extends React.Component {
     }
     return (
       <div width={offsetWidth}>
-        <Map height={(offsetHeight / 2)} getFilteredResources={getFilteredResources} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng}/>
+        <Map height={(offsetHeight / 2)} getFilteredResources={getFilteredResources} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
         <div style={{height: (offsetHeight / 2), overflow: 'auto'}}>
           <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displayAddResource={displayAddResource}/>
         </div>

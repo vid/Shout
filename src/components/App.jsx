@@ -26,6 +26,8 @@ import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 import About from './About.jsx';
 
+import {browserHistory } from 'react-router';
+
 
 import PouchDB from 'pouchdb';
 import PouchDBQuickSearch from 'pouchdb-quick-search';
@@ -229,11 +231,6 @@ export default class App extends React.Component {
     this.setState({screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} getGeocoder={()=>this.state.geocoder} displaySearch={()=>this.displaySearch}/>});
   }
 
-  displayFeedback () {
-    this.setState({screen: <Feedback displaySearch={(result)=>this.displaySearch()} />});
-    this.setState({showMenu: !this.state.showMenu});
-  }
-
   displayResult (result) {
     const clinicname=result.name;
     this.setState({appbarIcon:<NavigationChevronLeft />});
@@ -243,23 +240,23 @@ export default class App extends React.Component {
     this.setState({searchBar:""});
     this.setState({appbarTitle:clinicname});
     this.setState({appbarSubtitle:' '});
+    this.setState({searchBar: ""});
+    this.setState({searchBar: ""});
     this.setState({appbarState:true});
     this.setState({screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} />});
   }
 
 
   displaySearch () {
-
     db.allDocs({startkey : 'Resource_', endkey : 'Resource_\uffff', include_docs: true}, (err, doc) => {
             if (err) { return console.log(err); }
             this.redrawResources(doc.rows);
         });
-
     this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.getTags(name)} searchString={this.state.searchString} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} />});
     this.setState({appbarTitle:'Shout'});
     this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
-    this.setState({searchBar: <SearchInputs filterResources={()=>this.filterResources} searchString={this.state.searchString}/>});
+    this.setState({searchBar: <SearchInputs filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString}/>});
     this.setState({appbarIcon:<NavigationMenu />});
     this.requestCurrentPosition();
 
@@ -455,6 +452,8 @@ filterResources (searchString) {
 
 
 render () {
+
+const { main } = this.props
 
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>

@@ -18,7 +18,7 @@ export default class Map extends React.Component {
 
     this.defaults = {
       center: {lat: 33.7490, lng: -84.3880},
-      zoom: 13,
+      zoom: 10,
     };
   }
 
@@ -38,15 +38,14 @@ export default class Map extends React.Component {
             bootstrapURLKeys={{
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
             language: 'en'}}
+            onChildClick={()=>console.log("child clicked")}
             onGoogleApiLoaded={({map, maps}) => onGoogleApiLoad(map, maps)}
             yesIWantToUseGoogleMapApiInternals>
 
             {filteredResources.map((result, i) =>
-                  <li key={i}>
                   <Place lat={result.lat}
                           lng={result.lng}
                           text={i+1} />
-                          </li>
                           )}
 
             <Place lat={userLat} lng={userLng} text={"You are here"} />
