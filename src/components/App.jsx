@@ -34,8 +34,8 @@ import PouchDBQuickSearch from 'pouchdb-quick-search';
 
 PouchDB.plugin(PouchDBQuickSearch);
 
-var db = new PouchDB('resources');
-var remoteCouch = 'https://generaluser:pass@shout.zooid.org:6984/resources';
+var db = new PouchDB('resourcesnew');
+var remoteCouch = 'https://generaluser:pass@shout.zooid.org:6984/resourcesnew';
 
 PouchDB.sync('db', 'remoteCouch');
 
@@ -129,6 +129,7 @@ export default class App extends React.Component {
               website:res.website,
               description: res.description,
               resourcetype: res.type,
+              services: res.services,
               zip:res.zip
 
           };

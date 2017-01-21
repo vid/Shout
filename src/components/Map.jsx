@@ -11,22 +11,20 @@ export default class Map extends React.Component {
   constructor (props) {
     super(props);
 
-    this.map1 = null;
-    this.maps1 = null;
-    this.coords=null;
-
-
     this.defaults = {
       center: {lat: 33.7490, lng: -84.3880},
       zoom: 10,
     };
   }
 
+  onChildClick(key, childProps){
+
+  }
 
 
   render() {
     const {width, height} = this.props;
-    const {getFilteredResources, userLat, userLng, onGoogleApiLoad} = this.props;
+    const {getFilteredResources, displayResult, hoverRow, unhoverRow, userLat, userLng, onGoogleApiLoad} = this.props;
     const filteredResources = getFilteredResources();
 
     const m = (
@@ -38,17 +36,22 @@ export default class Map extends React.Component {
             bootstrapURLKeys={{
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
             language: 'en'}}
-            onChildClick={()=>console.log("child clicked")}
+            onChildClick={(key, childProp)=>displayResult(filteredResources[key])}
+            onChildMouseEnter={(key,childProp)=>hoverRow(key)}
+            onChildMouseLeave={(key,childProp)=>unhoverRow()}
             onGoogleApiLoaded={({map, maps}) => onGoogleApiLoad(map, maps)}
             yesIWantToUseGoogleMapApiInternals>
 
             {filteredResources.map((result, i) =>
-                  <Place lat={result.lat}
+                  <Place
+                          key={i}
+                          lat={result.lat}
                           lng={result.lng}
-                          text={i+1} />
+                          text={i+1}
+                          placename={result.name}/>
                           )}
 
-            <Place lat={userLat} lng={userLng} text={"You are here"} />
+            <Place lat={userLat} lng={userLng} text={"You"} key={-1} placename={"current location"} />
 
         </GoogleMap>
       </div>
@@ -59,6 +62,7 @@ export default class Map extends React.Component {
 
  class Place extends React.Component {
   render() {
+
     const K_WIDTH = 15;
     const K_HEIGHT = 15;
 
@@ -66,19 +70,13 @@ export default class Map extends React.Component {
     // initially any map object has left top corner at lat lng coordinates
     // it's on you to set object origin to 0,0 coordinates
     position: 'absolute',
-    width: K_WIDTH,
-    height: K_HEIGHT,
-    left: -K_WIDTH / 2,
-    top: -K_HEIGHT / 2,
+    width: K_WIDTH*7,
 
-    border: '5px solid #4DD0E1',
-    borderRadius: K_HEIGHT,
-    backgroundColor: '#B2EBF2',
-    textAlign: 'center',
-    color: cyan500,
-    fontSize: 16,
-    fontWeight: 'bold',
-    padding: 4
+    border: '3px solid #4DD0E1',
+    backgroundColor: 'white',
+    color: '#3f51b5',
+    fontSize: 10,
+    padding: 2
   };
 
   const style = {
@@ -97,12 +95,14 @@ export default class Map extends React.Component {
   color: '#3f51b5',
   fontSize: 12,
   fontWeight: 'bold',
-  padding: 4
+  padding: 2
 };
   return (
+  <div>
      <div style={this.props.$hover ? styleHover : style}>
-        {this.props.text}
+        {this.props.$hover ? this.props.text+"."+this.props.placename : this.props.text}
      </div>
+  </div>
     );
   }
 };

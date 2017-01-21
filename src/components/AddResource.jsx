@@ -98,10 +98,12 @@ export default class AddResource extends React.Component {
             value_Hours: '',
             value_Lat:'',
             value_Lng:'',
+            value_Services:'',
 
             geoResult: "Waiting",
 
-            chipData: []
+            chipData: [],
+            serviceData:[]
         };
 
         this.errorMessages = {
@@ -135,6 +137,7 @@ export default class AddResource extends React.Component {
             website: this.state.value_Website,
             description: this.state.value_Descript,
             tags: this.state.chipData,
+            services:this.state.serviceData,
             hours: this.state.value_Hours,
             lat: this.state.value_Lat,
             lng: this.state.value_Lng
@@ -188,19 +191,38 @@ export default class AddResource extends React.Component {
     }
 
 
-    handleRequestDelete(key) {
+    handleRequestDeleteTag(key) {
         this.chipData = this.state.chipData;
         const chipToDelete = this.chipData.map((chip) => chip.key).indexOf(key);
         this.chipData.splice(chipToDelete, 1);
         this.setState({ chipData: this.chipData });
     }
 
-    renderChip(data) {
+    handleRequestDeleteService(key) {
+        this.serviceData = this.state.serviceData;
+        const chipToDelete = this.serviceData.map((chip) => chip.key).indexOf(key);
+        this.chipData.splice(chipToDelete, 1);
+        this.setState({ serviceData: this.chipData });
+    }
+
+    renderChipTag(data) {
+
         return (
-            <Chip key={data.key} onRequestDelete={() =>this.handleRequestDelete(data.key)}>
+            <Chip key={data.key} onRequestDelete={() =>this.handleRequestDeleteTag(data.key)}>
           {data.label}
       </Chip>
         );
+
+    }
+
+    renderChipService(data) {
+
+        return (
+            <Chip key={data.key} onRequestDelete={() =>this.handleRequestDeleteService(data.key)}>
+          {data.label}
+      </Chip>
+        );
+
     }
 
     searchSizer() {
@@ -298,6 +320,7 @@ export default class AddResource extends React.Component {
           />
           </div>
 
+          <div>
           <FormsyText
             name="aptnumber"
             validations="isCustom"
@@ -310,6 +333,8 @@ export default class AddResource extends React.Component {
             inputStyle={styles.input}
             onChange={(event) => this.setState({value_Apt: event.target.value})}
           />
+          </div>
+          <div>
 
           <FormsyText
             name="lat"
@@ -322,7 +347,8 @@ export default class AddResource extends React.Component {
             inputStyle={styles.input}
             onChange={(event) => this.setState({value_Lat: event.target.value})}
           />
-
+          </div>
+          <div>
           <FormsyText
             name="lng"
             required
@@ -334,8 +360,8 @@ export default class AddResource extends React.Component {
             inputStyle={styles.input}
             onChange={(event) => this.setState({value_Lng: event.target.value})}
           />
-
-
+          </div>
+          <div>
             <FormsyText
                          name="zip"
                          validations="isNumeric"
@@ -348,7 +374,7 @@ export default class AddResource extends React.Component {
                          floatingLabelFixed={true}
                          onChange={(event) => this.setState({value_zip: event.target.value})}
                          /> <br />
-
+          </div>
 
 
           <FormsyText
@@ -375,6 +401,28 @@ export default class AddResource extends React.Component {
               floatingLabelStyle={styles.floatinglabel}
               inputStyle={styles.input}
             />
+
+            <div>
+            <TextField hintText=""
+                       hintStyle={styles.hint}
+                       floatingLabelStyle={styles.floatinglabel}
+                       inputStyle={styles.input}
+                       floatingLabelText="Services (press enter to add)"
+                       value={this.state.value_Services}
+                       floatingLabelFixed={true}
+                       onChange={(event) => this.setState({value_Services: event.target.value})}
+                       onKeyPress={(event)=>{
+                                   if (event.key === 'Enter') {
+                                     this.state.serviceData.push({key:this.state.serviceData.length+1, label: this.state.value_Services})
+                                     this.setState({value_Services: ''})
+                                   }
+                                   }}/><br />
+
+              </div>
+              <div style={styles.row}>
+               Services you entered: {this.state.serviceData.map(this.renderChipService, this)}
+              </div>
+              <br />
 
             <div>
             <FormsyText
@@ -413,7 +461,7 @@ export default class AddResource extends React.Component {
 
 
                <div style={styles.row}>
-                Tags you entered: {this.state.chipData.map(this.renderChip, this)}
+                Tags you entered: {this.state.chipData.map(this.renderChipTag, this)}
                </div>
                <br />
 

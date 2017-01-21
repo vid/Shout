@@ -95,11 +95,16 @@ const styles = {
         flexDirection: 'row'
     },
 
+
     wrapper: {
         display: 'flex',
         flexWrap: 'wrap',
         flexDirection: 'row',
     },
+
+      stars: {
+        marginTop:5
+      },
 
 };
 
@@ -125,7 +130,7 @@ export default class ClinicPage extends React.Component {
         };
 
         this.defaults = {
-            zoom: 16,
+            zoom: 10,
             center: {
                 lat: 33.7490,
                 lng: -84.3880
@@ -310,16 +315,16 @@ export default class ClinicPage extends React.Component {
             <div style={styles.cardStyle}>
               <div style={styles.mapStyle}>
                  <GoogleMap
-                    defaultCenter={[result.lat, result.lng]}
-                    defaultZoom={this.defaults.zoom}
+                    center={[result.lat,result.lng]}
+                    zoom={15}
                     hoverDistance={40}
                     bootstrapURLKeys={{
                     key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
                     language: 'en'}}>
                     <Place lat={result.lat}
                                   lng={result.lng}
-                                  text={"a"} />
-                 </GoogleMap>/*}
+                                  text={"A"} />
+                 </GoogleMap>
                 </div>
               <div style={styles.dataStyle}>
                 <h3> Address: </h3>
@@ -377,75 +382,66 @@ export default class ClinicPage extends React.Component {
           <CardHeader
           title="Feedback"/>
           <CardText>
-            <div style={styles.feedbackWrapper}>
-            <div style={styles.ratingsSection}>
-            <div>
-              <h3>Average Accessibility</h3>
-              <p> Reflects waiting time for appointments/walk-in. </p>
-              <StarRatingComponent
-                name="accessibility" /* name of the radio input, it is required */
-                value={()=>this.getRating("0")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              />
-            </div>
-            <div>
-              <h3>Average Quality of Care</h3>
-              <p> Reflects  </p>
-              <StarRatingComponent
-                name="Quality" /* name of the radio input, it is required */
-                value={()=>this.getRating("1")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              />
-            </div>
-            <div>
-              <h3>Average Affordability</h3>
-              <StarRatingComponent
-                name="Affordability" /* name of the radio input, it is required */
-                value={()=>this.getRating("2")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              />
-            </div>
-            <div>
-              <h3>Overall</h3>
-              <StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
-                value={()=>this.getRating("3")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-                onStarClick={()=>this.setState(rating.accessibility)}
-              />
-            </div>
             <div>
 
                                   <RaisedButton
                                     style={styles.button}
                                     label="Submit Feedback"
-                                    primary={true}
                                     onTouchTap={() => this.setState({submitfeedbackOpen: true})}/>
 
                                   <RaisedButton
                                     label="Flag this Content"
                                     style={styles.button}
-                                    secondary={true}
                                     onTouchTap={() => this.setState({flagcontentOpen: true})}/>
             </div>
-          </div>
-          <div style={styles.reviews}>
-
-
-
-
-            <div style={styles.reviews}>
-            {this.formatFeedbacks(allFeedbacks)}
+            <div style={styles.feedbackWrapper}>
+            <div style={styles.ratingsSection}>
+            <div style={styles.wrapper}>
+              <p><b>Average Accessibility:</b></p>
+              <div style={styles.stars}><StarRatingComponent
+                name="accessibility" /* name of the radio input, it is required */
+                value={()=>this.getRating("0")} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              /></div>
             </div>
-
-            <FlatButton onClick={()=>this.setState({feedbackExpanded:!this.state.feedbackExpanded})} label={">> Click to expand/collapse all ("+allFeedbacks.length+")"}/>
-
-            <div>
-            {expandedFeedback}
+            <div style={styles.wrapper}>
+              <p><b>Average Quality of Care:</b></p>
+              <div style={styles.stars}><StarRatingComponent
+                name="Quality" /* name of the radio input, it is required */
+                value={()=>this.getRating("1")} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              /></div>
+            </div>
+            <div style={styles.wrapper}>
+              <p><b>Average Affordability:</b></p>
+              <div style={styles.stars}><StarRatingComponent
+                name="Affordability" /* name of the radio input, it is required */
+                value={()=>this.getRating("2")} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+              /></div>
+            </div>
+            <div style={styles.wrapper}>
+              <p><b>Overall:  </b></p>
+              <div style={styles.stars}><StarRatingComponent
+                name="Service" /* name of the radio input, it is required */
+                value={()=>this.getRating("3")} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+                onStarClick={()=>this.setState(rating.accessibility)}
+              /></div>
             </div>
 
           </div>
         </div>
+
+                    <div style={styles.reviews}>
+                    {this.formatFeedbacks(allFeedbacks)}
+                    </div>
+
+                    <FlatButton onClick={()=>this.setState({feedbackExpanded:!this.state.feedbackExpanded})} label={">> Click to expand/collapse all ("+allFeedbacks.length+")"}/>
+
+                    <div>
+                    {expandedFeedback}
+                    </div>
 
         </CardText>
       </Card>

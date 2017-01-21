@@ -48,8 +48,10 @@ console.log("Tags to format are:"+arrTags);
 
   render () {
 
-    const {getFilteredResources, displayResult, getTags, displayAddResource} = this.props;
+    const {getFilteredResources, displayResult, getTags, displayAddResource, getHoveredRow} = this.props;
     const filteredResources = getFilteredResources();
+    const hoveredRowIndex=getHoveredRow();
+
     return (
       <Table
         selectable={false}
@@ -67,7 +69,10 @@ console.log("Tags to format are:"+arrTags);
           displayRowCheckbox={false}
           showRowHover={true}>
           {filteredResources.map((result, i) => (
-            <TableRow key={i} onClick={() => displayResult()}>
+            <TableRow
+              key={i}
+              onClick={() => displayResult()}
+              selected={i===hoveredRowIndex}>
               <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
               <TableRowColumn style={styles.namesectionStyle}><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
               <TableRowColumn style={styles.addresssectionStyle}>
