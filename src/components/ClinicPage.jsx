@@ -64,12 +64,10 @@ const styles = {
 
     dataStyle: {
         margin: '5px',
-        height: '100%',
     },
 
     mainStyle: {
 
-        height: '100%',
         width: '100%',
         alignment: 'right',
         display: 'inline-block',
@@ -317,7 +315,6 @@ export default class ClinicPage extends React.Component {
                  <GoogleMap
                     center={[result.lat,result.lng]}
                     zoom={15}
-                    hoverDistance={40}
                     bootstrapURLKeys={{
                     key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
                     language: 'en'}}>
