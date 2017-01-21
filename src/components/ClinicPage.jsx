@@ -29,6 +29,9 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import UpdateResource from '../components/UpdateResource.jsx';
 import FlagContent from '../components/FlagContent.jsx';
 import { browserHistory } from 'react-router';
+import IconButton from 'material-ui/IconButton';
+import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
+import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
 
 
 //* ***************************************** *//
@@ -36,17 +39,12 @@ import { browserHistory } from 'react-router';
 //* ***************************************** *//
 
 const styles = {
-
-    button: {
-        margin: '5px',
-        padding: '5px'
-    },
-
     cardStyle: {
         display: 'flex',
         flex: 1,
         flexDirection: 'column',
-        margin: '5px'
+        margin: 2,
+        padding:1
     },
 
     chip: {
@@ -59,11 +57,11 @@ const styles = {
 
     chipInfo: {
         padding: 6,
-        height: '80%',
+        height: '80%'
     },
 
     dataStyle: {
-        margin: '5px',
+        margin: '2px',
     },
 
     mainStyle: {
@@ -86,6 +84,8 @@ const styles = {
 
     list: {
         listStyle: 'none',
+        margin:0,
+        padding:0
     },
 
     feedbackWrapper: {
@@ -102,6 +102,19 @@ const styles = {
 
       stars: {
         marginTop:5
+      },
+
+      smallIcon: {
+        width: 20,
+        height: 20,
+        padding:1
+      },
+
+      smallButton: {
+        height: 20,
+        padding:1,
+        margin:1,
+        fontSize:12
       },
 
 };
@@ -212,8 +225,11 @@ export default class ClinicPage extends React.Component {
 
     formatServices(services)
     {
-      if(services){
-      return <p>services</p>
+    console.log(services);
+      if(services.length>0){
+          return services.map((service, i) =>
+                <li key={i}><b>{service.label}</b></li>
+                        );
       }
       else return <p>None specified</p>;
     }
@@ -278,12 +294,9 @@ export default class ClinicPage extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.searchSizer, false);
-        browserHistory.goBack();
     }
 
     render() {
-
-        browserHistory.push('/clinicpage');
 
         const {addTags,getTags,getFeedbacks} = this.props;
         const previousTags = getTags();
@@ -308,37 +321,22 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 
         <Card style ={styles.cardStyle}>
-        <CardHeader title={result.name} subtitle={result.civic_address} avatar="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300"/>
+        <CardHeader title={result.name} subtitle={result.civic_address} avatar="http://icons.iconarchive.com/icons/icons8/android/512/Healthcare-Clinic-icon.png"/>
           <CardText>
             <div style={styles.cardStyle}>
-              <div style={styles.mapStyle}>
-                 <GoogleMap
-                    center={[result.lat,result.lng]}
-                    zoom={15}
-                    bootstrapURLKeys={{
-                    key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
-                    language: 'en'}}>
-                    <Place lat={result.lat}
-                                  lng={result.lng}
-                                  text={"A"} />
-                 </GoogleMap>
-                </div>
+
               <div style={styles.dataStyle}>
-                <h3> Address: </h3>
+                <h4> Address: </h4>
                 {result.civic_address}
-                <h3> Phone: </h3>
+                <h4> Phone: </h4>
                 {result.phone}
-                <h3> Description: </h3>
+                <h4> Description: </h4>
                 {result.description}
 
               </div>
             </div>
         </CardText>
       </Card>
-
-{/* ***************************************** */}
-{/* Section 3: Short Description*/}
-{/* ***************************************** */}
 
 
 {/* ***************************************** */}
@@ -354,6 +352,8 @@ export default class ClinicPage extends React.Component {
               <b>{tag.value+"  "}</b>
               </Chip>
               <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
+              <IconButton style={styles.smallIcon} tooltip="vouch for"><NavigationArrowUpward /></IconButton>
+              <IconButton style={styles.smallIcon} tooltip="vouch against"><NavigationArrowDownward /></IconButton>
               </div>
                       </li>
                       )}
@@ -362,12 +362,12 @@ export default class ClinicPage extends React.Component {
       </Card>
 
 {/* ***************************************** */}
-{/* Section 4: services*/}
+{/* Section 3: services*/}
 {/* ***************************************** */}
       <Card style ={styles.cardStyle}>
         <CardHeader title="Services"/>
           <CardText>
-            {()=>this.formatServices(result.services)}
+            {this.formatServices(result.services)}
           </CardText>
         </Card>
 
@@ -382,15 +382,18 @@ export default class ClinicPage extends React.Component {
             <div>
 
                                   <RaisedButton
-                                    style={styles.button}
+                                    style={styles.smallButton}
                                     label="Submit Feedback"
+                                    primary={true}
                                     onTouchTap={() => this.setState({submitfeedbackOpen: true})}/>
 
                                   <RaisedButton
                                     label="Flag this Content"
-                                    style={styles.button}
+                                    style={styles.smallButton}
+                                    primary={true}
                                     onTouchTap={() => this.setState({flagcontentOpen: true})}/>
             </div>
+            <br />
             <div style={styles.feedbackWrapper}>
             <div style={styles.ratingsSection}>
             <div style={styles.wrapper}>

@@ -26,9 +26,6 @@ import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 import About from './About.jsx';
 
-import {browserHistory } from 'react-router';
-
-
 import PouchDB from 'pouchdb';
 import PouchDBQuickSearch from 'pouchdb-quick-search';
 
@@ -176,25 +173,29 @@ export default class App extends React.Component {
 
   addTags(tags, res_name) {
 
+  const tagsarr=[]
+
     tags.forEach(function(element) {
 
                     var tag = {
-                        _id: "tag"+"_"+res_name+"_"+element.label,
-                        type: "tag",
-                        name: res_name,
                         value: element.label,
                         count: 1
 
                     };
-                    console.log("Creating tag object:"+tag._id);
+                    tagsarr.push(tag);
 
-                    db.put(tag, function callback(err, result) {
-                        if (err) {
-                            return console.log(err);
-                        }
-                    });
+      });
 
+      var tagsobj={
+        _id: "tags"+"_"+res_name,
+        type: "tag",
+        tags:tagsarr,
+      }
 
+      db.put(tagsobj, function callback(err, result) {
+          if (err) {
+              return console.log(err);
+          }
       });
 
     if (remoteCouch) {
@@ -253,7 +254,7 @@ export default class App extends React.Component {
             if (err) { return console.log(err); }
             this.redrawResources(doc.rows);
         });
-    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.getTags(name)} searchString={this.state.searchString} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} />});
+    this.setState({screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} searchString={this.state.searchString} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} />});
     this.setState({appbarTitle:'Shout'});
     this.setState({appbarSubtitle:'Find Accessible Healthcare.'});
     this.setState({appbarState:false});
@@ -417,16 +418,22 @@ filterResources (searchString) {
 
   updatePageTags(name){
 
-    db.allDocs({startkey : 'tag_'+name, endkey : 'tag_'+name+'_\uffff', include_docs: true}, (err, doc) => {
+    db.allDocs({startkey : 'tags_'+name, endkey : 'tags_'+name+'_\uffff', include_docs: true}, (err, doc) => {
 
         if (err) { return console.log(err); }
 
         var tags=[];
+        doc.rows.forEach(function(result){
 
-        doc.rows.forEach(function(tag){
-          tags.push(tag.doc);
+          console.log(result.doc);
+          tags.push(result.doc.tags);
         });
-        this.setState({clinicpageTags:tags});
+          if(tags.length>0){
+            this.setState({clinicpageTags:tags[0]});
+          }
+          else{
+            this.setState({clinicpageTags:[{value:'No tags yet', count:''}]});
+          }
     });
 
   }

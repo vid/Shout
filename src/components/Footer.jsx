@@ -54,11 +54,6 @@ render() {
             icon={<ActionPregnantWoman />}
             onTouchTap={() => onSelect(3)}
           />
-          <BottomNavigationItem
-            label="Near Me"
-            icon={nearbyIcon}
-            onTouchTap={() => onSelect(4)}
-          />
 
         </BottomNavigation>
       </Paper>

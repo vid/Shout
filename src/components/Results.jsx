@@ -55,12 +55,14 @@ console.log("Tags to format are:"+arrTags);
     return (
       <Table
         selectable={false}
+        fixedHeader={true}
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
-        <TableHeader displaySelectAll={false}>
+        <TableHeader
+          displaySelectAll={false}>
           <TableRow style={styles.headerStyle}>
             <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Tags</h2></TableHeaderColumn>
+            <TableHeaderColumn><h2>Services</h2></TableHeaderColumn>
           {/*  <RaisedButton style = {styles.addResButton} onTouchTap={() => displayAddResource()}> <ContentAdd /></RaisedButton> */}
           </TableRow>
         </TableHeader>

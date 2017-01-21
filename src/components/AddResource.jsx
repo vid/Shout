@@ -18,7 +18,6 @@ import FontIcon from 'material-ui/FontIcon';
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
-import { browserHistory } from 'react-router';
 
 import { cyan200 } from 'material-ui/styles/colors';
 
@@ -242,8 +241,6 @@ export default class AddResource extends React.Component {
     }
 
     render() {
-
-      browserHistory.push('/addresource');
 
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { addResource, getGeocoder, displaySearch} = this.props;
