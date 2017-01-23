@@ -11,6 +11,8 @@ import Menu from 'material-ui/Menu';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import SocialShare from 'material-ui/svg-icons/social/share';
 import ActionSearch from 'material-ui/svg-icons/action/search';
+import ActionBook from 'material-ui/svg-icons/action/book';
+import ContentMail from 'material-ui/svg-icons/content/mail';
 import MapsEditLocation from 'material-ui/svg-icons/maps/edit-location';
 import SocialPerson from 'material-ui/svg-icons/social/person';
 
@@ -45,11 +47,14 @@ export default class LeftMenu extends React.Component {
         <div id='menu'>
             <MenuItem primaryText="" />
             <MenuItem primaryText="" />
+            <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
                 <Divider />
+
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>
-            <MenuItem primaryText="Invite friends" leftIcon={<SocialShare />}/>
+            <MenuItem primaryText="Blog" leftIcon={<ActionBook />} target="_blank" href="http://www.shoutforhealth.org/blog-2/"/>
+            <MenuItem primaryText="Listserv" leftIcon={<ContentMail />} target="_blank" href="http://eepurl.com/cvWx3b"/>
 
 
             <Dialog
@@ -69,7 +74,7 @@ export default class LeftMenu extends React.Component {
                 onRequestClose={() => this.setState({changelocationOpen: false})}>
 
                 <div>
-                Please select one of location:
+                Shout is currently only active in Atlanta. Stay tuned for other cities.
                 </div>
                 <SelectField
                     floatingLabelText="Select a city"

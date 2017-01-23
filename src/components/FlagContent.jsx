@@ -36,14 +36,13 @@ export default class FlagContent extends React.Component {
               <MenuItem value={2} primaryText="Wrong address" />
               <MenuItem value={3} primaryText="Wrong phone number" />
               <MenuItem value={4} primaryText="Entry is Spam" />
-              <MenuItem value={5} primaryText="Other" />
+              <MenuItem value={5} primaryText="Other (please enter details below)" />
 
               </SelectField>
               <br />
 
-              <h3> Enter a description: </h3>
-                <TextField hintText="Reason"
-                         floatingLabelText="Resource Name"
+                <TextField hintText="Further explanation"
+                         floatingLabelText="Details"
                          floatingLabelFixed={true}
     />
 

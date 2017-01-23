@@ -34,8 +34,10 @@ PouchDB.plugin(PouchDBQuickSearch);
 var db = new PouchDB('resourcesnew');
 var remoteCouch = 'https://generaluser:pass@shout.zooid.org:6984/resourcesnew';
 
-PouchDB.sync('db', 'remoteCouch');
+//declare the remote DB's that store tentative user feedbacks for moderation
+var pendingDB = 'https://generaluser:pass@shout.zooid.org:6984/resourcespending';
 
+PouchDB.sync('db', 'remoteCouch');
 
 // all of the CSS styles for this component defined here
 const styles = {
@@ -108,6 +110,32 @@ export default class App extends React.Component {
 
 
   }
+
+  addFlag(flag, result){
+
+    console.log("added flag");
+  }
+
+  addSingleTag(label, tagsdoc){
+
+    var tag={
+    value:label,
+    count:1
+    }
+
+    tagsdoc.tags.push(tag);
+    db.put({
+            _id:tagsdoc._id,
+            _rev:tagsdoc._rev,
+            type:"tag",
+            tags:tagsdoc.tags,
+        }, function(err, response) {
+          if (err) { return console.log(err); }
+          console.log("success");
+        });
+  }
+
+  
   // Add a resource to the collection
   addResource (res) {
 
@@ -245,7 +273,7 @@ export default class App extends React.Component {
     this.setState({searchBar: ""});
     this.setState({searchBar: ""});
     this.setState({appbarState:true});
-    this.setState({screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} />});
+    this.setState({screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addSingleTag={(a,b)=>this.addSingleTag(a,b)} addFlag={()=>this.addFlag(a,b)}/>});
   }
 
 
@@ -324,7 +352,6 @@ filterResources (searchString) {
 
   filterNearMe(){
 
-    console.log("chose select near me");
     var arr=this.state.allResources;
     console.log(arr);
     arr.sort((a, b)=>{
@@ -400,7 +427,6 @@ filterResources (searchString) {
                                                       const y=crd.longitude;
                                                       this.setState({userLat:x});
                                                       this.setState({userLng:y});
-                                                      console.log("Current location:",x,y);
                                                       }, this.error, options);
       }
   }
@@ -425,8 +451,7 @@ filterResources (searchString) {
         var tags=[];
         doc.rows.forEach(function(result){
 
-          console.log(result.doc);
-          tags.push(result.doc.tags);
+          tags.push(result.doc);
         });
           if(tags.length>0){
             this.setState({clinicpageTags:tags[0]});
@@ -454,6 +479,65 @@ filterResources (searchString) {
       });
 
   }
+
+  vouchFor(tagsdoc, index){
+
+      var tag=tagsdoc.tags[index];
+
+      var modified_tag={
+          value:tag.value,
+          count:tag.count+1,
+      };
+      tagsdoc.tags[index]=modified_tag;
+
+      db.put({
+          _id:tagsdoc._id,
+          _rev:tagsdoc._rev,
+          type:"tag",
+          tags:tagsdoc.tags,
+      }, function(err, response) {
+        if (err) { return console.log(err); }
+        console.log("success");
+      });
+    }
+
+    vouchAgainst(tagsdoc, index){
+
+    var tag=tagsdoc.tags[index];
+
+    if(tag.count>0){
+        var modified_tag={
+            value:tag.value,
+            count:tag.count-1,
+        };
+        tagsdoc.tags[index]=modified_tag;
+
+        db.put({
+            _id:tagsdoc._id,
+            _rev:tagsdoc._rev,
+            type:"tag",
+            tags:tagsdoc.tags,
+        }, function(err, response) {
+          if (err) { return console.log(err); }
+          console.log("success");
+        });
+    }
+    else{
+      tagsdoc.tags.splice(index,1);
+
+      db.put({
+          _id:tagsdoc._id,
+          _rev:tagsdoc._rev,
+          type:"tag",
+          tags:tagsdoc.tags,
+      }, function(err, response) {
+        if (err) { return console.log(err); }
+        console.log("success");
+      });
+
+    }
+
+    }
 // end of actions
 
 //sync the database
@@ -462,6 +546,14 @@ filterResources (searchString) {
 render () {
 
 const { main } = this.props
+
+db.changes({
+  limit: 30,
+  since: 0
+}, function (err, response) {
+  if (err) { return console.log(err); }
+    ()=>this.redrawResources(doc.rows);
+});
 
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>

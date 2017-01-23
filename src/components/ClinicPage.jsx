@@ -27,11 +27,16 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import UpdateResource from '../components/UpdateResource.jsx';
-import FlagContent from '../components/FlagContent.jsx';
 import { browserHistory } from 'react-router';
 import IconButton from 'material-ui/IconButton';
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
+import Snackbar from 'material-ui/Snackbar';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
 
 
 //* ***************************************** *//
@@ -131,13 +136,17 @@ export default class ClinicPage extends React.Component {
             flagcontentOpen: false,
             feedbackExpanded:false,
 
-            value_Author: "",
+            value_Author: "Anonymous",
             accessibilityRating: 0,
             qualityRating: 0,
             affordabilityRating: 0,
             value_Descript: "",
             previous_Tags: [],
-            chipData: []
+            chipData: [],
+            vouchOpen:false,
+            value_Flag: '',
+            value_FlagDetails: '',
+            value_NewTag: '',
         };
 
         this.defaults = {
@@ -225,7 +234,6 @@ export default class ClinicPage extends React.Component {
 
     formatServices(services)
     {
-    console.log(services);
       if(services.length>0){
           return services.map((service, i) =>
                 <li key={i}><b>{service.label}</b></li>
@@ -296,16 +304,19 @@ export default class ClinicPage extends React.Component {
         window.removeEventListener('resize', this.searchSizer, false);
     }
 
+
     render() {
 
-        const {addTags,getTags,getFeedbacks} = this.props;
-        const previousTags = getTags();
+        const {addTags,getTags,getFeedbacks, vouchFor, vouchAgainst, addSingleTag, addFlag} = this.props;
+        const tagdoc = getTags();
+        const previousTags=tagdoc.tags;
         const allFeedbacks = getFeedbacks();
         const {offsetWidth,offsetHeight,footerOffsetHeight} = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
         const {result} = this.props;
+        const id=result._id;
         const {displaySearch} = this.props;
         const {addFeedback} = this.props;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
@@ -352,14 +363,41 @@ export default class ClinicPage extends React.Component {
               <b>{tag.value+"  "}</b>
               </Chip>
               <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
-              <IconButton style={styles.smallIcon} tooltip="vouch for"><NavigationArrowUpward /></IconButton>
-              <IconButton style={styles.smallIcon} tooltip="vouch against"><NavigationArrowDownward /></IconButton>
+              <IconButton
+              style={styles.smallIcon}
+              tooltip="vouch for"
+              onTouchTap={()=>{vouchFor(tagdoc, i)
+                              this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
+              <IconButton
+              style={styles.smallIcon}
+              tooltip="vouch against"
+              onTouchTap={()=>{vouchAgainst(tagdoc, i)
+                              this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
               </div>
                       </li>
                       )}
           </ul>
+          <div style={styles.row}>
+             <TextField hintText=""
+                        hintStyle={styles.hint}
+                        floatingLabelStyle={styles.floatinglabel}
+                        inputStyle={styles.input}
+                        floatingLabelText="Add New Tags"
+                        floatingLabelFixed={true}
+                        value={this.state.value_Tags}
+                        onChange={(event) => this.setState({value_NewTag: event.target.value})}/><br />
+              <RaisedButton onTouchTap={() => addSingleTag(this.state.value_NewTag, tagdoc)}> Submit</RaisedButton>
+             <br />
+            </div>
         </CardText>
       </Card>
+
+      <Snackbar
+          open={this.state.vouchOpen}
+          message="Your vote has been recorded"
+          autoHideDuration={3000}
+          onRequestClose={this.handleRequestClose}
+        />
 
 {/* ***************************************** */}
 {/* Section 3: services*/}
@@ -391,44 +429,11 @@ export default class ClinicPage extends React.Component {
                                     label="Flag this Content"
                                     style={styles.smallButton}
                                     primary={true}
-                                    onTouchTap={() => this.setState({flagcontentOpen: true})}/>
+                                    onTouchTap={() =>this.setState({flagcontentOpen: true})}/>
             </div>
             <br />
             <div style={styles.feedbackWrapper}>
             <div style={styles.ratingsSection}>
-            <div style={styles.wrapper}>
-              <p><b>Average Accessibility:</b></p>
-              <div style={styles.stars}><StarRatingComponent
-                name="accessibility" /* name of the radio input, it is required */
-                value={()=>this.getRating("0")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              /></div>
-            </div>
-            <div style={styles.wrapper}>
-              <p><b>Average Quality of Care:</b></p>
-              <div style={styles.stars}><StarRatingComponent
-                name="Quality" /* name of the radio input, it is required */
-                value={()=>this.getRating("1")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              /></div>
-            </div>
-            <div style={styles.wrapper}>
-              <p><b>Average Affordability:</b></p>
-              <div style={styles.stars}><StarRatingComponent
-                name="Affordability" /* name of the radio input, it is required */
-                value={()=>this.getRating("2")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-              /></div>
-            </div>
-            <div style={styles.wrapper}>
-              <p><b>Overall:  </b></p>
-              <div style={styles.stars}><StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
-                value={()=>this.getRating("3")} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-                onStarClick={()=>this.setState(rating.accessibility)}
-              /></div>
-            </div>
 
           </div>
         </div>
@@ -453,6 +458,7 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 <Dialog
     title="Submit Feedback"
+    autoScrollBodyContent={true}
     actions={[
        <FlatButton
          label="Cancel"
@@ -468,9 +474,9 @@ export default class ClinicPage extends React.Component {
                             this.setState({submitfeedbackOpen: false})
                             }}/>]}
 
-    modal={false}
-    open={this.state.submitfeedbackOpen}
-    onRequestClose={() => this.setState({submitfeedbackOpen: false})}>
+        modal={false}
+        open={this.state.submitfeedbackOpen}
+        onRequestClose={() => this.setState({submitfeedbackOpen: false})}>
 
       <CardHeader title="Submit Feedback"/>
       <CardText>
@@ -513,10 +519,6 @@ export default class ClinicPage extends React.Component {
               />
             </div>
             <div>
-              <h3>Services and Tags</h3>
-              <p> Would you like to endorse {result.name} for any of the following services or specialties?</p>
-           </div>
-           <div>
               <h3> Comments </h3>
               <p> Enter any details that might help others who are looking for healthcare. (Limit 160 char)</p>
 
@@ -531,9 +533,6 @@ export default class ClinicPage extends React.Component {
                          onChange={(event) => this.setState({value_Descript: event.target.value})}/><br />
 
                   <br />
-                   <div style={styles.wrapper}>
-                       {this.state.chipData.map(this.renderChip, this)}
-                   </div>
            </div>
 
           </div>
@@ -545,6 +544,7 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 <Dialog
     title="Flag Content"
+    autoScrollBodyContent={true}
     actions={[
        <FlatButton
          label="Cancel"
@@ -554,12 +554,16 @@ export default class ClinicPage extends React.Component {
          label="Submit"
          primary={true}
          keyboardFocused={true}
-         onTouchTap={() => this.setState({flagcontentOpen: false})}/>]}
-    modal={false}
-    open={this.state.flagcontentOpen}
-    onRequestClose={() => this.setState({flagcontentOpen: false})}>
+         onTouchTap={() => {this.setState({flagcontentOpen: false})}}/>]}
+        modal={false}
+        open={this.state.flagcontentOpen}
+        onRequestClose={() => this.setState({flagcontentOpen: false})}>
             <CardText>
-            <FlagContent />
+              <div>
+
+            <h3> This feature will be available soon </h3>
+
+              </div>
             </CardText>
     </Dialog>
 

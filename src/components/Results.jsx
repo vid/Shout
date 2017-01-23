@@ -4,7 +4,7 @@
 import React from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
-import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
@@ -14,8 +14,8 @@ const styles = {
   },
 
   addResButton:{
-  padding:7,
-  margin:4
+  margin:4,
+  radius:52,
   }
 }
 export default class Results extends React.Component {
@@ -62,8 +62,8 @@ console.log("Tags to format are:"+arrTags);
           <TableRow style={styles.headerStyle}>
             <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Services</h2></TableHeaderColumn>
-          {/*  <RaisedButton style = {styles.addResButton} onTouchTap={() => displayAddResource()}> <ContentAdd /></RaisedButton> */}
+            {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
+            <IconButton style = {styles.addResButton} onTouchTap={() => displayAddResource()} tooltip="add new"> <ContentAdd /></IconButton>
           </TableRow>
         </TableHeader>
         <TableBody
