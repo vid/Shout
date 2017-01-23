@@ -253,7 +253,7 @@ export default class AddResource extends React.Component {
 
         Formsy.addValidationRule('isCustom', (values, value) => {
 
-          var regobj=/^[a-zA-Z0-9,.!? ]*$/;
+          var regobj=/^[a-zA-Z0-9,.!?' ]*$/;
           return regobj.test(value);
         });
 
@@ -331,33 +331,7 @@ export default class AddResource extends React.Component {
             onChange={(event) => this.setState({value_Apt: event.target.value})}
           />
           </div>
-          <div>
 
-          <FormsyText
-            name="lat"
-            required
-            floatingLabelText="Lat"
-            floatingLabelFixed={true}
-            hintText="12 Grimmauld Place"
-            hintStyle={styles.hint}
-            floatingLabelStyle={styles.floatinglabel}
-            inputStyle={styles.input}
-            onChange={(event) => this.setState({value_Lat: event.target.value})}
-          />
-          </div>
-          <div>
-          <FormsyText
-            name="lng"
-            required
-            floatingLabelText="Lng"
-            floatingLabelFixed={true}
-            hintText="12 Grimmauld Place"
-            hintStyle={styles.hint}
-            floatingLabelStyle={styles.floatinglabel}
-            inputStyle={styles.input}
-            onChange={(event) => this.setState({value_Lng: event.target.value})}
-          />
-          </div>
           <div>
             <FormsyText
                          name="zip"
