@@ -48,8 +48,9 @@ console.log("Tags to format are:"+arrTags);
 
   render () {
 
-    const {getFilteredResources, displayResult, getTags, displayAddResource, getHoveredRow} = this.props;
+    const {getFilteredResources, displayResult, displaySearch, getTags, displayAddResource, getHoveredRow} = this.props;
     const filteredResources = getFilteredResources();
+    
     const hoveredRowIndex=getHoveredRow();
 
     return (

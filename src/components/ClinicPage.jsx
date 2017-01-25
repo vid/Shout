@@ -298,6 +298,7 @@ export default class ClinicPage extends React.Component {
     componentDidMount() {
         this.searchSizer();
         window.addEventListener('resize', () => this.searchSizer(), false);
+        
     }
 
     componentWillUnmount() {
