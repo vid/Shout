@@ -65,7 +65,7 @@ const styles = {
 
 const validators = {
   customvalid: {
-    regexp: /^[a-zA-Z0-9,.!? ]*$/,
+    regexp: /^[a-zA-Z0-9,.!?' ]*$/,
     message: 'Not valid time'
   },
   phone: {
@@ -253,7 +253,7 @@ export default class AddResource extends React.Component {
 
         Formsy.addValidationRule('isCustom', (values, value) => {
 
-          var regobj=/^[a-zA-Z0-9,.!?' ]*$/;
+          var regobj=/^[a-zA-Z0-9,.!? ]*$/;
           return regobj.test(value);
         });
 
@@ -331,7 +331,7 @@ export default class AddResource extends React.Component {
             onChange={(event) => this.setState({value_Apt: event.target.value})}
           />
           </div>
-
+    
           <div>
             <FormsyText
                          name="zip"

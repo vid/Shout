@@ -135,7 +135,7 @@ export default class App extends React.Component {
         });
   }
 
-  
+
   // Add a resource to the collection
   addResource (res) {
 
@@ -297,12 +297,18 @@ export default class App extends React.Component {
 filterResources (searchString) {
 
   if (!searchString || searchString.length < 1) {
-    this.setState({filteredResources:this.state.allResources});
-  }else{
+    db.allDocs({startkey : 'Resource_', endkey : 'Resource_\uffff', include_docs: true}, (err, doc) => {
+            if (err) { return console.log(err); }
+            this.redrawResources(doc.rows);
+        });
+  }
+
+  else{
     db.search({
       query: searchString,
-      fields: ['name', 'description','_id','text'],
-      include_docs: true
+      fields: ['name', 'description','_id','services.label','text'],
+      include_docs: true,
+      mm: '33%'
       },(err,list)=>{
 
         if(err){return console.log(err);}
@@ -312,9 +318,22 @@ filterResources (searchString) {
         };
 
           list.rows.forEach(function (res) {
-              if(res.id.startsWith('Tag')){
+              if(res.id.startsWith('tags')){
+
                 console.log("started with tag");
-                matches.results.push(res);
+                  db.search({
+                    query: res._id,
+                    fields: ['name'],
+                    include_docs: true,
+                    mm: '33%'
+                    },(err,list)=>{
+
+                    if(err){return console.log(err);}
+
+                    else if(res.id.startsWith('Resource')){
+                      matches.results.push(res);
+                    }
+                  });
               }
               else if(res.id.startsWith('Resource')){
                 matches.results.push(res);
@@ -344,7 +363,7 @@ filterResources (searchString) {
       }else if(index===2){
         this.filterResources('mental health');
       }else if(index===3){
-        this.filterResources('pregnancy');
+        this.filterResources('pregnancy women');
       }else if(index===4){
         this.filterNearMe();
       }
@@ -395,7 +414,6 @@ filterResources (searchString) {
             resourcesdocs.results.push(res.doc);
         });
 
-        this.setState({allResources:resourcesdocs.results});
         this.setState({filteredResources:resourcesdocs.results});
     }
 
@@ -548,7 +566,7 @@ render () {
 const { main } = this.props
 
 db.changes({
-  limit: 30,
+  limit: 10,
   since: 0
 }, function (err, response) {
   if (err) { return console.log(err); }

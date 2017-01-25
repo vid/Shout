@@ -50,7 +50,7 @@ render() {
             onTouchTap={() => onSelect(2)}
           />
           <BottomNavigationItem
-            label="Pregnancy"
+            label="Women"
             icon={<ActionPregnantWoman />}
             onTouchTap={() => onSelect(3)}
           />
