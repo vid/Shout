@@ -310,6 +310,10 @@ export default class ClinicPage extends React.Component {
         const {addTags,getTags,getFeedbacks, vouchFor, vouchAgainst, addSingleTag, addFlag} = this.props;
         const tagdoc = getTags();
         const previousTags=tagdoc.tags;
+        var tagsloaded=true;
+        if(tagdoc){
+          tagsloaded=false;
+        }
         const allFeedbacks = getFeedbacks();
         const {offsetWidth,offsetHeight,footerOffsetHeight} = this.state;
         if (offsetHeight === undefined) {
@@ -357,7 +361,7 @@ export default class ClinicPage extends React.Component {
       <CardHeader title="Tags"/>
         <CardText>
           <ul style={styles.list}>
-        {previousTags.map((tag, i) =>
+        {tagsloaded? "loading":previousTags.map((tag, i) =>
               <li style={styles.list} key={i}><div style={styles.wrapper}>
               <Chip style={styles.chip}>
               <b>{tag.value+"  "}</b>
