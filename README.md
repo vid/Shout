@@ -4,7 +4,7 @@ Shout webapp
 
 A React-based version of the Shout resource tool, intended for use as a hybrid app (web, Android, IOS).
 
-To use:
+##Installation
 
 * Install Node.js (developed with version 6)
 * clone the repo and ```cd``` to it
@@ -15,4 +15,7 @@ To use:
 * run cordova app, eg ```cordova run android```
 
 
-* (#1: if npm start fails at : 'node config && HOST=0.0.0.0 webpack-dev-server' then remove "HOST=0.0.0.0" from that line in package.json)
+##Examples
+
+* Shout Atlanta:
+[example](http://shoutapp.org) 
