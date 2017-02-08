@@ -2,65 +2,64 @@
 'use strict';
 
 import React from 'react';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
 const styles = {
-  headerStyle: {
-  fontColor:'black'
-  },
+    tableHeader: {
+        fontColor: 'black'
+    },
 
-  addResButton:{
-  margin:4,
-  radius:52,
-  }
+    addResButton: {
+        margin: 4,
+        radius: 52,
+    }
 }
 export default class Results extends React.Component {
 
-calculateDistance(result){
-  if(result&&result.lat&&result.lng){
-  var y_distance=69*Math.pow((result.lat-33.7490),2);
-  var x_distance=69*Math.pow((-84.3880-result.lng),2);
-  var distance=Math.round(100*Math.sqrt(x_distance+y_distance))/100;
+    calculateDistance(result) {
+        if (result && result.lat && result.lng) {
+            var y_distance = 69 * Math.pow((result.lat - 33.7490), 2);
+            var x_distance = 69 * Math.pow((-84.3880 - result.lng), 2);
+            var distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
 
-  return distance;
-  }
-  else return "?";
-}
+            return distance;
+        } else return "?";
+    }
 
-formatTags(arrTags){
+    formatTags(arrTags) {
 
-console.log("Tags to format are:"+arrTags);
-  if(arrTags){
-    var arrLabels=[];
-    arrTags.forEach(function(element) {
-        arrLabels.push(element.label);
-    });
-  return arrLabels.join(', ');
-  }
+        console.log("Tags to format are:" + arrTags);
+        if (arrTags) {
+            var arrLabels = [];
+            arrTags.forEach(function (element) {
+                arrLabels.push(element.label);
+            });
+            return arrLabels.join(', ');
+        }
 
-  return "No tags yet";
+        return "No tags yet";
 
-}
+    }
 
-  render () {
+    render() {
 
-    const {getFilteredResources, displayResult, displaySearch, getTags, displayAddResource, getHoveredRow} = this.props;
-    const filteredResources = getFilteredResources();
-    
-    const hoveredRowIndex=getHoveredRow();
+        const { getFilteredResources, displayResult, displaySearch, getTags, displayAddResource, getHoveredRow } = this.props;
+        const filteredResources = getFilteredResources();
 
-    return (
-      <Table
+        const hoveredRowIndex = getHoveredRow();
+
+        return (
+            <Table
         selectable={false}
         fixedHeader={true}
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
         <TableHeader
           displaySelectAll={false}>
-          <TableRow style={styles.headerStyle}>
+          <TableRow style={styles.tableHeader}>
             <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
             {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
@@ -85,6 +84,6 @@ console.log("Tags to format are:"+arrTags);
           ))}
         </TableBody>
       </Table>
-    );
-  }
+        );
+    }
 }

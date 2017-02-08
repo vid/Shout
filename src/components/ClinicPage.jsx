@@ -3,6 +3,10 @@
 import React, {
     Component
 } from 'react';
+
+import StarRatingComponent from 'react-star-rating-component';
+import GoogleMap from 'google-map-react';
+
 import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
 import {
@@ -13,29 +17,25 @@ import {
     CardTitle,
     CardMedia
 } from 'material-ui/Card';
-import {cyan300, indigo900} from 'material-ui/styles/colors';
+import { cyan300, indigo900 } from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
-import Rater from 'react-rater';
 import Chip from 'material-ui/Chip';
 import Checkbox from 'material-ui/Checkbox';
-import StarRatingComponent from 'react-star-rating-component';
-import GoogleMap from 'google-map-react';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import UpdateResource from '../components/UpdateResource.jsx';
-import { browserHistory } from 'react-router';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import IconButton from 'material-ui/IconButton';
-import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
-import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
 import Snackbar from 'material-ui/Snackbar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
+import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
 
 
 
@@ -44,18 +44,18 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 //* ***************************************** *//
 
 const styles = {
-    cardStyle: {
+    card: {
         display: 'flex',
         flex: 1,
         flexDirection: 'column',
         margin: 2,
-        padding:1
+        padding: 1
     },
 
     chip: {
         margin: 2,
         height: '50%',
-        fontSize:8,
+        fontSize: 8,
         backgroundColor: cyan300,
         fontColor: '#FFFFFF'
     },
@@ -65,62 +65,49 @@ const styles = {
         height: '80%'
     },
 
-    dataStyle: {
+    data: {
         margin: '2px',
     },
 
-    mainStyle: {
+    list: {
+        listStyle: 'none',
+        margin: 0,
+        padding: 0
+    },
+
+    main: {
 
         width: '100%',
         alignment: 'right',
         display: 'inline-block',
     },
 
-    mapStyle: {
-
-        height: '100px',
-        width: '100%',
-    },
-
     reviews: {
-        margin: '10',
-        height: '100%',
+        margin: '10'
     },
 
-    list: {
-        listStyle: 'none',
-        margin:0,
-        padding:0
+    stars: {
+        marginTop: 5
     },
 
-    feedbackWrapper: {
-        display: 'flex',
-        flexDirection: 'row'
+    smallIcon: {
+        width: 20,
+        height: 20,
+        padding: 1
     },
 
+    smallButton: {
+        height: 20,
+        padding: 1,
+        margin: 1,
+        fontSize: 12
+    },
 
     wrapper: {
         display: 'flex',
         flexWrap: 'wrap',
         flexDirection: 'row',
     },
-
-      stars: {
-        marginTop:5
-      },
-
-      smallIcon: {
-        width: 20,
-        height: 20,
-        padding:1
-      },
-
-      smallButton: {
-        height: 20,
-        padding:1,
-        margin:1,
-        fontSize:12
-      },
 
 };
 
@@ -132,10 +119,14 @@ export default class ClinicPage extends React.Component {
         super(props);
 
         this.state = {
+
+        //Flags for all expandable containers in the page
             submitfeedbackOpen: false,
             flagcontentOpen: false,
-            feedbackExpanded:false,
+            feedbackExpanded: false,
+            vouchOpen: false,
 
+        //Defaults for any input values to be stored in state
             value_Author: "Anonymous",
             accessibilityRating: 0,
             qualityRating: 0,
@@ -143,103 +134,75 @@ export default class ClinicPage extends React.Component {
             value_Descript: "",
             previous_Tags: [],
             chipData: [],
-            vouchOpen:false,
-            value_Flag: '',
-            value_FlagDetails: '',
             value_NewTag: '',
         };
 
-        this.defaults = {
-            zoom: 10,
-            center: {
-                lat: 33.7490,
-                lng: -84.3880
-            },
-        };
     }
 
-//* ***************************************** *//
+    componentDidMount() {
+        this.searchSizer();
+        window.addEventListener('resize', () => this.searchSizer(), false);
+
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.searchSizer, false);
+    }
+
+    //* ***************************************** *//
     //Begin actions
-//* ***************************************** *//
+    //* ***************************************** *//
 
+    formatFeedbacks(reviews) {
 
-    renderChip(data) {
-        return (
-            <Chip
-        key={data.key}
-        onRequestDelete={() => this.handleRequestDelete(data.key)}
-        style={styles.chip}
-      >
-        {data.label}
-      </Chip>
-        );
-    }
-
-    formatFeedbacks(revs) {
-
-        if (revs.length === 0) {
+        if (reviews.length === 0) {
             return "No feedback yet. Would you like to add one?";
-        }
-        else if(revs.length<3){
+        } else if (reviews.length < 3) {
 
-        return revs.map((feedback, i) =>
-            <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
+            return reviews.map((feedback, i) =>
+                <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
             <div>Accessibility: {feedback.accessibility+"/5"} </div>
             <div>Quality: {feedback.quality+"/5"} </div>
             <div>Affordability: {feedback.affordability+"/5"}</div>
             <div><b>Comments:</b>{feedback.text}</div></li>);
             <br />
-        }
-        else {
+        } else {
 
-        var revs_a=revs.slice(0,3);
-        return revs_a.map((feedback, i) =>
-            <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
-            <div>Accessibility: {feedback.accessibility+"/5"} </div>
-            <div>Quality: {feedback.quality+"/5"} </div>
-            <div>Affordability: {feedback.affordability+"/5"}</div>
-            <div><b>Comments:</b>{feedback.text}</div></li>);
-            <br />
-
-        }
-
-    }
-
-    viewAllFeedbacks(revs) {
-
-    if(this.state.feedbackExpanded){
-
-        if(revs.length>=3){
-
-            var revs_a=revs.slice(3,revs.length);
+            var revs_a = reviews.slice(0, 3);
             return revs_a.map((feedback, i) =>
                 <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
-                <div>Accessibility: {feedback.accessibility+"/5"} </div>
-                <div>Quality: {feedback.quality+"/5"} </div>
-                <div>Affordability: {feedback.affordability+"/5"}</div>
-                <div><b>Comments:</b>{feedback.text}</div></li>);
-                <br />
-        }
-
-        else {
-
-        return "No more feedback to show";
+            <div>Accessibility: {feedback.accessibility+"/5"} </div>
+            <div>Quality: {feedback.quality+"/5"} </div>
+            <div>Affordability: {feedback.affordability+"/5"}</div>
+            <div><b>Comments:</b>{feedback.text}</div></li>);
+            <br />
 
         }
-    }
-
-    else return "";
 
     }
 
-    formatServices(services)
-    {
-      if(services.length>0){
-          return services.map((service, i) =>
+    formatServices(services) {
+
+        if (services.length > 0) {
+            return services.map((service, i) =>
                 <li key={i}><b>{service.label}</b></li>
-                        );
-      }
-      else return <p>None specified</p>;
+            );
+        } else return <p>None specified</p>;
+    }
+
+    formatSubmission(name) {
+
+        var temp = {
+            name: name,
+            author: this.state.value_Author,
+            accessibility: this.state.accessibilityRating,
+            quality: this.state.qualityRating,
+            affordability: this.state.affordabilityRating,
+            text: this.state.value_Descript
+        }
+
+        return temp;
+
     }
 
     getRating(result, id) {
@@ -263,6 +226,18 @@ export default class ClinicPage extends React.Component {
 
     }
 
+    renderChip(data) {
+        return (
+            <Chip
+        key={data.key}
+        onRequestDelete={() => this.handleRequestDelete(data.key)}
+        style={styles.chip}
+      >
+        {data.label}
+      </Chip>
+        );
+    }
+
     searchSizer() {
         const {
             container,
@@ -280,68 +255,64 @@ export default class ClinicPage extends React.Component {
         });
     }
 
-    formatSubmission(name) {
+    viewAllFeedbacks(revs) {
 
-        var temp = {
-            name: name,
-            author: this.state.value_Author,
-            accessibility:this.state.accessibilityRating,
-            quality:this.state.qualityRating,
-            affordability:this.state.affordabilityRating,
-            text: this.state.value_Descript
-        }
+        if (this.state.feedbackExpanded) {
 
-        return temp;
+            if (revs.length >= 3) {
+
+                var revs_a = revs.slice(3, revs.length);
+                return revs_a.map((feedback, i) =>
+                    <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
+                <div>Accessibility: {feedback.accessibility+"/5"} </div>
+                <div>Quality: {feedback.quality+"/5"} </div>
+                <div>Affordability: {feedback.affordability+"/5"}</div>
+                <div><b>Comments:</b>{feedback.text}</div></li>);
+                <br />
+            } else {
+
+                return "No more feedback to show";
+
+            }
+        } else return "";
 
     }
-
-    componentDidMount() {
-        this.searchSizer();
-        window.addEventListener('resize', () => this.searchSizer(), false);
-        
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.searchSizer, false);
-    }
-
 
     render() {
 
-        const {addTags,getTags,getFeedbacks, vouchFor, vouchAgainst, addSingleTag, addFlag} = this.props;
+        const { addTags, getTags, getFeedbacks, vouchFor, vouchAgainst, addSingleTag, addFlag } = this.props;
         const tagdoc = getTags();
-        const previousTags=tagdoc.tags;
-        var tagsloaded=true;
-        if(tagdoc){
-          tagsloaded=false;
+        const previousTags = tagdoc.tags;
+        var tagsloaded = true;
+        if (tagdoc) {
+            tagsloaded = false;
         }
         const allFeedbacks = getFeedbacks();
-        const {offsetWidth,offsetHeight,footerOffsetHeight} = this.state;
+        const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
-        const {result} = this.props;
-        const id=result._id;
-        const {displaySearch} = this.props;
-        const {addFeedback} = this.props;
+        const { result } = this.props;
+        const id = result._id;
+        const { displaySearch } = this.props;
+        const { addFeedback } = this.props;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
 
 
         return (
 
-    <div style={{height: (offsetHeight), overflow: 'auto'}}>
-      <Paper style={styles.mainStyle} zDepth={1}>
+            <div style={{height: (offsetHeight), overflow: 'auto'}}>
+      <Paper style={styles.main} zDepth={1}>
 
 {/* ***************************************** */}
 {/* Section 1 */}
 {/* ***************************************** */}
 
-        <Card style ={styles.cardStyle}>
+        <Card style ={styles.card}>
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="http://icons.iconarchive.com/icons/icons8/android/512/Healthcare-Clinic-icon.png"/>
           <CardText>
-            <div style={styles.cardStyle}>
 
-              <div style={styles.dataStyle}>
+              <div style={styles.data}>
                 <h4> Address: </h4>
                 {result.civic_address}
                 <h4> Phone: </h4>
@@ -349,7 +320,6 @@ export default class ClinicPage extends React.Component {
                 <h4> Description: </h4>
                 {result.description}
 
-              </div>
             </div>
         </CardText>
       </Card>
@@ -358,7 +328,7 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 {/* Section 2: List of tags */}
 {/* ***************************************** */}
-      <Card style ={styles.cardStyle}>
+      <Card style ={styles.card}>
       <CardHeader title="Tags"/>
         <CardText>
           <ul style={styles.list}>
@@ -407,7 +377,7 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 {/* Section 3: services*/}
 {/* ***************************************** */}
-      <Card style ={styles.cardStyle}>
+      <Card style ={styles.card}>
         <CardHeader title="Services"/>
           <CardText>
             {this.formatServices(result.services)}
@@ -418,7 +388,7 @@ export default class ClinicPage extends React.Component {
 {/* Section 4: Feedback */}
 {/* ***************************************** */}
 <div id="feedback">
-      <Card style ={styles.cardStyle}>
+      <Card style ={styles.card}>
           <CardHeader
           title="Feedback"/>
           <CardText>
@@ -437,12 +407,6 @@ export default class ClinicPage extends React.Component {
                                     onTouchTap={() =>this.setState({flagcontentOpen: true})}/>
             </div>
             <br />
-            <div style={styles.feedbackWrapper}>
-            <div style={styles.ratingsSection}>
-
-          </div>
-        </div>
-
                     <div style={styles.reviews}>
                     {this.formatFeedbacks(allFeedbacks)}
                     </div>

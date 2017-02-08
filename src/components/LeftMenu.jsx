@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
@@ -6,6 +6,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import Menu from 'material-ui/Menu';
+import Divider from 'material-ui/Divider';
 
 
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -19,43 +20,44 @@ import SocialPerson from 'material-ui/svg-icons/social/person';
 
 import AddResource from './AddResource.jsx';
 
-import Divider from 'material-ui/Divider';
-
 export default class LeftMenu extends React.Component {
     constructor() {
         super()
 
-    this.state = {
-        changelocationOpen: false,
-        aboutOpen: false,
-        addResourceOpen: false,
-      };
+        this.state = {
+            changelocationOpen: false,
+            aboutOpen: false,
+            addResourceOpen: false,
+        };
 
     }
 
-    render(){
+    render() {
 
-        const {displayAddResource} = this.props;
+        const { displayAddResource } = this.props;
 
-        const {addResource} = this.props;
-        const {displayAbout} = this.props;
-
-
+        const { addResource } = this.props;
+        const { displayAbout } = this.props;
 
 
-        return(
-        <div id='menu'>
+
+
+        return (
+            <div id='menu'>
             <MenuItem primaryText="" />
             <MenuItem primaryText="" />
             <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
-                <Divider />
+
+            <Divider />
 
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>
             <MenuItem primaryText="Blog" leftIcon={<ActionBook />} target="_blank" href="http://www.shoutforhealth.org/blog-2/"/>
             <MenuItem primaryText="Listserv" leftIcon={<ContentMail />} target="_blank" href="http://eepurl.com/cvWx3b"/>
 
+
+{/* Below: material-UI hidden Dialogs that will show conditionally */}
 
             <Dialog
                 title="Change your location"
@@ -105,6 +107,6 @@ export default class LeftMenu extends React.Component {
 
 
             </div>
-      )
+        )
     }
 }
