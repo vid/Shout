@@ -522,7 +522,7 @@ export default class App extends React.Component {
             type: "tag",
             tags: tagsdoc.tags,
         }, function (err, response) {
-            if (err) { return this.error(err); }
+            if (err) { console.log(err); }
             console.log("successfully upvoted");
         });
     }
@@ -545,7 +545,7 @@ export default class App extends React.Component {
                 type: "tag",
                 tags: tagsdoc.tags,
             }, function (err, response) {
-                if (err) { return this.error(err); }
+                if (err) { return console.log(err); }
                 console.log("success");
             });
         } else {

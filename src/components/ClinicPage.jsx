@@ -205,6 +205,29 @@ export default class ClinicPage extends React.Component {
 
     }
 
+    formatTags(previousTags, vouchFor, vouchAgainst, tagdoc){
+
+      return (previousTags.map((tag, i) =>
+          <li style={styles.list} key={i}><div style={styles.wrapper}>
+          <Chip style={styles.chip}>
+          <b>{tag.value+"  "}</b>
+          </Chip>
+          <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
+          <IconButton
+          style={styles.smallIcon}
+          tooltip="vouch for"
+          onTouchTap={()=>{vouchFor(tagdoc, i)
+                          this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
+          <IconButton
+          style={styles.smallIcon}
+          tooltip="vouch against"
+          onTouchTap={()=>{vouchAgainst(tagdoc, i)
+                          this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
+          </div>
+                  </li>
+                  ))
+    }
+
     getRating(result, id) {
 
         if (results.reviews.length() === 0) {
@@ -282,12 +305,7 @@ export default class ClinicPage extends React.Component {
 
         const { addTags, getTags, getFeedbacks, vouchFor, vouchAgainst, addSingleTag, addFlag } = this.props;
         const tagdoc = getTags();
-        var tagsloading = true;
-        var previousTags={};
-        if (tagdoc) {
-            previousTags = tagdoc.tags;
-            tagsloading = false;
-        }
+        var previousTags=tagdoc.tags;
         const allFeedbacks = getFeedbacks();
         const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
         if (offsetHeight === undefined) {
@@ -333,25 +351,7 @@ export default class ClinicPage extends React.Component {
       <CardHeader title="Tags"/>
         <CardText>
           <ul style={styles.list}>
-        {tagsloading? "loading":previousTags.map((tag, i) =>
-              <li style={styles.list} key={i}><div style={styles.wrapper}>
-              <Chip style={styles.chip}>
-              <b>{tag.value+"  "}</b>
-              </Chip>
-              <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
-              <IconButton
-              style={styles.smallIcon}
-              tooltip="vouch for"
-              onTouchTap={()=>{vouchFor(tagdoc, i)
-                              this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
-              <IconButton
-              style={styles.smallIcon}
-              tooltip="vouch against"
-              onTouchTap={()=>{vouchAgainst(tagdoc, i)
-                              this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
-              </div>
-                      </li>
-                      )}
+        {this.formatTags(previousTags, vouchFor, vouchAgainst, tagdoc)}
           </ul>
           <div style={styles.row}>
              <TextField hintText=""
