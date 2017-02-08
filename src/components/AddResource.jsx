@@ -99,8 +99,6 @@ export default class AddResource extends React.Component {
             value_Lng:'',
             value_Services:'',
 
-            geoResult: "Waiting",
-
             chipData: [],
             serviceData:[]
         };
@@ -112,20 +110,13 @@ export default class AddResource extends React.Component {
             urlError: "Please provide a valid URL",
         };
 
-        this.setGeoResult = this.setGeoResult.bind(this);
-    }
-
-    submitForm(data) {
-        alert(JSON.stringify(data, null, 4));
-    }
-
-    notifyFormError(data) {
-        console.error('Form error:', data);
     }
 
 
+//creates a new Resource_ object and adds it to the database
 
-    submitAll() {
+
+    formatSubmission() {
 
       var temp = {
             name: this.state.value_Name,
@@ -145,50 +136,6 @@ export default class AddResource extends React.Component {
         return temp;
 
     }
-
-    findAddress(geo){
-
-      this.geocodeAddress(this.value_Address, geo, this.setGeoResult);
-
-    }
-
-    geocodeAddress(address, geo, callback){
-
-      this.setState({canSubmit:false});
-
-      if(geo){
-         var address = "1000 Northside Dr NW 30318";
-         geo.geocode({'address': address}, function(results, status) {
-           if (status === 'OK') {
-              var response=results[0].geometry.location;
-              callback(response);
-           } else {
-             alert('Geocode was not successful for the following reason: ' + status);
-           }
-         });
-       }
-
-       else{
-       console.log("Geocoder not found");
-       }
-
-   }
-
-   setGeoResult(x){
-      this.setState({geoResult:x});
-      this.setState({canSubmit:true});
-   }
-
-    getApiResult()
-    {
-      if(!this.state.geoResult){
-      return "Waiting";
-      }
-      else{
-      return "Success";
-      }
-    }
-
 
     handleRequestDeleteTag(key) {
         this.chipData = this.state.chipData;
@@ -243,8 +190,7 @@ export default class AddResource extends React.Component {
     render() {
 
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
-        const { addResource, getGeocoder, displaySearch} = this.props;
-        var geo = getGeocoder();
+        const { addResource, displaySearch} = this.props;
 
         const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
         if (offsetHeight === undefined) {
@@ -331,7 +277,7 @@ export default class AddResource extends React.Component {
             onChange={(event) => this.setState({value_Apt: event.target.value})}
           />
           </div>
-    
+
           <div>
             <FormsyText
                          name="zip"
@@ -511,13 +457,14 @@ export default class AddResource extends React.Component {
                     primary={true}
                     disabled={!this.state.canSubmit}
                     onClick={()=>{
-                                  if(!this.geoResult){
-                                    var x=this.submitAll();
+                                  try{
+                                    var sub=this.formatSubmission();
                                     this.setState({completedOpen:true});
-                                    addResource(x);
+                                    addResource(sub);
                                   }
-                                  else{
+                                  catch(err){
                                     this.setState({errorOpen:true});
+                                    console.log("error"+err)
                                   }
                                   }}/>
 

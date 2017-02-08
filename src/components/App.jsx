@@ -113,11 +113,6 @@ export default class App extends React.Component {
 
     }
 
-    addFlag(flag, result) {
-
-        console.log("added flag");
-    }
-
     addSingleTag(label, tagsdoc) {
 
         var tag = {
@@ -138,7 +133,7 @@ export default class App extends React.Component {
     }
 
 
-    // Add a resource to the collection
+    // action called by AddResource
     addResource(res) {
 
         //calculate latitude and longitude
@@ -175,6 +170,8 @@ export default class App extends React.Component {
         this.filterResources(this.state.searchString);
 
     }
+
+    //actions called by ClinicPage
 
     addFeedback(rev) {
 
@@ -251,18 +248,25 @@ export default class App extends React.Component {
         }
         this.displaySearch();
     }
-    // these are the app's actions, passed to and called by other components
 
+//functions to display render different components inside this single page app
     displayAddResource() {
+
+    //first update title, subtitle, and icons in AppBar
         this.setState({ appbarIcon: <NavigationChevronLeft /> });
         this.setState({ appbarTitle: "Add Resource" });
         this.setState({ appbarSubtitle: ' ' });
         this.setState({ appbarState: true });
+
+    //showMenu variable controls what function is called when a user clicks on the top lefthand icon
         this.setState({ showMenu: false });
-        this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} getGeocoder={()=>this.state.geocoder} displaySearch={()=>this.displaySearch}/> });
+
+        this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/> });
     }
 
     displayResult(result) {
+
+    //first update title, subtitle, and icons in AppBar
         const clinicname = result.name;
         this.setState({ appbarIcon: <NavigationChevronLeft /> });
         this.updatePageTags(result.name);
@@ -271,11 +275,15 @@ export default class App extends React.Component {
         this.setState({ appbarSubtitle: '' });
         this.setState({ searchBar: "" });
         this.setState({ appbarState: true });
+
+    //now can load a different component. note: all state variables in App.jsx must be changed before it's unmounted, or React throws an error
         this.setState({ screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addSingleTag={(a,b)=>this.addSingleTag(a,b)} addFlag={()=>this.addFlag(a,b)}/> });
     }
 
 
     displaySearch() {
+
+    //first retrieve all docs again, to reverse any filters
         db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
             if (err) { return this.error(err); }
             this.redrawResources(doc.rows);
@@ -291,6 +299,9 @@ export default class App extends React.Component {
 
     }
 
+
+//this filter method uses the Pouchdb-Quick-Search library
+//See:  https://github.com/nolanlawson/pouchdb-quick-search
 
     filterResources(searchString) {
 
@@ -391,13 +402,15 @@ export default class App extends React.Component {
         hoveredMapRowIndex: 'index';
     }
 
+//A function that's called by the React Google Maps library after map component loads the API
     onGoogleApiLoad(map, maps) {
 
         var geo = new google.maps.Geocoder();
-        this.setState({ geocoder: geo });
+        this.setState({ geocoder: geo }); //current version of ShoutApp is not using the geocoder
 
     }
 
+//Update the rows of the results table on main page
     redrawResources(resources) {
 
         var resourcesdocs = {
@@ -410,6 +423,7 @@ export default class App extends React.Component {
         this.setState({ filteredResources: resourcesdocs.results });
     }
 
+//Show filtered rows of the results table on main page
     redrawFilteredResources(resources) {
 
         var resourcesdocs = {
@@ -422,7 +436,7 @@ export default class App extends React.Component {
         this.setState({ filteredResources: resourcesdocs.results });
     }
 
-
+//user gets prompt to allow browser to access current position
     requestCurrentPosition() {
         var options = {
             enableHighAccuracy: true,
@@ -452,6 +466,8 @@ export default class App extends React.Component {
         db.replicate.from(remoteCouch, opts, this.syncError);
     }
 
+//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
+//currently stored in the state of App.jsx
     updatePageTags(name) {
 
         db.allDocs({ startkey: 'tags_' + name, endkey: 'tags_' + name + '_\uffff', include_docs: true }, (err, doc) => {
@@ -472,6 +488,7 @@ export default class App extends React.Component {
 
     }
 
+//See previous comment
     updateFeedbacks(name) {
 
 
@@ -489,6 +506,7 @@ export default class App extends React.Component {
 
     }
 
+//Function called from ClinicPage to upvote a tag
     vouchFor(tagsdoc, index) {
 
         var tag = tagsdoc.tags[index];
@@ -510,8 +528,8 @@ export default class App extends React.Component {
         });
     }
 
-
-  vouchAgainst(tagsdoc, index) {
+//Function called from ClinicPage to downvote a tag
+    vouchAgainst(tagsdoc, index) {
 
         var tag = tagsdoc.tags[index];
 
