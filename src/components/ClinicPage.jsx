@@ -207,6 +207,7 @@ export default class ClinicPage extends React.Component {
 
     formatTags(previousTags, vouchFor, vouchAgainst, tagdoc){
 
+    if(previousTags){
       return (previousTags.map((tag, i) =>
           <li style={styles.list} key={i}><div style={styles.wrapper}>
           <Chip style={styles.chip}>
@@ -226,6 +227,9 @@ export default class ClinicPage extends React.Component {
           </div>
                   </li>
                   ))
+
+      }
+      else return "loading";
     }
 
     getRating(result, id) {
