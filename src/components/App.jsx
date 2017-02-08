@@ -36,8 +36,7 @@ import PouchDBQuickSearch from 'pouchdb-quick-search';
 PouchDB.plugin(PouchDBQuickSearch);
 
 var db = new PouchDB('resourcesnew');
-var remoteCouch = 'https://generaluser:pass@shout.zooid.org:6984/resourcesnew';
-
+var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
 
 PouchDB.sync('db', 'remoteCouch');
 
