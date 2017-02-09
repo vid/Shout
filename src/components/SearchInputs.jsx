@@ -17,11 +17,18 @@ const styles = {
 };
 
 export default class SearchInputs extends React.Component {
+
     render() {
-        const { filterResources } = this.props;
+        const { filterResources, getSearchstring} = this.props;
+        var searchString=getSearchstring();
         return (
-            <Paper style={styles.input}>
-          <TextField onChange={e => filterResources(e.target.value)} hintText="  Enter any search keyword..." hintStyle={styles.hint}/>
+        <Paper style={styles.input}>
+          <TextField
+            defaultValue=''
+            onChange={e => filterResources(e.target.value)}
+            hintText="  Enter any search keyword..."
+            hintStyle={styles.hint}
+            value={searchString}/>
         </Paper>
         );
     }

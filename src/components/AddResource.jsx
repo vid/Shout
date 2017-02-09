@@ -86,7 +86,7 @@ export default class AddResource extends React.Component {
             errorOpen: false,
 
             value_Name: "",
-            value_Type: "clinic",
+            value_Type: 1,
             value_Phone: "",
             value_Address: "",
             value_Apt: "",
@@ -118,9 +118,16 @@ export default class AddResource extends React.Component {
 
     formatSubmission() {
 
+    var type="clinic";
+    if(this.state.value_Type==2){
+      type="emergency";
+    }else if(this.state.value_Type==3){
+      type="housing";
+    }
+
       var temp = {
             name: this.state.value_Name,
-            type: this.state.value_Type,
+            type: type,
             phone: this.state.value_Phone,
             civic_address: this.state.value_Address + " " + this.state.value_Apt,
             zip: this.state.value_zip,
@@ -199,7 +206,7 @@ export default class AddResource extends React.Component {
 
         Formsy.addValidationRule('isCustom', (values, value) => {
 
-          var regobj=/^[a-zA-Z0-9,.!? ]*$/;
+          var regobj=/^[a-zA-Z0-9,.!?')( ]*$/;
           return regobj.test(value);
         });
 
@@ -240,10 +247,11 @@ export default class AddResource extends React.Component {
                        <SelectField
                            floatingLabelText="Select type *"
                            floatingLabelStyle={styles.floatinglabel}
-                           value={1}
+                           value={this.state.value_Type}
+                           onChange={(event, index, value) => this.setState({value_Type:value})}
                          >
                          <MenuItem value={1} primaryText="Clinic" />
-                         <MenuItem value={2} primaryText="Hospital" />
+                         <MenuItem value={2} primaryText="E.R. or Urgent Care" />
                          <MenuItem value={3} primaryText="Housing" />
                        </SelectField>
 

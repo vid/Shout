@@ -340,6 +340,8 @@ export default class ClinicPage extends React.Component {
                 {result.civic_address}
                 <h4> Phone: </h4>
                 {result.phone}
+                <h4> Website: </h4>
+                {result.website}
                 <h4> Description: </h4>
                 {result.description}
 

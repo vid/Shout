@@ -291,7 +291,7 @@ export default class App extends React.Component {
         this.setState({ appbarTitle: 'Shout' });
         this.setState({ appbarSubtitle: 'Find Accessible Healthcare.' });
         this.setState({ appbarState: false });
-        this.setState({ searchBar: <SearchInputs filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString}/> });
+        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString}/> });
         this.setState({ appbarIcon: <NavigationMenu /> });
         this.requestCurrentPosition();
 
@@ -306,6 +306,7 @@ export default class App extends React.Component {
 
         if (!searchString || searchString.length < 1) {
             db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
+                this.setState({searchString:""});
                 if (err) { return console.log(err); }
                 this.redrawResources(doc.rows);
             });
@@ -330,7 +331,7 @@ export default class App extends React.Component {
                 list.rows.forEach(function (res) {
                     if (res.id.startsWith('tags')) {
 
-                        console.log("started with tag");
+                        console.log(res.label);
                         db.search({
                             query: res._id,
                             fields: ['name'],
@@ -363,24 +364,28 @@ export default class App extends React.Component {
     }
 
     footerSelect(index) {
+
+    //first, go back to the main screen
+    this.displaySearch();
         this.setState({ selectedFooterIndex: index });
         if (index === 0) {
             this.filterResources('');
+            this.setState({searchString:''});
         } else if (index === 1) {
             this.filterResources('children');
+            this.setState({searchString:'children'});
         } else if (index === 2) {
             this.filterResources('mental health');
+            this.setState({searchString:'mental health'});
         } else if (index === 3) {
-            this.filterResources('pregnancy women');
-        } else if (index === 4) {
-            this.filterNearMe();
-        }
+            this.filterResources('women');
+            this.setState({searchString:'women'});
+        } 
     }
 
     filterNearMe() {
 
         var arr = this.state.filteredResources;
-        console.log(arr);
         arr.sort((a, b) => {
             if (a.lat && b.lat) {
 
