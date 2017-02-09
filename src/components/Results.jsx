@@ -45,28 +45,11 @@ export default class Results extends React.Component {
 
     }
 
-    render() {
+    formatFilteredResources(filteredResources, hoveredRowIndex, searchstring){
 
-        const { getFilteredResources, displayResult, displaySearch, getTags, displayAddResource, getHoveredRow } = this.props;
-        const filteredResources = getFilteredResources();
+    if(filteredResources.length>0){
 
-        const hoveredRowIndex = getHoveredRow();
-
-        return (
-            <Table
-        selectable={false}
-        fixedHeader={true}
-        onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
-        <TableHeader
-          displaySelectAll={false}>
-          <TableRow style={styles.tableHeader}>
-            <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
-            <IconButton style = {styles.addResButton} onTouchTap={() => displayAddResource()} tooltip="add new"> <ContentAdd /></IconButton>
-          </TableRow>
-        </TableHeader>
-        <TableBody
+      return (<TableBody
           stripedRows={true}
           displayRowCheckbox={false}
           showRowHover={true}>
@@ -82,7 +65,42 @@ export default class Results extends React.Component {
               </TableRowColumn>
             </TableRow>
           ))}
-        </TableBody>
+        </TableBody>);
+      }
+      else {
+      return (<TableBody
+          displayRowCheckbox={false}
+          showRowHover={true}>
+            <TableRow>
+              <TableRowColumn><h1>No results for search "{searchstring}"</h1></TableRowColumn>
+            </TableRow>
+          ))
+        </TableBody>);
+      }
+    }
+
+    render() {
+
+        const { getFilteredResources, displayResult, displaySearch, getTags, displayAddResource, getHoveredRow, getSearchstring } = this.props;
+        const filteredResources = getFilteredResources();
+        const hoveredRowIndex = getHoveredRow();
+        var searchstring=getSearchstring();
+
+        return (
+            <Table
+        selectable={false}
+        fixedHeader={true}
+        onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
+        <TableHeader
+          displaySelectAll={false}>
+          <TableRow style={styles.tableHeader}>
+            <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
+            <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
+            {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
+            <IconButton style = {styles.addResButton} onTouchTap={() => displayAddResource()} tooltip="add new"> <ContentAdd /></IconButton>
+          </TableRow>
+        </TableHeader>
+        {this.formatFilteredResources(filteredResources, hoveredRowIndex, searchstring)}
       </Table>
         );
     }

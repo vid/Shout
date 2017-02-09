@@ -317,6 +317,7 @@ export default class AddResource extends React.Component {
               hintStyle={styles.hint}
               floatingLabelStyle={styles.floatinglabel}
               inputStyle={styles.input}
+              onChange={(event) => this.setState({value_Website: event.target.value})}
             />
 
             <div>

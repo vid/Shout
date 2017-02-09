@@ -40,24 +40,24 @@ export default class Search extends React.Component {
     }
 
     render() {
-        const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, searchString, getFilteredResources, userLat, userLng } = this.props;
+        const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, userLat, userLng } = this.props;
         const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
 
-        const filteredResources = getFilteredResources();
+        var filteredResources = getFilteredResources();
 
+        //clunky workaround for database not loading until refresh
         if (filteredResources.length < 1) {
-            // stupid workaround for resources not loading until refresh
-            filterResources("");
+            filteredResources = getFilteredResources();
         }
 
         return (
             <div width={offsetWidth}>
         <Map height={(offsetHeight / 2)} getFilteredResources={getFilteredResources} hoverRow={(key)=>this.hoverRow(key)} unhoverRow={()=>this.unhoverRow()} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
         <div style={{height: (offsetHeight / 2), overflow: 'auto'}}>
-          <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getHoveredRow={()=>this.state.hoveredRow}/>
+          <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getHoveredRow={()=>this.state.hoveredRow} getSearchstring={getSearchstring}/>
         </div>
       </div>
         );

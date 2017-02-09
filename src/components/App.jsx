@@ -287,7 +287,7 @@ export default class App extends React.Component {
             if (err) { return this.error(err); }
             this.redrawResources(doc.rows);
         });
-        this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} searchString={this.state.searchString} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} /> });
+        this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} /> });
         this.setState({ appbarTitle: 'Shout' });
         this.setState({ appbarSubtitle: 'Find Accessible Healthcare.' });
         this.setState({ appbarState: false });
@@ -310,6 +310,8 @@ export default class App extends React.Component {
                 this.redrawResources(doc.rows);
             });
         } else {
+
+        this.setState({searchString:searchString});
             db.search({
                 query: searchString,
                 fields: ['name', 'description', '_id', 'services.label', 'text'],
@@ -377,7 +379,7 @@ export default class App extends React.Component {
 
     filterNearMe() {
 
-        var arr = this.state.allResources;
+        var arr = this.state.filteredResources;
         console.log(arr);
         arr.sort((a, b) => {
             if (a.lat && b.lat) {
@@ -411,7 +413,6 @@ export default class App extends React.Component {
 
 //Update the rows of the results table on main page
     redrawResources(resources) {
-
         var resourcesdocs = {
             results: []
         };
@@ -420,6 +421,7 @@ export default class App extends React.Component {
         });
 
         this.setState({ filteredResources: resourcesdocs.results });
+        this.filterNearMe();
     }
 
 //Show filtered rows of the results table on main page
@@ -433,6 +435,7 @@ export default class App extends React.Component {
         });
 
         this.setState({ filteredResources: resourcesdocs.results });
+        this.filterNearMe();
     }
 
 //user gets prompt to allow browser to access current position
