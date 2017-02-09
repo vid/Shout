@@ -124,6 +124,7 @@ export default class ClinicPage extends React.Component {
             submitfeedbackOpen: false,
             flagcontentOpen: false,
             feedbackExpanded: false,
+            descriptionExpanded: false,
             vouchOpen: false,
 
         //Defaults for any input values to be stored in state
@@ -152,6 +153,27 @@ export default class ClinicPage extends React.Component {
     //* ***************************************** *//
     //Begin actions
     //* ***************************************** *//
+
+      formatDescription(description) {
+
+            if (this.state.descriptionExpanded) {
+
+                return (<div>
+                          {description}
+                          <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={"<< less"}/>
+                        </div>)
+
+            } else {
+
+                var des_a = description.slice(0, 1000);
+                return (<div>
+                          {des_a}
+                          <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={">> more"}/>
+                        </div>)
+
+            }
+
+        }
 
     formatFeedbacks(reviews) {
 
@@ -343,7 +365,7 @@ export default class ClinicPage extends React.Component {
                 <h4> Website: </h4>
                 {result.website}
                 <h4> Description: </h4>
-                {result.description}
+                {this.formatDescription(result.description)}
 
             </div>
         </CardText>

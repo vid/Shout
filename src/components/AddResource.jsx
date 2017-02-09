@@ -154,8 +154,8 @@ export default class AddResource extends React.Component {
     handleRequestDeleteService(key) {
         this.serviceData = this.state.serviceData;
         const chipToDelete = this.serviceData.map((chip) => chip.key).indexOf(key);
-        this.chipData.splice(chipToDelete, 1);
-        this.setState({ serviceData: this.chipData });
+        this.serviceData.splice(chipToDelete, 1);
+        this.setState({ serviceData: this.serviceData });
     }
 
     renderChipTag(data) {
@@ -278,7 +278,7 @@ export default class AddResource extends React.Component {
             validationError={customError}
             floatingLabelText="Apt/Office#"
             floatingLabelFixed={true}
-            hintText="#45"
+            hintText="'Suite 45' or 'Apt. 11'"
             hintStyle={styles.hint}
             floatingLabelStyle={styles.floatinglabel}
             inputStyle={styles.input}
