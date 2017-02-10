@@ -90,6 +90,7 @@ export default class AddResource extends React.Component {
             value_Phone: "",
             value_Address: "",
             value_Apt: "",
+            value_City: "Atlanta",
             value_zip: "default",
             value_Website: "default",
             value_Descript: "default",
@@ -130,6 +131,7 @@ export default class AddResource extends React.Component {
             type: type,
             phone: this.state.value_Phone,
             civic_address: this.state.value_Address + " " + this.state.value_Apt,
+            city: this.state.value_City,
             zip: this.state.value_zip,
             website: this.state.value_Website,
             description: this.state.value_Descript,
@@ -285,6 +287,18 @@ export default class AddResource extends React.Component {
             onChange={(event) => this.setState({value_Apt: event.target.value})}
           />
           </div>
+
+          <FormsyText
+            name="city"
+            required
+            floatingLabelText="City"
+            floatingLabelFixed={true}
+            hintText="Atlanta"
+            hintStyle={styles.hint}
+            floatingLabelStyle={styles.floatinglabel}
+            inputStyle={styles.input}
+            onChange={(event) => this.setState({value_City: event.target.value})}
+          />
 
           <div>
             <FormsyText

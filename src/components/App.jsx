@@ -102,6 +102,7 @@ export default class App extends React.Component {
             appbarIcon: <NavigationMenu />,
             searchBar: "",
             hoveredMapRowIndex: '-1',
+            pageLoading: 'true',
             userLat: '33.7490',
             userLng: '-84.3880',
 
@@ -283,11 +284,18 @@ export default class App extends React.Component {
     displaySearch() {
 
     //first retrieve all docs again, to reverse any filters
+
         db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
             if (err) { return this.error(err); }
-            this.redrawResources(doc.rows);
+            if(doc.rows.length>0){
+              this.setState({pageLoading:false});
+              this.redrawResources(doc.rows);
+            }
+            else{
+              console.log("false");
+            }
         });
-        this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} /> });
+        this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} /> });
         this.setState({ appbarTitle: 'Shout' });
         this.setState({ appbarSubtitle: 'Find Accessible Healthcare.' });
         this.setState({ appbarState: false });
@@ -366,7 +374,7 @@ export default class App extends React.Component {
     footerSelect(index) {
 
     //first, go back to the main screen
-    this.displaySearch();
+        this.displaySearch();
         this.setState({ selectedFooterIndex: index });
         if (index === 0) {
             this.filterResources('');
@@ -380,7 +388,7 @@ export default class App extends React.Component {
         } else if (index === 3) {
             this.filterResources('women');
             this.setState({searchString:'women'});
-        } 
+        }
     }
 
     filterNearMe() {
@@ -579,16 +587,12 @@ export default class App extends React.Component {
 
     render() {
 
-        const { main } = this.props
+    db.changes({
+      since: 'now',
+      live: true
+    }).on('change', ()=>this.displaySearch());
 
-        //pull any changes since load from remote DB
-        db.changes({
-            limit: 40,
-            since: 0
-        }, function (err, response) {
-            if (err) { return console.log(err); }
-            () => this.redrawResources(doc.rows);
-        });
+        const { main } = this.props
 
         return (
             <MuiThemeProvider muiTheme={getMuiTheme()}>

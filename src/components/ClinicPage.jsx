@@ -156,7 +156,11 @@ export default class ClinicPage extends React.Component {
 
       formatDescription(description) {
 
-            if (this.state.descriptionExpanded) {
+            if(description.length<1000){
+
+              return (<div>{description}</div>)
+
+            }else if (this.state.descriptionExpanded) {
 
                 return (<div>
                           {description}

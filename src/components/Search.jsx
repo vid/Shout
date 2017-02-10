@@ -40,7 +40,7 @@ export default class Search extends React.Component {
     }
 
     render() {
-        const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, userLat, userLng } = this.props;
+        const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, getPageLoading, userLat, userLng } = this.props;
         const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
         if (offsetHeight === undefined) {
             return null;
@@ -57,7 +57,7 @@ export default class Search extends React.Component {
             <div width={offsetWidth}>
         <Map height={(offsetHeight / 2)} getFilteredResources={getFilteredResources} hoverRow={(key)=>this.hoverRow(key)} unhoverRow={()=>this.unhoverRow()} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
         <div style={{height: (offsetHeight / 2), overflow: 'auto'}}>
-          <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getHoveredRow={()=>this.state.hoveredRow} getSearchstring={getSearchstring}/>
+          <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getHoveredRow={()=>this.state.hoveredRow} getPageLoading={getPageLoading} getSearchstring={getSearchstring}/>
         </div>
       </div>
         );

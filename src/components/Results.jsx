@@ -45,7 +45,7 @@ export default class Results extends React.Component {
 
     }
 
-    formatFilteredResources(filteredResources, hoveredRowIndex, searchstring){
+    formatFilteredResources(filteredResources, hoveredRowIndex, searchstring, pageLoading){
 
     if(filteredResources.length>0){
 
@@ -66,6 +66,15 @@ export default class Results extends React.Component {
             </TableRow>
           ))}
         </TableBody>);
+      }else if(pageLoading){
+        return (<TableBody
+                  displayRowCheckbox={false}
+                  showRowHover={true}>
+                <TableRow>
+                  <TableRowColumn><h1>Loading resources...</h1></TableRowColumn>
+                </TableRow>
+                ))
+              </TableBody>);
       }
       else {
       return (<TableBody
@@ -81,8 +90,9 @@ export default class Results extends React.Component {
 
     render() {
 
-        const { getFilteredResources, displayResult, displaySearch, getTags, displayAddResource, getHoveredRow, getSearchstring } = this.props;
-        const filteredResources = getFilteredResources();
+        const { getFilteredResources, displayResult, displaySearch, getTags, getPageLoading, displayAddResource, getHoveredRow, getSearchstring } = this.props;
+        var filteredResources = getFilteredResources();
+        var pageLoading=getPageLoading();
         const hoveredRowIndex = getHoveredRow();
         var searchstring=getSearchstring();
 
@@ -100,7 +110,7 @@ export default class Results extends React.Component {
             <IconButton style = {styles.addResButton} onTouchTap={() => displayAddResource()} tooltip="add new"> <ContentAdd /></IconButton>
           </TableRow>
         </TableHeader>
-        {this.formatFilteredResources(filteredResources, hoveredRowIndex, searchstring)}
+        {this.formatFilteredResources(filteredResources, hoveredRowIndex, searchstring, pageLoading)}
       </Table>
         );
     }
