@@ -587,10 +587,14 @@ export default class App extends React.Component {
 
     render() {
 
-    db.changes({
-      since: 'now',
-      live: true
-    }).on('change', ()=>this.displaySearch());
+    if(this.state.pageLoading){
+      db.changes({
+        since: 'now',
+        live: true,
+        include_docs: true,
+        limit: 2
+      }).on('change', (change)=>this.displaySearch());
+    }
 
         const { main } = this.props
 
