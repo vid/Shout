@@ -3,6 +3,7 @@
 import React, {
     Component
 } from 'react';
+import Formsy from 'formsy-react';
 
 import StarRatingComponent from 'react-star-rating-component';
 import GoogleMap from 'google-map-react';
@@ -37,7 +38,17 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
 
-
+import {
+    FormsyCheckbox,
+    FormsyDate,
+    FormsyRadio,
+    FormsyRadioGroup,
+    FormsySelect,
+    FormsyText,
+    FormsyTime,
+    FormsyToggle,
+    FormsyAutoComplete
+} from 'formsy-material-ui/lib';
 
 //* ***************************************** *//
 //* all styles defined here
@@ -125,6 +136,7 @@ export default class ClinicPage extends React.Component {
             flagcontentOpen: false,
             feedbackExpanded: false,
             descriptionExpanded: false,
+            tagsExpanded: false,
             vouchOpen: false,
 
         //Defaults for any input values to be stored in state
@@ -136,6 +148,13 @@ export default class ClinicPage extends React.Component {
             previous_Tags: [],
             chipData: [],
             value_NewTag: '',
+        };
+
+        this.errorMessages = {
+            customError: "Incorrect format",
+            wordsError: "Please only use letters",
+            numericError: "Please provide a number",
+            urlError: "Please provide a valid URL",
         };
 
     }
@@ -233,7 +252,11 @@ export default class ClinicPage extends React.Component {
 
     formatTags(previousTags, vouchFor, vouchAgainst, tagdoc){
 
-    if(previousTags){
+    if(!previousTags){
+
+      return "loading";
+
+    } else if(previousTags.length<8){
       return (previousTags.map((tag, i) =>
           <li style={styles.list} key={i}><div style={styles.wrapper}>
           <Chip style={styles.chip}>
@@ -251,11 +274,53 @@ export default class ClinicPage extends React.Component {
           onTouchTap={()=>{vouchAgainst(tagdoc, i)
                           this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
           </div>
-                  </li>
-                  ))
+                  </li>))
 
       }
-      else return "loading";
+      else if(this.state.tagsExpanded){
+        return (previousTags.map((tag, i) =>
+                      <li style={styles.list} key={i}><div style={styles.wrapper}>
+                      <Chip style={styles.chip}>
+                      <b>{tag.value+"  "}</b>
+                      </Chip>
+                      <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
+                      <IconButton
+                      style={styles.smallIcon}
+                      tooltip="vouch for"
+                      onTouchTap={()=>{vouchFor(tagdoc, i)
+                                      this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
+                      <IconButton
+                      style={styles.smallIcon}
+                      tooltip="vouch against"
+                      onTouchTap={()=>{vouchAgainst(tagdoc, i)
+                                      this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
+                      </div>
+                              </li>))
+
+      }
+      else {
+        var tags_a = previousTags.slice(0, 8);
+        return (tags_a.map((tag, i) =>
+                      <li style={styles.list} key={i}><div style={styles.wrapper}>
+                      <Chip style={styles.chip}>
+                      <b>{tag.value+"  "}</b>
+                      </Chip>
+                      <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
+                      <IconButton
+                      style={styles.smallIcon}
+                      tooltip="vouch for"
+                      onTouchTap={()=>{vouchFor(tagdoc, i)
+                                      this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
+                      <IconButton
+                      style={styles.smallIcon}
+                      tooltip="vouch against"
+                      onTouchTap={()=>{vouchAgainst(tagdoc, i)
+                                      this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
+                      </div>
+                              </li>))
+
+        }
+
     }
 
     getRating(result, id) {
@@ -334,6 +399,7 @@ export default class ClinicPage extends React.Component {
     render() {
 
         const { addTags, getTags, getFeedbacks, vouchFor, vouchAgainst, addSingleTag, addFlag } = this.props;
+        const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const tagdoc = getTags();
         var previousTags=tagdoc.tags;
         const allFeedbacks = getFeedbacks();
@@ -384,6 +450,7 @@ export default class ClinicPage extends React.Component {
         <CardText>
           <ul style={styles.list}>
         {this.formatTags(previousTags, vouchFor, vouchAgainst, tagdoc)}
+        <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.tagsExpanded})} label={">> view all"}/>
           </ul>
           <div style={styles.row}>
              <TextField hintText=""
@@ -469,7 +536,6 @@ export default class ClinicPage extends React.Component {
        <FlatButton
          label="Submit"
          primary={true}
-         keyboardFocused={true}
          onTouchTap={() =>{
                             var x=this.formatSubmission(result.name);
                             addFeedback(x);
@@ -480,19 +546,51 @@ export default class ClinicPage extends React.Component {
         open={this.state.submitfeedbackOpen}
         onRequestClose={() => this.setState({submitfeedbackOpen: false})}>
 
-      <CardHeader title="Submit Feedback"/>
+      <Formsy.Form
+            onValid={()=>this.setState({ canSubmit: true })}
+            onInvalid={()=>this.setState({ canSubmit: false })}
+            onValidSubmit={()=>this.submitForm}
+            onInvalidSubmit={()=>this.notifyFormError}
+          >
+
       <CardText>
         <div> Fields marked by an asterisk * are required </div>
         <div className="feedback-container">
-        <TextField hintText="Your name"
-                   inputStyle={styles.input}
-                   floatingLabelStyle={styles.floatinglabel}
-                   floatingLabelText="author "
-                   floatingLabelFixed={true}
-                   onChange={(event) => this.setState({value_Author: event.target.value})}/><br />
+        <br />
+        <b>Name (optional):   </b>
+        <FormsyText name="name"
+                  validations="isWords"
+                  validationError={wordsError}
+                  hintText="Your name"
+                  hintStyle={styles.hint}
+                  inputStyle={styles.input}
+                  floatingLabelStyle={styles.floatinglabel}
+                  onChange={(event) => this.setState({value_Author: event.target.value})}/><br />
             <div>
-              <h3> Accessibility*</h3>
-              <p>How easy was it to book an appointment or walk-in for services?</p>
+              <p><b>Wait Time: </b>Approximate waiting time? Select below:</p>
+              <SelectField
+                floatingLabelText="Waiting Time"
+                value={this.state.value_Wait}
+                onChange={(event, index, value) => this.setState({value_Wait:value})}
+              >
+                <MenuItem value={1} primaryText="Immediate/Walk-In" />
+                <MenuItem value={1} primaryText="2 hours" />
+                <MenuItem value={1} primaryText="3 hours" />
+                <MenuItem value={1} primaryText="4 hours" />
+                <MenuItem value={1} primaryText="5 hours" />
+                <MenuItem value={1} primaryText="6 hours" />
+                <MenuItem value={1} primaryText="8 hours" />
+                <MenuItem value={1} primaryText="Next day" />
+                <MenuItem value={3} primaryText="2-3 days" />
+                <MenuItem value={2} primaryText="1 week" />
+                <MenuItem value={3} primaryText="1 month" />
+                <MenuItem value={3} primaryText="3 months" />
+                <MenuItem value={4} primaryText="6 months" />
+                <MenuItem value={5} primaryText="1 year" />
+              </SelectField>
+            </div>
+            <div>
+              <p><b>Accessibility: </b>How easy was it to book an appointment/access services?</p>
               <StarRatingComponent
                 name="accessibility" /* name of the radio input, it is required */
                 value={this.state.accessibilityRating} /* number of selected icon (`0` - none, `1` - first) */
@@ -501,27 +599,24 @@ export default class ClinicPage extends React.Component {
               />
             </div>
             <div>
-              <h3>Quality of Care *</h3>
-              <p>Please rate the quality of service (confidentiality, professionalism, explanation of your health/management)</p>
+              <p><b>Affordibility: </b> Was it affordable?</p>
               <StarRatingComponent
-                name="Quality" /* name of the radio input, it is required */
-                value={this.state.qualityRating} /* number of selected icon (`0` - none, `1` - first) */
-                starCount={5} /* number of icons in rating, default `5` */
-                onStarClick={(nextValue, prevValue, name)=>this.setState({qualityRating: nextValue})}
-              />
-            </div>
-            <div>
-              <h3>Affordability *</h3>
-              <p>Please rate the quality of service (confidentiality, professionalism, explanation of your health/management)</p>
-              <StarRatingComponent
-                name="Service" /* name of the radio input, it is required */
+                name="affordability" /* name of the radio input, it is required */
                 value={this.state.affordabilityRating} /* number of selected icon (`0` - none, `1` - first) */
                 starCount={5} /* number of icons in rating, default `5` */
                 onStarClick={(nextValue, prevValue, name)=>this.setState({affordabilityRating: nextValue})}
               />
             </div>
             <div>
-              <h3> Comments </h3>
+              <p><b>Communication: </b>How was the communication and professionalism of the staff?</p>
+              <StarRatingComponent
+                name="Communication" /* name of the radio input, it is required */
+                value={this.state.qualityRating} /* number of selected icon (`0` - none, `1` - first) */
+                starCount={5} /* number of icons in rating, default `5` */
+                onStarClick={(nextValue, prevValue, name)=>this.setState({qualityRating: nextValue})}
+              />
+            </div>
+            <div>
               <p> Enter any details that might help others who are looking for healthcare. (Limit 160 char)</p>
 
               <TextField hintText="Limit 160 char"
@@ -531,7 +626,7 @@ export default class ClinicPage extends React.Component {
                          floatingLabelFixed={true}
                          multiLine={true}
                          rows={3}
-                         rowsMax={10}
+                         rowsMax={8}
                          onChange={(event) => this.setState({value_Descript: event.target.value})}/><br />
 
                   <br />
@@ -539,6 +634,7 @@ export default class ClinicPage extends React.Component {
 
           </div>
       </CardText>
+      </Formsy.Form>
     </Dialog>
 
 {/* ***************************************** */}
@@ -549,14 +645,9 @@ export default class ClinicPage extends React.Component {
     autoScrollBodyContent={true}
     actions={[
        <FlatButton
-         label="Cancel"
+         label="OK"
          primary={true}
-         onTouchTap={() => this.setState({flagcontentOpen: false})}/>,
-       <FlatButton
-         label="Submit"
-         primary={true}
-         keyboardFocused={true}
-         onTouchTap={() => {this.setState({flagcontentOpen: false})}}/>]}
+         onTouchTap={() => this.setState({flagcontentOpen: false})}/>]}
         modal={false}
         open={this.state.flagcontentOpen}
         onRequestClose={() => this.setState({flagcontentOpen: false})}>

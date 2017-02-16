@@ -193,7 +193,6 @@ export default class App extends React.Component {
             }
         });
 
-        this.filterResources(this.state.searchString);
 
     }
 
