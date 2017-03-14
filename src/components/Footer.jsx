@@ -11,13 +11,6 @@ import ActionHome from 'material-ui/svg-icons/action/home';
 import ActionPregnantWoman from 'material-ui/svg-icons/action/pregnant-woman';
 import PlacesChildCare from 'material-ui/svg-icons/places/child-care';
 
-const styles = {
-  footerLabel: {
-    height:'100%',
-    color:'black'
-  },
-};
-
 export default class Footer extends Component {
 
 render() {
@@ -26,7 +19,7 @@ render() {
   const {onSelect}=this.props;
 
     return (
-      <Paper zDepth={1} style={styles.footerLabel}>
+      <Paper zDepth={1}>
         <BottomNavigation selectedIndex={selectedIndex}>
         <BottomNavigationItem
           label="View All"

@@ -24,7 +24,6 @@ export default class SearchInputs extends React.Component {
         return (
         <Paper style={styles.input}>
           <TextField
-            defaultValue=''
             onChange={e => filterResources(e.target.value)}
             hintText="  Enter any search keyword..."
             hintStyle={styles.hint}

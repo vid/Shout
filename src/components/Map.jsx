@@ -2,8 +2,6 @@
 'use strict';
 
 import React from 'react';
-
-import { cyan500 } from 'material-ui/styles/colors';
 import GoogleMap from 'google-map-react';
 
 export default class Map extends React.Component {
@@ -24,7 +22,7 @@ export default class Map extends React.Component {
 
     render() {
         const { width, height } = this.props;
-        const { getFilteredResources, displayResult, hoverRow, unhoverRow, userLat, userLng, onGoogleApiLoad } = this.props;
+        const { getFilteredResources, displayResult, userLat, userLng, onGoogleApiLoad } = this.props;
         const filteredResources = getFilteredResources();
 
         const map = (
@@ -37,8 +35,6 @@ export default class Map extends React.Component {
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
             language: 'en'}}
             onChildClick={(key, childProp)=>displayResult(filteredResources[key])}
-            onChildMouseEnter={(key,childProp)=>hoverRow(key)}
-            onChildMouseLeave={(key,childProp)=>unhoverRow()}
             onGoogleApiLoaded={({map, maps}) => onGoogleApiLoad(map, maps)}
             yesIWantToUseGoogleMapApiInternals>
 

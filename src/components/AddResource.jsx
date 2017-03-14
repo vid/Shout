@@ -19,8 +19,6 @@ import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
 
-import { cyan200 } from 'material-ui/styles/colors';
-
 
 import {
     FormsyCheckbox,

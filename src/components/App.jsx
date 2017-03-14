@@ -27,17 +27,15 @@ import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 
-
-/*PouchDB server*/
-
 import PouchDB from 'pouchdb';
 import PouchDBQuickSearch from 'pouchdb-quick-search';
 
 PouchDB.plugin(PouchDBQuickSearch);
 
+/*PouchDB server*/
+//Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
 var db = new PouchDB('resourcesnew');
 var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
-
 PouchDB.sync('db', 'remoteCouch');
 
 // all of the CSS styles for this component defined here
@@ -60,11 +58,6 @@ const styles = {
         marginLeft: 10
     },
 
-    search: {
-        paddingTop: 5,
-        width: '60%'
-    },
-
     stylemenu: {
         position: 'fixed',
         height: '100%',
@@ -82,7 +75,7 @@ const styles = {
 
 };
 
-//begin Component definition
+//Begin class definition
 
 export default class App extends React.Component {
 
@@ -101,7 +94,6 @@ export default class App extends React.Component {
             appbarSubtitle: 'Find Accessible Healthcare.',
             appbarIcon: <NavigationMenu />,
             searchBar: "",
-            hoveredMapRowIndex: '-1',
             pageLoading: 'true',
             userLat: '33.7490',
             userLng: '-84.3880',
@@ -113,6 +105,9 @@ export default class App extends React.Component {
 
     }
 
+//This method adds one tag at a time to a particular resource. It create a new "tags" document and updates the existing document
+//Updating already existing documents in a PouchDB database requires submitting a value to the "_rev" field. See:https://pouchdb.com/api.html
+// * Currently does not check for duplicates!
     addSingleTag(label, tagsdoc) {
 
         var tag = {
@@ -133,7 +128,8 @@ export default class App extends React.Component {
     }
 
 
-    // action called by AddResource
+// This method is called by the AddResource component. For now, adds a new document directly to the "resourcesnew" database
+// on the couchdb server. Later, this database should be migrated to a "pending" database where we store items before they are approved/moderated
     addResource(res) {
 
         //calculate latitude and longitude
@@ -167,12 +163,10 @@ export default class App extends React.Component {
 
         PouchDB.sync('db', 'remoteCouch');
 
-        this.filterResources(this.state.searchString);
-
     }
 
-    //actions called by ClinicPage
 
+//This method is called by ClinicPage, and submits a new "Feedback_" document to the PouchDB database
     addFeedback(rev) {
 
         var review = {
@@ -196,6 +190,8 @@ export default class App extends React.Component {
 
     }
 
+//This method is called by the AddResource component, and submits a completely new "Tags" document to the database.
+//It adds multiple tags at once, in contrast to the addSingleTag method above.
     addTags(tags, res_name) {
 
         const tagsarr = []
@@ -230,7 +226,8 @@ export default class App extends React.Component {
     }
 
 
-    // onClick function for toggling menu state
+//This function is called when the left-hand icon in the AppBar is clicked.
+//the action depends on whether the user is currently on the main/landing page or a clinic page result
     appbarClick() {
         if (!this.state.appbarState) {
             this.setState({ showMenu: !this.state.showMenu });
@@ -248,7 +245,8 @@ export default class App extends React.Component {
         this.displaySearch();
     }
 
-//functions to display render different components inside this single page app
+//This function basically updates the single page app to now display the AddResource component.
+//state variables are changed as needed in order to modify the title and layout of the page.
     displayAddResource() {
 
     //first update title, subtitle, and icons in AppBar
@@ -263,8 +261,9 @@ export default class App extends React.Component {
         this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/> });
     }
 
+//This function basically updates the single page app to now display the ClinicPage component.
+//state variables are changed as needed in order to modify the title and layout of the page.
     displayResult(result) {
-
     //first update title, subtitle, and icons in AppBar
         const clinicname = result.name;
         this.setState({ appbarIcon: <NavigationChevronLeft /> });
@@ -279,7 +278,8 @@ export default class App extends React.Component {
         this.setState({ screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addSingleTag={(a,b)=>this.addSingleTag(a,b)} addFlag={()=>this.addFlag(a,b)}/> });
     }
 
-
+//This function basically updates the single page app to now display the main component (App.js) with all results and no filter.
+//state variables are changed as needed in order to modify the title and layout of the page.
     displaySearch() {
 
     //first retrieve all docs again, to reverse any filters
@@ -287,11 +287,8 @@ export default class App extends React.Component {
         db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
             if (err) { return this.error(err); }
             if(doc.rows.length>0){
-              this.setState({pageLoading:false});
+              this.setState({pageLoading:false}); //Can stop displaying the "loading" message and display results
               this.redrawResources(doc.rows);
-            }
-            else{
-              console.log("false");
             }
         });
         this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} /> });
@@ -306,9 +303,8 @@ export default class App extends React.Component {
     }
 
 
-//this filter method uses the Pouchdb-Quick-Search library
+//This filter method uses the Pouchdb-Quick-Search library
 //See:  https://github.com/nolanlawson/pouchdb-quick-search
-
     filterResources(searchString) {
 
         if (!searchString || searchString.length < 1) {
@@ -370,6 +366,7 @@ export default class App extends React.Component {
         console.warn('ERROR(' + err.code + '): ' + err.message);
     }
 
+//This function allows user to filter resources based on the selected icon in the footer
     footerSelect(index) {
 
     //first, go back to the main screen
@@ -390,6 +387,7 @@ export default class App extends React.Component {
         }
     }
 
+//This function allows user to filter resources based on the selected icon in the footer
     filterNearMe() {
 
         var arr = this.state.filteredResources;
@@ -411,15 +409,23 @@ export default class App extends React.Component {
         this.setState({ filteredResources: arr });
     }
 
-    hoverTableRow(index) {
-        hoveredMapRowIndex: 'index';
+//Function that is called by event listeners attached when we called "db.changes"
+//It should refresh the resources when we initially sync the database, but should do nothing otherwise.
+    handleChanges(change){
+      if(this.state.pageLoading){
+        this.displaySearch();
+      }
+      else{
+      console.log("db has received an update");
+      }
     }
 
 //A function that's called by the React Google Maps library after map component loads the API
+//Currently doing nothing! ShoutApp is not using geocoder. May be necessary in the future.
     onGoogleApiLoad(map, maps) {
 
         var geo = new google.maps.Geocoder();
-        this.setState({ geocoder: geo }); //current version of ShoutApp is not using the geocoder
+        this.setState({ geocoder: geo });
 
     }
 
@@ -502,7 +508,8 @@ export default class App extends React.Component {
 
     }
 
-//See previous comment
+//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
+//currently stored in the state of App.jsx
     updateFeedbacks(name) {
 
 
@@ -520,7 +527,7 @@ export default class App extends React.Component {
 
     }
 
-//Function called from ClinicPage to upvote a tag
+//Function called from ClinicPage to upvote a tag.
     vouchFor(tagsdoc, index) {
 
         var tag = tagsdoc.tags[index];
@@ -579,6 +586,7 @@ export default class App extends React.Component {
         }
 
     }
+
     // end of actions
 
     //sync the database
@@ -586,19 +594,21 @@ export default class App extends React.Component {
 
     render() {
 
+
+    //If there are no results yet, then database is still syncing and
+    //we should listen for changes to the db and display a "Loading" message in the meantime
     if(this.state.pageLoading){
       db.changes({
         since: 'now',
         live: true,
         include_docs: true,
-        limit: 2
-      }).on('change', (change)=>this.displaySearch());
+        limit: 1
+      }).on('change', (change)=>this.handleChanges(change)); //When the changes arrive, call displaySearch
     }
 
-        const { main } = this.props
+    return (
 
-        return (
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper'>
 
           <div id='header'>
@@ -609,7 +619,7 @@ export default class App extends React.Component {
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
               </div>
-              <div styles={styles.search}>
+              <div>
                 {this.state.searchBar}
               </div>
             </div>
@@ -618,7 +628,7 @@ export default class App extends React.Component {
 
 
           <div ref='content' id='content'>
-          <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 200 } transitionLeaveTimeout={ 300 }>
+          <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 200 }>
             {this.state.screen}
           </CSSTransitionGroup>
           </div>

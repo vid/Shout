@@ -8,16 +8,6 @@ import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
-const styles = {
-    tableHeader: {
-        fontColor: 'black'
-    },
-
-    addResButton: {
-        margin: 4,
-        radius: 52,
-    }
-}
 export default class Results extends React.Component {
 
     calculateDistance(result) {
@@ -45,55 +35,47 @@ export default class Results extends React.Component {
 
     }
 
-    formatFilteredResources(filteredResources, hoveredRowIndex, searchstring, pageLoading){
+//This method returns the filteredResources formatted as a table of results
+//If the page has not yet loaded, then it returns a simple message "Loading resources"
+    formatFilteredResources(filteredResources, searchstring, pageLoading){
 
-    if(filteredResources.length>0){
+        if(filteredResources.length>0){
 
-      return (<TableBody
-          stripedRows={true}
-          displayRowCheckbox={false}
-          showRowHover={true}>
-          {filteredResources.map((result, i) => (
-            <TableRow
-              key={i}
-              onClick={() => displayResult()}
-              selected={i===hoveredRowIndex}>
-              <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
-              <TableRowColumn style={styles.namesectionStyle}><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
-              <TableRowColumn style={styles.addresssectionStyle}>
+          return (
 
-              </TableRowColumn>
-            </TableRow>
-          ))}
-        </TableBody>);
-      }else if(pageLoading){
-        return (<TableBody
-                  displayRowCheckbox={false}
-                  showRowHover={true}>
-                <TableRow>
-                  <TableRowColumn><h1>Loading resources...</h1></TableRowColumn>
+              (filteredResources.map((result, i) => (
+                <TableRow
+                  key={i}
+                  onClick={() => displayResult()}>
+                  <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
+                  <TableRowColumn><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
+                  <TableRowColumn>
+
+                  </TableRowColumn>
                 </TableRow>
-                ))
-              </TableBody>);
-      }
-      else {
-      return (<TableBody
-          displayRowCheckbox={false}
-          showRowHover={true}>
-            <TableRow>
-              <TableRowColumn><h1>No results for search "{searchstring}"</h1></TableRowColumn>
-            </TableRow>
-          ))
-        </TableBody>);
-      }
+              )))
+          );
+          }else if(pageLoading){
+            return (
+                    <TableRow>
+                      <TableRowColumn><h1>Loading resources...</h1></TableRowColumn>
+                    </TableRow>
+                  );
+          }
+          else {
+          return (
+                <TableRow>
+                  <TableRowColumn><h1>No results for search "{searchstring}"</h1></TableRowColumn>
+                </TableRow>
+          );
+          }
     }
 
     render() {
 
-        const { getFilteredResources, displayResult, displaySearch, getTags, getPageLoading, displayAddResource, getHoveredRow, getSearchstring } = this.props;
+        const { getFilteredResources, displayResult, displaySearch, getTags, getPageLoading, displayAddResource, getSearchstring } = this.props;
         var filteredResources = getFilteredResources();
         var pageLoading=getPageLoading();
-        const hoveredRowIndex = getHoveredRow();
         var searchstring=getSearchstring();
 
         return (
@@ -103,14 +85,18 @@ export default class Results extends React.Component {
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
         <TableHeader
           displaySelectAll={false}>
-          <TableRow style={styles.tableHeader}>
+          <TableRow>
             <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
             <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
             {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
-            <IconButton style = {styles.addResButton} onTouchTap={() => displayAddResource()} tooltip="add new"> <ContentAdd /></IconButton>
           </TableRow>
         </TableHeader>
-        {this.formatFilteredResources(filteredResources, hoveredRowIndex, searchstring, pageLoading)}
+        <TableBody
+            stripedRows={true}
+            displayRowCheckbox={false}
+            showRowHover={true}>
+        {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
+        </TableBody>
       </Table>
         );
     }

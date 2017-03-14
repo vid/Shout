@@ -38,6 +38,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
 import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
 
+//Formsy-React is a library used for input validation in this web app
+//See more at https://github.com/christianalfoni/formsy-react
 import {
     FormsyCheckbox,
     FormsyDate,
@@ -94,7 +96,7 @@ const styles = {
     },
 
     reviews: {
-        margin: '10'
+        margin: 10
     },
 
     stars: {
@@ -137,7 +139,8 @@ export default class ClinicPage extends React.Component {
             feedbackExpanded: false,
             descriptionExpanded: false,
             tagsExpanded: false,
-            vouchOpen: false,
+            vouchSnackbarOpen: false,
+            submitSnackbarOpen: false,
 
         //Defaults for any input values to be stored in state
             value_Author: "Anonymous",
@@ -176,52 +179,34 @@ export default class ClinicPage extends React.Component {
       formatDescription(description) {
 
             if(description.length<1000){
-
               return (<div>{description}</div>)
-
             }else if (this.state.descriptionExpanded) {
-
                 return (<div>
                           {description}
                           <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={"<< less"}/>
                         </div>)
-
             } else {
-
                 var des_a = description.slice(0, 1000);
                 return (<div>
                           {des_a}
                           <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={">> more"}/>
                         </div>)
-
             }
-
         }
 
     formatFeedbacks(reviews) {
 
         if (reviews.length === 0) {
             return "No feedback yet. Would you like to add one?";
-        } else if (reviews.length < 3) {
+        } else{
 
             return reviews.map((feedback, i) =>
-                <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
+                <Card><b>{"Author: "+feedback.author}</b>
             <div>Accessibility: {feedback.accessibility+"/5"} </div>
             <div>Quality: {feedback.quality+"/5"} </div>
             <div>Affordability: {feedback.affordability+"/5"}</div>
-            <div><b>Comments:</b>{feedback.text}</div></li>);
+            <div><b>Comments:</b>{feedback.text}</div></Card>);
             <br />
-        } else {
-
-            var revs_a = reviews.slice(0, 3);
-            return revs_a.map((feedback, i) =>
-                <li key={feedback._id}><b>{"Author: "+feedback.author}</b>
-            <div>Accessibility: {feedback.accessibility+"/5"} </div>
-            <div>Quality: {feedback.quality+"/5"} </div>
-            <div>Affordability: {feedback.affordability+"/5"}</div>
-            <div><b>Comments:</b>{feedback.text}</div></li>);
-            <br />
-
         }
 
     }
@@ -267,12 +252,12 @@ export default class ClinicPage extends React.Component {
           style={styles.smallIcon}
           tooltip="vouch for"
           onTouchTap={()=>{vouchFor(tagdoc, i)
-                          this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
+                          this.setState({vouchSnackbarOpen:true})}}><NavigationArrowUpward /></IconButton>
           <IconButton
           style={styles.smallIcon}
           tooltip="vouch against"
           onTouchTap={()=>{vouchAgainst(tagdoc, i)
-                          this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
+                          this.setState({vouchSnackbarOpen:true})}}><NavigationArrowDownward /></IconButton>
           </div>
                   </li>))
 
@@ -288,12 +273,12 @@ export default class ClinicPage extends React.Component {
                       style={styles.smallIcon}
                       tooltip="vouch for"
                       onTouchTap={()=>{vouchFor(tagdoc, i)
-                                      this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
+                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowUpward /></IconButton>
                       <IconButton
                       style={styles.smallIcon}
                       tooltip="vouch against"
                       onTouchTap={()=>{vouchAgainst(tagdoc, i)
-                                      this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
+                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowDownward /></IconButton>
                       </div>
                               </li>))
 
@@ -310,12 +295,12 @@ export default class ClinicPage extends React.Component {
                       style={styles.smallIcon}
                       tooltip="vouch for"
                       onTouchTap={()=>{vouchFor(tagdoc, i)
-                                      this.setState({vouchOpen:true})}}><NavigationArrowUpward /></IconButton>
+                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowUpward /></IconButton>
                       <IconButton
                       style={styles.smallIcon}
                       tooltip="vouch against"
                       onTouchTap={()=>{vouchAgainst(tagdoc, i)
-                                      this.setState({vouchOpen:true})}}><NavigationArrowDownward /></IconButton>
+                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowDownward /></IconButton>
                       </div>
                               </li>))
 
@@ -409,7 +394,6 @@ export default class ClinicPage extends React.Component {
         }
         const { result } = this.props;
         const id = result._id;
-        const { displaySearch } = this.props;
         const { addFeedback } = this.props;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
 
@@ -468,7 +452,7 @@ export default class ClinicPage extends React.Component {
       </Card>
 
       <Snackbar
-          open={this.state.vouchOpen}
+          open={this.state.vouchSnackbarOpen}
           message="Your vote has been recorded"
           autoHideDuration={3000}
           onRequestClose={this.handleRequestClose}
@@ -511,12 +495,6 @@ export default class ClinicPage extends React.Component {
                     {this.formatFeedbacks(allFeedbacks)}
                     </div>
 
-                    <FlatButton onClick={()=>this.setState({feedbackExpanded:!this.state.feedbackExpanded})} label={">> Click to expand/collapse all ("+allFeedbacks.length+")"}/>
-
-                    <div>
-                    {expandedFeedback}
-                    </div>
-
         </CardText>
       </Card>
 </div>
@@ -540,6 +518,7 @@ export default class ClinicPage extends React.Component {
                             var x=this.formatSubmission(result.name);
                             addFeedback(x);
                             this.setState({submitfeedbackOpen: false})
+                            this.setState({submitSnackbarOpen:true})
                             }}/>]}
 
         modal={false}
@@ -549,7 +528,6 @@ export default class ClinicPage extends React.Component {
       <Formsy.Form
             onValid={()=>this.setState({ canSubmit: true })}
             onInvalid={()=>this.setState({ canSubmit: false })}
-            onValidSubmit={()=>this.submitForm}
             onInvalidSubmit={()=>this.notifyFormError}
           >
 
@@ -574,19 +552,19 @@ export default class ClinicPage extends React.Component {
                 onChange={(event, index, value) => this.setState({value_Wait:value})}
               >
                 <MenuItem value={1} primaryText="Immediate/Walk-In" />
-                <MenuItem value={1} primaryText="2 hours" />
-                <MenuItem value={1} primaryText="3 hours" />
-                <MenuItem value={1} primaryText="4 hours" />
-                <MenuItem value={1} primaryText="5 hours" />
-                <MenuItem value={1} primaryText="6 hours" />
-                <MenuItem value={1} primaryText="8 hours" />
-                <MenuItem value={1} primaryText="Next day" />
-                <MenuItem value={3} primaryText="2-3 days" />
-                <MenuItem value={2} primaryText="1 week" />
-                <MenuItem value={3} primaryText="1 month" />
-                <MenuItem value={3} primaryText="3 months" />
-                <MenuItem value={4} primaryText="6 months" />
-                <MenuItem value={5} primaryText="1 year" />
+                <MenuItem value={2} primaryText="2 hours" />
+                <MenuItem value={3} primaryText="3 hours" />
+                <MenuItem value={4} primaryText="4 hours" />
+                <MenuItem value={5} primaryText="5 hours" />
+                <MenuItem value={6} primaryText="6 hours" />
+                <MenuItem value={7} primaryText="8 hours" />
+                <MenuItem value={8} primaryText="Next day" />
+                <MenuItem value={9} primaryText="2-3 days" />
+                <MenuItem value={10} primaryText="1 week" />
+                <MenuItem value={11} primaryText="1 month" />
+                <MenuItem value={12} primaryText="3 months" />
+                <MenuItem value={13} primaryText="6 months" />
+                <MenuItem value={14} primaryText="1 year" />
               </SelectField>
             </div>
             <div>
@@ -636,6 +614,12 @@ export default class ClinicPage extends React.Component {
       </CardText>
       </Formsy.Form>
     </Dialog>
+
+      <Snackbar
+          open={this.state.submitSnackbarOpen}
+          message="Thank you for your feedback!"
+          autoHideDuration={4000}
+        />
 
 {/* ***************************************** */}
 {/* Section 6: Flag Content */}
