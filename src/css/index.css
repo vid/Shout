@@ -11,13 +11,9 @@ html, body {
 }
 
 #content {
-  flex: 1;
-  height: 100%;
-  width: 100%;
-}
-
-
-h1{
+  flex:1;
+  height:100%;
+  width:100%;
 }
 
 h3{
@@ -26,10 +22,6 @@ h3{
 #cliniccomponents{
   display: flex; /* or inline-flex */
 }
-
-#header{
-}
-
 
 #menu {
   z-index:10;
