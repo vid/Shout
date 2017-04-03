@@ -41,7 +41,6 @@ PouchDB.sync('db', 'remoteCouch');
 const styles = {
 
     appbar: {
-        minHeight: 110
     },
 
     appbarTitle: {
@@ -614,9 +613,10 @@ export default class App extends React.Component {
               <div style={styles.row}>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
+                {this.state.searchBar}
               </div>
               <div>
-                {this.state.searchBar}
+
               </div>
             </div>
           </AppBar>
