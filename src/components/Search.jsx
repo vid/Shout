@@ -6,7 +6,6 @@ import Map from './Map.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Results from './Results.jsx';
 
-
 //Begin class definition
 export default class Search extends React.Component {
     constructor(props) {
@@ -40,8 +39,8 @@ export default class Search extends React.Component {
 
         return (
         <div width={offsetWidth}>
-        <Map height={(offsetHeight / 2)} getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
-        <div style={{height: (offsetHeight / 2), overflow: 'auto'}}>
+        <Map height={(offsetHeight / 3)} getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
+        <div style={{height: (2*offsetHeight / 3), overflow: 'auto'}}>
           <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}/>
         </div>
       </div>

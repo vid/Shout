@@ -92,7 +92,6 @@ export default class Results extends React.Component {
           </TableRow>
         </TableHeader>
         <TableBody
-            stripedRows={true}
             displayRowCheckbox={false}
             showRowHover={true}>
         {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced

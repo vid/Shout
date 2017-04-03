@@ -22,22 +22,17 @@ render() {
       <Paper zDepth={1}>
         <BottomNavigation selectedIndex={selectedIndex}>
         <BottomNavigationItem
-          label="View All"
+          label="Recently Viewed"
           icon={<ActionHome />}
           onTouchTap={() => onSelect(0)}
         />
           <BottomNavigationItem
-            label="Children"
-            icon={<PlacesChildCare />}
-            onTouchTap={() => onSelect(1)}
-          />
-          <BottomNavigationItem
-            label="Psychiatric"
+            label="Favorites"
             icon={<ActionFavorite />}
             onTouchTap={() => onSelect(2)}
           />
           <BottomNavigationItem
-            label="Women"
+            label="Nearby"
             icon={<ActionPregnantWoman />}
             onTouchTap={() => onSelect(3)}
           />

@@ -23,6 +23,10 @@ h3{
   display: flex; /* or inline-flex */
 }
 
-#menu {
-  z-index:10;
+@media screen and (min-width: 0px) and (max-width: 400px) {
+  #hide-mobile { display: none; }  /* hide it on small screens */
+}
+
+@media screen and (min-width: 401px) and (max-width: 1024px) {
+  #hide-mobile { display: block; }   /* show it elsewhere */
 }

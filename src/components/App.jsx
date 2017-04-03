@@ -41,7 +41,7 @@ PouchDB.sync('db', 'remoteCouch');
 const styles = {
 
     appbar: {
-        minHeight: 100
+        minHeight: 110
     },
 
     appbarTitle: {
