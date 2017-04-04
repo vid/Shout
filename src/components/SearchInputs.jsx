@@ -11,12 +11,6 @@ const styles = {
     hint: {
         color: '#FFFFFF',
     },
-    div:{
-        display:'flex',
-        flexDirection:'row',
-        width:'100%',
-        overflow:'hidden'
-    },
 };
 
 export default class SearchInputs extends React.Component {
@@ -26,7 +20,7 @@ export default class SearchInputs extends React.Component {
         const { filterResources, getSearchstring} = this.props;
         var searchString=getSearchstring();
         return (
-          <div style={styles.div}>
+          <div>
 
                 <TextField
                   onChange={e => filterResources(e.target.value)}

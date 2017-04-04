@@ -92,7 +92,7 @@ export default class OptionMenu extends React.Component {
                   <FlatButton label="Free" labelStyle={styles.label2}/>
                 </div>
                 <div style={styles.button2}>
-                  <FlatButton label="Sliding-scale" labelStyle={styles.label2}/>
+                  <FlatButton label="Sliding scale" labelStyle={styles.label2}/>
                 </div>
                 </div>): (<div></div>)}
 
@@ -107,7 +107,7 @@ export default class OptionMenu extends React.Component {
                     <FlatButton label="STD testing" labelStyle={styles.label2}/>
                   </div>
                   <div style={styles.button2}>
-                    <FlatButton label="Check-up" labelStyle={styles.label2}/>
+                    <FlatButton label="Check up" labelStyle={styles.label2}/>
                   </div>
                   </div>): (<div></div>)}
 
