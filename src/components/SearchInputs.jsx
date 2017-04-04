@@ -4,31 +4,33 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
-import ActionSearch from 'material-ui/svg-icons/action/search';
+import EditorAttachMoney from 'material-ui/svg-icons/editor/attach-money';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
     hint: {
-        color: '#01579B',
+        color: '#FFFFFF',
     },
-    input: {
-        marginTop: 7,
-        width: '100%'
-    },
+    wrapper:{
+        overflow:'hidden'
+    }
 };
 
 export default class SearchInputs extends React.Component {
+
 
     render() {
         const { filterResources, getSearchstring} = this.props;
         var searchString=getSearchstring();
         return (
-        <Paper style={styles.input}>
-          <TextField
-            onChange={e => filterResources(e.target.value)}
-            hintText="  Enter any search keyword..."
-            hintStyle={styles.hint}
-            />
-        </Paper>
+          <div style={styles.wrapper}>
+
+                <TextField
+                  onChange={e => filterResources(e.target.value)}
+                  hintText="Search..."
+                  hintStyle={styles.hint}
+                  />
+          </div>
         );
     }
 }
