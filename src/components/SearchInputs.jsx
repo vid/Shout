@@ -27,7 +27,7 @@ export default class SearchInputs extends React.Component {
             onChange={e => filterResources(e.target.value)}
             hintText="  Enter any search keyword..."
             hintStyle={styles.hint}
-            value={searchString}/>
+            />
         </Paper>
         );
     }

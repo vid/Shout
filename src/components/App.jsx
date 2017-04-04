@@ -38,7 +38,6 @@ var db = new PouchDB('resourcesnew');
 var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
 PouchDB.sync('db', 'remoteCouch');
 
-// all of the CSS styles for this component defined here
 const styles = {
 
     appbar: {
@@ -75,8 +74,6 @@ const styles = {
 
 };
 
-//Begin class definition
-
 export default class App extends React.Component {
 
     constructor() {
@@ -86,7 +83,7 @@ export default class App extends React.Component {
         this.state = {
             allResources: [],
             filteredResources: [],
-            showMenu: false,
+            showMenu: false,                  //toggles left-hand menu
             searchString: '',
             appbarState: false,
             selectedFooterIndex: 0,
@@ -94,10 +91,9 @@ export default class App extends React.Component {
             appbarSubtitle: 'Find Accessible Healthcare.',
             appbarIcon: <NavigationMenu />,
             searchBar: "",
-            pageLoading: 'true',
+            pageLoading: 'true',              //true if page has not loaded yet
             userLat: '33.7490',
             userLng: '-84.3880',
-
             clinicpageTags: [],
             clinicpageFeedbacks: []
         };
@@ -114,7 +110,6 @@ export default class App extends React.Component {
             value: label,
             count: 1
         }
-
         tagsdoc.tags.push(tag);
         db.put({
             _id: tagsdoc._id,
@@ -128,14 +123,12 @@ export default class App extends React.Component {
     }
 
 
+
 // This method is called by the AddResource component. For now, adds a new document directly to the "resourcesnew" database
 // on the couchdb server. Later, this database should be migrated to a "pending" database where we store items before they are approved/moderated
     addResource(res) {
 
-        //calculate latitude and longitude
-
-
-        //create json object
+        //create object to add
         var resource = {
             _id: "Resource" + "_" + res.zip + "_" + res.name,
             type: "resource",
@@ -155,7 +148,7 @@ export default class App extends React.Component {
             if (!err) {
                 console.log('Added resource');
             } else {
-                console.log('Error adding the resource' + err);
+                console.log('Error adding resource' + err);
             }
         });
 
@@ -164,6 +157,7 @@ export default class App extends React.Component {
         PouchDB.sync('db', 'remoteCouch');
 
     }
+
 
 
 //This method is called by ClinicPage, and submits a new "Feedback_" document to the PouchDB database
@@ -180,22 +174,24 @@ export default class App extends React.Component {
             text: rev.text,
 
         };
-
-        db.put(review, function callback(err, result) {
+      db.put(review, function callback(err, result) {
             if (!err) {
                 console.log('Added review');
+            }else {
+                console.log('Error adding feedback' + err);
             }
         });
 
 
     }
 
+
+
 //This method is called by the AddResource component, and submits a completely new "Tags" document to the database.
 //It adds multiple tags at once, in contrast to the addSingleTag method above.
     addTags(tags, res_name) {
 
         const tagsarr = []
-
         tags.forEach(function (element) {
 
             var tag = {
@@ -206,64 +202,66 @@ export default class App extends React.Component {
             tagsarr.push(tag);
 
         });
-
         var tagsobj = {
             _id: "tags" + "_" + res_name,
             type: "tag",
             tags: tagsarr,
         }
-
         db.put(tagsobj, function callback(err, result) {
             if (err) {
                 return console.log(err);
             }
         });
-
         if (remoteCouch) {
             this.sync();
         }
 
     }
+
 
 
 //This function is called when the left-hand icon in the AppBar is clicked.
 //the action depends on whether the user is currently on the main/landing page or a clinic page result
     appbarClick() {
+
         if (!this.state.appbarState) {
             this.setState({ showMenu: !this.state.showMenu });
         } else {
             this.displaySearch();
         }
-
     }
-
-
     componentDidMount() {
         if (remoteCouch) {
             this.sync();
         }
         this.displaySearch();
+
     }
+
+
 
 //This function basically updates the single page app to now display the AddResource component.
 //state variables are changed as needed in order to modify the title and layout of the page.
     displayAddResource() {
 
-    //first update title, subtitle, and icons in AppBar
+    //First update title, subtitle, and icons in AppBar
         this.setState({ appbarIcon: <NavigationChevronLeft /> });
         this.setState({ appbarTitle: "Add Resource" });
         this.setState({ appbarSubtitle: ' ' });
         this.setState({ appbarState: true });
-
     //showMenu variable controls what function is called when a user clicks on the top lefthand icon
         this.setState({ showMenu: false });
 
         this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/> });
+
     }
+
+
 
 //This function basically updates the single page app to now display the ClinicPage component.
 //state variables are changed as needed in order to modify the title and layout of the page.
     displayResult(result) {
+
     //first update title, subtitle, and icons in AppBar
         const clinicname = result.name;
         this.setState({ appbarIcon: <NavigationChevronLeft /> });
@@ -273,21 +271,21 @@ export default class App extends React.Component {
         this.setState({ appbarSubtitle: '' });
         this.setState({ searchBar: "" });
         this.setState({ appbarState: true });
-
     //now can load a different component. note: all state variables in App.jsx must be changed before it's unmounted, or React throws an error
         this.setState({ screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addSingleTag={(a,b)=>this.addSingleTag(a,b)} addFlag={()=>this.addFlag(a,b)}/> });
+
     }
+
+
 
 //This function basically updates the single page app to now display the main component (App.js) with all results and no filter.
 //state variables are changed as needed in order to modify the title and layout of the page.
     displaySearch() {
 
     //first retrieve all docs again, to reverse any filters
-
         db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
             if (err) { return this.error(err); }
             if(doc.rows.length>0){
-              this.setState({pageLoading:false}); //Can stop displaying the "loading" message and display results
               this.redrawResources(doc.rows);
             }
         });
@@ -303,6 +301,14 @@ export default class App extends React.Component {
     }
 
 
+
+//Error method
+    error(err) {
+        console.warn('ERROR(' + err.code + '): ' + err.message);
+    }
+
+
+
 //This filter method uses the Pouchdb-Quick-Search library
 //See:  https://github.com/nolanlawson/pouchdb-quick-search
     filterResources(searchString) {
@@ -314,7 +320,6 @@ export default class App extends React.Component {
                 this.redrawResources(doc.rows);
             });
         } else {
-
         this.setState({searchString:searchString});
             db.search({
                 query: searchString,
@@ -322,15 +327,10 @@ export default class App extends React.Component {
                 include_docs: true,
                 mm: '33%'
             }, (err, list) => {
-
                 if (err) {
                     this.error(err);
                 }
-
-                var matches = {
-                    results: []
-                };
-
+                var matches=[];
                 list.rows.forEach(function (res) {
                     if (res.id.startsWith('tags')) {
 
@@ -346,25 +346,21 @@ export default class App extends React.Component {
                                 return console.log("error searching DB:"+err);
                             }
                             else if (res.id.startsWith('Resource')) {
-                                matches.results.push(res);
+                                matches.push(res);
                             }
                         });
                     } else if (res.id.startsWith('Resource')) {
-                        matches.results.push(res);
+                        matches.push(res);
                     } else {
                         console.log("unknown item type");
                     }
                 });
-                this.redrawFilteredResources(matches.results);
-
+                this.redrawResources(matches);
             });
         }
-
     }
 
-    error(err) {
-        console.warn('ERROR(' + err.code + '): ' + err.message);
-    }
+
 
 //This function allows user to filter resources based on the selected icon in the footer
     footerSelect(index) {
@@ -387,13 +383,14 @@ export default class App extends React.Component {
         }
     }
 
-//This function allows user to filter resources based on the selected icon in the footer
+
+
+//This function sorts resources based on the distance
     filterNearMe() {
 
-        var arr = this.state.filteredResources;
-        arr.sort((a, b) => {
+        var arrSorted = this.state.filteredResources;
+        arrSorted.sort((a, b) => {
             if (a.lat && b.lat) {
-
                 var y_distance = 69 * Math.pow((a.lat - this.state.userLat), 2);
                 var x_distance = 69 * Math.pow((this.state.userLng - a.lng), 2);
                 var a_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
@@ -403,22 +400,28 @@ export default class App extends React.Component {
                 var b_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
 
                 return (a_distance - b_distance);
-            } else return 0;
+            } else return 10000;
         });
-
-        this.setState({ filteredResources: arr });
+        this.setState({ filteredResources: arrSorted });
     }
+
+
 
 //Function that is called by event listeners attached when we called "db.changes"
 //It should refresh the resources when we initially sync the database, but should do nothing otherwise.
-    handleChanges(change){
+    handleChanges(change, changesObject){
+
       if(this.state.pageLoading){
+        this.setState({pageLoading:false});
         this.displaySearch();
+        changes.cancel();
       }
       else{
-      console.log("db has received an update");
+      console.log("Database update");
       }
     }
+
+
 
 //A function that's called by the React Google Maps library after map component loads the API
 //Currently doing nothing! ShoutApp is not using geocoder. May be necessary in the future.
@@ -429,41 +432,29 @@ export default class App extends React.Component {
 
     }
 
+
+
 //Update the rows of the results table on main page
     redrawResources(resources) {
-        var resourcesdocs = {
-            results: []
-        };
-        resources.forEach(function (res) {
-            resourcesdocs.results.push(res.doc);
-        });
 
-        this.setState({ filteredResources: resourcesdocs.results });
+        var results= [];
+        resources.forEach(function (res) {
+            results.push(res.doc);
+        });
+        this.setState({ filteredResources: results });
         this.filterNearMe();
+
     }
 
-//Show filtered rows of the results table on main page
-    redrawFilteredResources(resources) {
-
-        var resourcesdocs = {
-            results: []
-        };
-        resources.forEach(function (res) {
-            resourcesdocs.results.push(res.doc);
-        });
-
-        this.setState({ filteredResources: resourcesdocs.results });
-        this.filterNearMe();
-    }
 
 //user gets prompt to allow browser to access current position
     requestCurrentPosition() {
+
         var options = {
             enableHighAccuracy: true,
             timeout: 5000,
             maximumAge: 0
         }
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 var crd = pos.coords;
@@ -473,11 +464,17 @@ export default class App extends React.Component {
                 this.setState({ userLng: y });
             }, this.error, options);
         }
+
     }
 
+
+
     syncError() {
+
         console.log('data-sync-state: error');
     }
+
+
 
     sync() {
 
@@ -485,6 +482,8 @@ export default class App extends React.Component {
         db.replicate.to(remoteCouch, opts, this.syncError);
         db.replicate.from(remoteCouch, opts, this.syncError);
     }
+
+
 
 //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
 //currently stored in the state of App.jsx
@@ -508,17 +507,16 @@ export default class App extends React.Component {
 
     }
 
+
+
 //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
 //currently stored in the state of App.jsx
     updateFeedbacks(name) {
 
-
         db.allDocs({ startkey: 'Feedback_' + name, endkey: 'Feedback_' + name + '_\uffff', include_docs: true }, (err, doc) => {
 
             if (err) { return this.error(err); }
-
             var feedbacks = [];
-
             doc.rows.forEach(function (feedback) {
                 feedbacks.push(feedback.doc);
             });
@@ -527,17 +525,17 @@ export default class App extends React.Component {
 
     }
 
+
+
 //Function called from ClinicPage to upvote a tag.
     vouchFor(tagsdoc, index) {
 
         var tag = tagsdoc.tags[index];
-
         var modified_tag = {
             value: tag.value,
             count: tag.count + 1,
         };
         tagsdoc.tags[index] = modified_tag;
-
         db.put({
             _id: tagsdoc._id,
             _rev: tagsdoc._rev,
@@ -547,13 +545,15 @@ export default class App extends React.Component {
             if (err) { console.log(err); }
             console.log("successfully upvoted");
         });
+
     }
+
+
 
 //Function called from ClinicPage to downvote a tag
     vouchAgainst(tagsdoc, index) {
 
         var tag = tagsdoc.tags[index];
-
         if (tag.count > 0) {
             var modified_tag = {
                 value: tag.value,
@@ -572,7 +572,6 @@ export default class App extends React.Component {
             });
         } else {
             tagsdoc.tags.splice(index, 1);
-
             db.put({
                 _id: tagsdoc._id,
                 _rev: tagsdoc._rev,
@@ -582,14 +581,11 @@ export default class App extends React.Component {
                 if (err) { return this.error(err); }
                 console.log("successfully downvoted");
             });
-
         }
-
     }
 
-    // end of actions
 
-    //sync the database
+// End of actions
 
 
     render() {
@@ -598,12 +594,12 @@ export default class App extends React.Component {
     //If there are no results yet, then database is still syncing and
     //we should listen for changes to the db and display a "Loading" message in the meantime
     if(this.state.pageLoading){
-      db.changes({
+      var changesObject=db.changes({
         since: 'now',
         live: true,
         include_docs: true,
         limit: 1
-      }).on('change', (change)=>this.handleChanges(change)); //When the changes arrive, call displaySearch
+      }).on('change', (change)=>this.handleChanges(change, changesObject)); //When the changes arrive, call displaySearch
     }
 
     return (
@@ -628,7 +624,7 @@ export default class App extends React.Component {
 
 
           <div ref='content' id='content'>
-          <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 200 }>
+          <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 300 }>
             {this.state.screen}
           </CSSTransitionGroup>
           </div>
