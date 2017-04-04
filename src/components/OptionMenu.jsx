@@ -60,7 +60,7 @@ export default class OptionMenu extends React.Component {
           <div style={styles.row}>
 
               <div style={styles.button}>
-                <RaisedButton label="Price" icon={<EditorAttachMoney />} backgroundColor={this.state.showPrice? '#C0C0C0' : cyan200} onTouchTap={()=>this.setState({showPrice:!this.state.showPrice})}/>
+                <RaisedButton icon={<EditorAttachMoney />} backgroundColor={this.state.showPrice? '#C0C0C0' : cyan200} onTouchTap={()=>this.setState({showPrice:!this.state.showPrice})}/>
               </div>
 
               <div style={styles.button}>

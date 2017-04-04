@@ -11,6 +11,9 @@ const styles = {
     hint: {
         color: '#FFFFFF',
     },
+    wrapper:{
+        overflow:'hidden'
+    }
 };
 
 export default class SearchInputs extends React.Component {
@@ -20,11 +23,11 @@ export default class SearchInputs extends React.Component {
         const { filterResources, getSearchstring} = this.props;
         var searchString=getSearchstring();
         return (
-          <div>
+          <div style={styles.wrapper}>
 
                 <TextField
                   onChange={e => filterResources(e.target.value)}
-                  hintText="  Enter search term..."
+                  hintText="Search..."
                   hintStyle={styles.hint}
                   />
           </div>
