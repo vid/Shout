@@ -210,6 +210,12 @@ export default class AddResource extends React.Component {
           return regobj.test(value);
         });
 
+        Formsy.addValidationRule('isUrlCustom', (values, value) => {
+
+          var regobj=/^$|((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+          return regobj.test(value);
+        });
+
         return (
 
           <Formsy.Form
@@ -328,9 +334,9 @@ export default class AddResource extends React.Component {
 
             <FormsyText
               name="url"
-              validations="isUrl"
+              validations="isUrlCustom"
               validationError={urlError}
-              hintText="http://www.example.com"
+              hintText="www.example.com"
               floatingLabelText="website URL"
               floatingLabelFixed={true}
               updateImmediately
