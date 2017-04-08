@@ -294,7 +294,10 @@ export default class AddResource extends React.Component {
 
           <FormsyText
             name="city"
+            validations="isAlpha"
+            validationError={wordsError}
             required
+            updateImmediately
             floatingLabelText="City"
             floatingLabelFixed={true}
             hintText="Atlanta"
