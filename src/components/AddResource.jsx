@@ -325,6 +325,9 @@ export default class AddResource extends React.Component {
 
           <FormsyText
                        name="PhoneNumber"
+                       validations="isInt"
+                       validationError={numericError}
+                       updateImmediately
                        hintText="3225550100"
                        hintStyle={styles.hint}
                        floatingLabelStyle={styles.floatinglabel}
