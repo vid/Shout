@@ -61,17 +61,6 @@ const styles = {
 
 };
 
-const validators = {
-  customvalid: {
-    regexp: /^[a-zA-Z0-9,.!?' ]*$/,
-    message: 'Not valid time'
-  },
-  phone: {
-    regexp: /^([A-Za-z0-9-]+)/,
-    message: 'Not a valid format'
-  }
-};
-
 export default class AddResource extends React.Component {
 
 
