@@ -595,13 +595,11 @@ export default class ClinicPage extends React.Component {
               />
             </div>
             <div>
-              <p> Enter any details that might help others who are looking for healthcare. (Limit 160 char)</p>
+            <br />
+              <p><b>Comments:</b></p>
 
-              <TextField hintText="Limit 160 char"
+              <TextField hintText="Enter any details that might help others who are looking for healthcare. (Limit 160 char)"
                          inputStyle={styles.input}
-                         floatingLabelStyle={styles.floatinglabel}
-                         floatingLabelText="Comments "
-                         floatingLabelFixed={true}
                          multiLine={true}
                          rows={3}
                          rowsMax={8}
