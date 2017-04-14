@@ -616,7 +616,7 @@ export default class ClinicPage extends React.Component {
       <Snackbar
           open={this.state.submitSnackbarOpen}
           message="Thank you for your feedback!"
-          autoHideDuration={4000}
+          autoHideDuration={5000}
         />
 
 {/* ***************************************** */}

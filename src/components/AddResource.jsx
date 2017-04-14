@@ -489,6 +489,7 @@ export default class AddResource extends React.Component {
                                     console.log("error"+err)
                                   }
                                   }}/>
+                  {this.state.canSubmit? "":<b> Please fill out required fields</b>}
 
                 <Dialog
                   title="Completed"
