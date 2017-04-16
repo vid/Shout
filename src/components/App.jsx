@@ -621,11 +621,6 @@ export default class App extends React.Component {
           </AppBar>
           </div>
 
-          <div ref='footer' id='footer'>
-            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
-          </div>
-
-
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 300 }>
             {this.state.screen}
@@ -641,6 +636,11 @@ export default class App extends React.Component {
                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
             </Drawer>
          </div>
+
+                   <div ref='footer' id='footer'>
+                     <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
+                   </div>
+
 
         </div>
       </MuiThemeProvider>

@@ -26,7 +26,7 @@ export default class Map extends React.Component {
         const filteredResources = getFilteredResources();
 
         const map = (
-            <div style={{height, width}}>
+            <div style={{height,width}}>
          <GoogleMap
             defaultCenter={this.defaults.center}
             defaultZoom={this.defaults.zoom}

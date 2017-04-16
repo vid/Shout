@@ -53,10 +53,9 @@ export default class Results extends React.Component {
                 <TableRow
                   key={i}
                   onClick={() => displayResult()}>
-                  <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
-                  <TableRowColumn><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
                   <TableRowColumn>
-
+                  <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><h4>({this.calculateDistance(result)+" mi"})</h4></div>
+                    {result.civic_address}
                   </TableRowColumn>
                 </TableRow>
               )))
@@ -93,13 +92,10 @@ export default class Results extends React.Component {
         <TableHeader
           displaySelectAll={false}>
           <TableRow>
-            <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
+            <TableHeaderColumn><h2>Results</h2></TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
-            stripedRows={true}
             displayRowCheckbox={false}
             showRowHover={true}>
         {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced

@@ -12,7 +12,9 @@ const styles = {
     },
     input: {
         marginTop: 7,
-        width: '100%'
+        marginRight:10,
+        width: '100%',
+        paddingLeft:10
     },
 };
 
@@ -22,13 +24,16 @@ export default class SearchInputs extends React.Component {
         const { filterResources, getSearchstring} = this.props;
         var searchString=getSearchstring();
         return (
+        <div style={{display:'flex', flexDirection:'row'}}>
         <Paper style={styles.input}>
+          <b>Find:   </b>
           <TextField
             onChange={e => filterResources(e.target.value)}
-            hintText="  Enter any search keyword..."
+            hintText="  e.g. 'pregnancy test' "
             hintStyle={styles.hint}
             />
         </Paper>
+        </div>
         );
     }
 }
