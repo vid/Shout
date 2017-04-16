@@ -269,7 +269,7 @@ export default class AddResource extends React.Component {
           <FormsyText
             name="addressline1"
             required
-            floatingLabelText="Street Address"
+            floatingLabelText="Street Address *"
             floatingLabelFixed={true}
             hintText="12 Grimmauld Place"
             hintStyle={styles.hint}
@@ -300,7 +300,7 @@ export default class AddResource extends React.Component {
             validationError={wordsError}
             required
             updateImmediately
-            floatingLabelText="City"
+            floatingLabelText="City *"
             floatingLabelFixed={true}
             hintText="Atlanta"
             hintStyle={styles.hint}
@@ -330,6 +330,7 @@ export default class AddResource extends React.Component {
                        validations="isPhoneNumberCustom"
                        validationError={numericError}
                        updateImmediately
+                       required
                        hintText="3225550100"
                        hintStyle={styles.hint}
                        floatingLabelStyle={styles.floatinglabel}
