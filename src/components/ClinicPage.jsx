@@ -414,6 +414,8 @@ export default class ClinicPage extends React.Component {
               <div style={styles.data}>
                 <h4> Address: </h4>
                 {result.civic_address}
+                <FlatButton href = {"http://maps.google.com/?daddr=" + result.civic_address} primary = {true} target = "_blank" label={"Click to View Directions"}/>
+
                 <h4> Phone: </h4>
                 {result.phone}
                 <h4> Website: </h4>
