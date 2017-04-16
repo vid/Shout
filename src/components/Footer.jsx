@@ -9,6 +9,7 @@ import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import ActionPregnantWoman from 'material-ui/svg-icons/action/pregnant-woman';
+import ActionVisibility from 'material-ui/svg-icons/action/visibility';
 import PlacesChildCare from 'material-ui/svg-icons/places/child-care';
 
 export default class Footer extends Component {
@@ -22,7 +23,7 @@ render() {
       <Paper zDepth={1}>
         <BottomNavigation selectedIndex={selectedIndex}>
         <BottomNavigationItem
-          label="View All"
+          label="View All Results"
           icon={<ActionHome />}
           onTouchTap={() => onSelect(0)}
         />
@@ -37,9 +38,19 @@ render() {
             onTouchTap={() => onSelect(2)}
           />
           <BottomNavigationItem
-            label="Women"
+            label="Women's Health"
             icon={<ActionPregnantWoman />}
             onTouchTap={() => onSelect(3)}
+          />
+          <BottomNavigationItem
+            label="Dental"
+            icon={<ActionFavorite />}
+            onTouchTap={() => onSelect(4)}
+          />
+          <BottomNavigationItem
+            label="Vision"
+            icon={<ActionVisibility />}
+            onTouchTap={() => onSelect(5)}
           />
 
         </BottomNavigation>

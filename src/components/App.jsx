@@ -314,6 +314,7 @@ export default class App extends React.Component {
     filterResources(searchString) {
 
         if (!searchString || searchString.length < 1) {
+            console.log("no search string, drawing all resources");
             db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
                 this.setState({searchString:""});
                 if (err) { return console.log(err); }
@@ -323,9 +324,8 @@ export default class App extends React.Component {
         this.setState({searchString:searchString});
             db.search({
                 query: searchString,
-                fields: ['name', 'description', '_id', 'services.label', 'text'],
+                fields: ['name', '_id', 'description', 'services.label'],
                 include_docs: true,
-                mm: '33%'
             }, (err, list) => {
                 if (err) {
                     this.error(err);
@@ -339,7 +339,6 @@ export default class App extends React.Component {
                             query: res._id,
                             fields: ['name'],
                             include_docs: true,
-                            mm: '33%'
                         }, (err, list) => {
 
                             if (err) {
@@ -366,20 +365,19 @@ export default class App extends React.Component {
     footerSelect(index) {
 
     //first, go back to the main screen
-        this.displaySearch();
         this.setState({ selectedFooterIndex: index });
         if (index === 0) {
             this.filterResources('');
-            this.setState({searchString:''});
         } else if (index === 1) {
-            this.filterResources('children');
-            this.setState({searchString:'children'});
+            this.filterResources("child");
         } else if (index === 2) {
-            this.filterResources('mental health');
-            this.setState({searchString:'mental health'});
+            this.filterResources("adult mental health");
         } else if (index === 3) {
-            this.filterResources('women');
-            this.setState({searchString:'women'});
+            this.filterResources("women");
+        } else if (index === 4) {
+            this.filterResources("dental");
+        } else if (index === 5) {
+            this.filterResources("vision");
         }
     }
 
@@ -412,6 +410,7 @@ export default class App extends React.Component {
     handleChanges(change, changesObject){
 
       if(this.state.pageLoading){
+        console.log("going to display search bc page loading");
         this.setState({pageLoading:false});
         this.displaySearch();
         changes.cancel();
@@ -622,6 +621,10 @@ export default class App extends React.Component {
           </AppBar>
           </div>
 
+          <div ref='footer' id='footer'>
+            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
+          </div>
+
 
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 300 }>
@@ -638,11 +641,6 @@ export default class App extends React.Component {
                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
             </Drawer>
          </div>
-
-
-          <div ref='footer' id='footer'>
-            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
-          </div>
 
         </div>
       </MuiThemeProvider>
