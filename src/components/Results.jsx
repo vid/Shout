@@ -7,6 +7,13 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
+const styles = {
+
+    table: {
+      cursor:'pointer'
+    },
+}
+
 
 export default class Results extends React.Component {
 
@@ -22,7 +29,6 @@ export default class Results extends React.Component {
 
     formatTags(arrTags) {
 
-        console.log("Tags to format are:" + arrTags);
         if (arrTags) {
             var arrLabels = [];
             arrTags.forEach(function (element) {
@@ -47,10 +53,9 @@ export default class Results extends React.Component {
                 <TableRow
                   key={i}
                   onClick={() => displayResult()}>
-                  <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
-                  <TableRowColumn><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
                   <TableRowColumn>
-
+                  <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><h4>({this.calculateDistance(result)+" mi"})</h4></div>
+                    {result.civic_address}
                   </TableRowColumn>
                 </TableRow>
               )))
@@ -82,17 +87,15 @@ export default class Results extends React.Component {
             <Table
         selectable={false}
         fixedHeader={true}
+        style={styles.table}
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
         <TableHeader
           displaySelectAll={false}>
           <TableRow>
-            <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
+            <TableHeaderColumn><h2>Results</h2></TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
-            stripedRows={true}
             displayRowCheckbox={false}
             showRowHover={true}>
         {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
