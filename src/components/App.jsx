@@ -373,6 +373,14 @@ export default class App extends React.Component {
         } else if (index === 2) {
             this.filterResources("adult mental health");
         } else if (index === 3) {
+            this.filterResources('women');
+            this.setState({searchString:'women'});
+        } else if (index === 4) {
+            this.filterResources('food');
+            this.setState({searchString:'food'});
+        } else if (index === 5) {
+            this.filterResources('housing');
+            this.setState({searchString:'housing'});
             this.filterResources("women");
         } else if (index === 4) {
             this.filterResources("dental");

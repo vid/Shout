@@ -1,3 +1,7 @@
 .npmignore
 node_modules/
 npm-debug.log
+
+# python and node js virtual environment
+/pyenvironment
+/nodejsenv
