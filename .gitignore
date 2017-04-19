@@ -1,3 +1,4 @@
+# nodes modules
 .npmignore
 node_modules/
 npm-debug.log
@@ -5,3 +6,6 @@ npm-debug.log
 # python and node js virtual environment
 /pyenvironment
 /nodejsenv
+
+# JetBrain generated folders and files
+/.idea

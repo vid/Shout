@@ -394,21 +394,42 @@ export default class App extends React.Component {
 //This function sorts resources based on the distance
     filterNearMe() {
 
-        var arrSorted = this.state.filteredResources;
-        arrSorted.sort((a, b) => {
-            if (a.lat && b.lat) {
-                var y_distance = 69 * Math.pow((a.lat - this.state.userLat), 2);
-                var x_distance = 69 * Math.pow((this.state.userLng - a.lng), 2);
-                var a_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+        var originalArray = this.state.filteredResources;
 
-                y_distance = 69 * Math.pow((b.lat - this.state.userLat), 2);
-                x_distance = 69 * Math.pow((this.state.userLng - b.lng), 2);
-                var b_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+        // split original array into 2 arrays, one for locations with coordinates
+        // one for without it
+        var validCoordination = [], invalidCoordination = [];
+        for (var i = 0; i < originalArray.length; i++) {
+            if (originalArray[i].lat && originalArray[i].lng) {
+                validCoordination.push(originalArray[i]);
+            }
+            else {
+                invalidCoordination.push(originalArray[i]);
+            }
+        }
 
-                return (a_distance - b_distance);
-            } else return 10000;
+        validCoordination.sort((a, b) => {
+            if (a.lat && b.lat && b.lng && a.lng) {
+                var a_distance = Math.pow((this.state.userLat - a.lat), 2) + Math.pow((this.state.userLng - a.lng), 2);
+                var b_distance = Math.pow((this.state.userLat - b.lat), 2) + Math.pow((this.state.userLng - b.lng), 2);
+                var diff = a_distance - b_distance;
+                // console.log("Difference: " + diff);
+                return diff;
+            } else {
+                return 10000;
+            }
         });
-        this.setState({ filteredResources: arrSorted });
+
+        // append back those 2 arrays
+        var arrSorted = [];
+        for (var i = 0; i < validCoordination.length; i++) {
+            arrSorted.push(validCoordination[i]);
+        }
+        for (var i = 0; i < invalidCoordination.length; i++) {
+            arrSorted.push(invalidCoordination[i]);
+        }
+
+        this.setState({filteredResources: arrSorted});
     }
 
 
