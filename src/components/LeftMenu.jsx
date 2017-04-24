@@ -27,7 +27,6 @@ export default class LeftMenu extends React.Component {
         this.state = {
             changelocationOpen: false,
             aboutOpen: false,
-            addResourceOpen: false,
         };
 
     }
@@ -35,7 +34,6 @@ export default class LeftMenu extends React.Component {
     render() {
 
         const { displayAddResource } = this.props;
-
         const { addResource } = this.props;
         const { displayAbout } = this.props;
 

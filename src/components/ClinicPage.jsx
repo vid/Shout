@@ -414,6 +414,7 @@ export default class ClinicPage extends React.Component {
               <div style={styles.data}>
                 <h4> Address: </h4>
                 {result.civic_address}
+                <FlatButton href = {"http://maps.google.com/?daddr=" + result.civic_address} primary = {true} target = "_blank" label={"Click to View Directions"}/>
                 <h4> Phone: </h4>
                 {result.phone}
                 <h4> Website: </h4>
@@ -595,13 +596,11 @@ export default class ClinicPage extends React.Component {
               />
             </div>
             <div>
-              <p> Enter any details that might help others who are looking for healthcare. (Limit 160 char)</p>
+            <br />
+              <p><b>Comments:</b></p>
 
-              <TextField hintText="Limit 160 char"
+              <TextField hintText="Enter any details that might help others who are looking for healthcare. (Limit 160 char)"
                          inputStyle={styles.input}
-                         floatingLabelStyle={styles.floatinglabel}
-                         floatingLabelText="Comments "
-                         floatingLabelFixed={true}
                          multiLine={true}
                          rows={3}
                          rowsMax={8}
@@ -618,7 +617,7 @@ export default class ClinicPage extends React.Component {
       <Snackbar
           open={this.state.submitSnackbarOpen}
           message="Thank you for your feedback!"
-          autoHideDuration={4000}
+          autoHideDuration={5000}
         />
 
 {/* ***************************************** */}

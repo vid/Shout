@@ -24,15 +24,14 @@ export default class Search extends React.Component {
 
 
     searchSizer() {
-        const { container, footer } = this.props;
+        const { container} = this.props;
         const { offsetHeight, offsetWidth } = container;
-        const footerOffsetHeight = footer.offsetHeight;
-        this.setState({ offsetHeight, offsetWidth, footerOffsetHeight });
+        this.setState({ offsetHeight, offsetWidth });
     }
 
     render() {
         const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, getPageLoading, userLat, userLng } = this.props;
-        const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
+        const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
@@ -40,13 +39,14 @@ export default class Search extends React.Component {
         var filteredResources = getFilteredResources();
 
         return (
-        <div width={offsetWidth}>
-        <Map height={(offsetHeight / 3)} getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
-        <div style={{height: 80, width:offsetWidth, overflow: 'auto'}}>
+        <div width={offsetWidth} style={{display:'flex', flexDirection:'row'}}>
+        <div style={{width: ((offsetWidth*0.40)), height: offsetHeight, overflow: 'auto', padding:10}}>
+          <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
         </div>
-        <div style={{height: (2*offsetHeight / 3 -80), overflow: 'auto'}}>
-          <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}/>
+        <div style={{padding:10}}>
+        <Map width={(offsetWidth*0.60)} height='100%' getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
         </div>
+
       </div>
         );
     }

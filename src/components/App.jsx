@@ -41,6 +41,7 @@ PouchDB.sync('db', 'remoteCouch');
 const styles = {
 
     appbar: {
+        minHeight: 150
     },
 
     appbarTitle: {
@@ -292,7 +293,7 @@ export default class App extends React.Component {
         this.setState({ appbarTitle: 'Shout' });
         this.setState({ appbarSubtitle: 'Find Accessible Healthcare.' });
         this.setState({ appbarState: false });
-        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString}/> });
+        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>});
         this.setState({ appbarIcon: <NavigationMenu /> });
         this.requestCurrentPosition();
 
@@ -313,6 +314,7 @@ export default class App extends React.Component {
     filterResources(searchString) {
 
         if (!searchString || searchString.length < 1) {
+            console.log("no search string, drawing all resources");
             db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
                 this.setState({searchString:""});
                 if (err) { return console.log(err); }
@@ -322,9 +324,8 @@ export default class App extends React.Component {
         this.setState({searchString:searchString});
             db.search({
                 query: searchString,
-                fields: ['name', 'description', '_id', 'services.label', 'text'],
+                fields: ['name', '_id', 'description', 'services.label'],
                 include_docs: true,
-                mm: '33%'
             }, (err, list) => {
                 if (err) {
                     this.error(err);
@@ -333,12 +334,10 @@ export default class App extends React.Component {
                 list.rows.forEach(function (res) {
                     if (res.id.startsWith('tags')) {
 
-                        console.log(res.label);
                         db.search({
                             query: res._id,
                             fields: ['name'],
                             include_docs: true,
-                            mm: '33%'
                         }, (err, list) => {
 
                             if (err) {
@@ -365,20 +364,27 @@ export default class App extends React.Component {
     footerSelect(index) {
 
     //first, go back to the main screen
-        this.displaySearch();
         this.setState({ selectedFooterIndex: index });
         if (index === 0) {
             this.filterResources('');
-            this.setState({searchString:''});
         } else if (index === 1) {
-            this.filterResources('children');
-            this.setState({searchString:'children'});
+            this.filterResources("child");
         } else if (index === 2) {
-            this.filterResources('mental health');
-            this.setState({searchString:'mental health'});
+            this.filterResources("adult mental health");
         } else if (index === 3) {
             this.filterResources('women');
             this.setState({searchString:'women'});
+        } else if (index === 4) {
+            this.filterResources('food');
+            this.setState({searchString:'food'});
+        } else if (index === 5) {
+            this.filterResources('housing');
+            this.setState({searchString:'housing'});
+            this.filterResources("women");
+        } else if (index === 4) {
+            this.filterResources("dental");
+        } else if (index === 5) {
+            this.filterResources("vision");
         }
     }
 
@@ -387,21 +393,42 @@ export default class App extends React.Component {
 //This function sorts resources based on the distance
     filterNearMe() {
 
-        var arrSorted = this.state.filteredResources;
-        arrSorted.sort((a, b) => {
-            if (a.lat && b.lat) {
-                var y_distance = 69 * Math.pow((a.lat - this.state.userLat), 2);
-                var x_distance = 69 * Math.pow((this.state.userLng - a.lng), 2);
-                var a_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+        var originalArray = this.state.filteredResources;
 
-                y_distance = 69 * Math.pow((b.lat - this.state.userLat), 2);
-                x_distance = 69 * Math.pow((this.state.userLng - b.lng), 2);
-                var b_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+        // split original array into 2 arrays, one for locations with coordinates
+        // one for without it
+        var validCoordination = [], invalidCoordination = [];
+        for (var i = 0; i < originalArray.length; i++) {
+            if (originalArray[i].lat && originalArray[i].lng) {
+                validCoordination.push(originalArray[i]);
+            }
+            else {
+                invalidCoordination.push(originalArray[i]);
+            }
+        }
 
-                return (a_distance - b_distance);
-            } else return 10000;
+        validCoordination.sort((a, b) => {
+            if (a.lat && b.lat && b.lng && a.lng) {
+                var a_distance = Math.pow((this.state.userLat - a.lat), 2) + Math.pow((this.state.userLng - a.lng), 2);
+                var b_distance = Math.pow((this.state.userLat - b.lat), 2) + Math.pow((this.state.userLng - b.lng), 2);
+                var diff = a_distance - b_distance;
+                // console.log("Difference: " + diff);
+                return diff;
+            } else {
+                return 10000;
+            }
         });
-        this.setState({ filteredResources: arrSorted });
+
+        // append back those 2 arrays
+        var arrSorted = [];
+        for (var i = 0; i < validCoordination.length; i++) {
+            arrSorted.push(validCoordination[i]);
+        }
+        for (var i = 0; i < invalidCoordination.length; i++) {
+            arrSorted.push(invalidCoordination[i]);
+        }
+
+        this.setState({filteredResources: arrSorted});
     }
 
 
@@ -411,6 +438,7 @@ export default class App extends React.Component {
     handleChanges(change, changesObject){
 
       if(this.state.pageLoading){
+        console.log("going to display search bc page loading");
         this.setState({pageLoading:false});
         this.displaySearch();
         changes.cancel();
@@ -425,6 +453,9 @@ export default class App extends React.Component {
 //A function that's called by the React Google Maps library after map component loads the API
 //Currently doing nothing! ShoutApp is not using geocoder. May be necessary in the future.
     onGoogleApiLoad(map, maps) {
+
+        this.setState({gmaps:maps});
+        this.setState({gmap:map});
 
         var geo = new google.maps.Geocoder();
         this.setState({ geocoder: geo });
@@ -604,24 +635,25 @@ export default class App extends React.Component {
     return (
 
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <div id='wrapper'>
+        <div id='wrapper' style={{backgroundImage:"url('http://www.graffiti.ee/wp-content/uploads/2016/09/graffiti-art-vandalism.jpg')"}}>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()}
+              <AppBar
+              iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
+              onLeftIconButtonTouchTap={() => this.appbarClick()}
+              style={{backgroundColor:'transparent'}}
               titleStyle={styles.appbar}>
               <div style={styles.column}>
               <div style={styles.row}>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
-                {this.state.searchBar}
               </div>
-              <div>
 
-              </div>
+                  {this.state.searchBar}
+
             </div>
           </AppBar>
           </div>
-
 
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 300 }>
@@ -639,10 +671,6 @@ export default class App extends React.Component {
             </Drawer>
          </div>
 
-
-          <div ref='footer' id='footer'>
-            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
-          </div>
 
         </div>
       </MuiThemeProvider>

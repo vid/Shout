@@ -7,22 +7,30 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
+const styles = {
+
+    table: {
+      cursor:'pointer'
+    },
+}
+
 
 export default class Results extends React.Component {
 
     calculateDistance(result) {
+        var userLat = this.props.userLat, userLng = this.props.userLng;
+
         if (result && result.lat && result.lng) {
-            var y_distance = 69 * Math.pow((result.lat - 33.7490), 2);
-            var x_distance = 69 * Math.pow((-84.3880 - result.lng), 2);
-            var distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+            var x_distance = 69 * Math.pow((result.lat - userLat), 2);
+            var y_distance = 69 * Math.pow((result.lng - userLng), 2);
+            var distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 10;
 
             return distance;
-        } else return "?";
+        } else return "N/A";
     }
 
     formatTags(arrTags) {
 
-        console.log("Tags to format are:" + arrTags);
         if (arrTags) {
             var arrLabels = [];
             arrTags.forEach(function (element) {
@@ -47,10 +55,9 @@ export default class Results extends React.Component {
                 <TableRow
                   key={i}
                   onClick={() => displayResult()}>
-                  <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
-                  <TableRowColumn><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
                   <TableRowColumn>
-
+                  <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><h4>({this.calculateDistance(result)+" mi"})</h4></div>
+                    {result.civic_address}
                   </TableRowColumn>
                 </TableRow>
               )))
@@ -82,13 +89,12 @@ export default class Results extends React.Component {
             <Table
         selectable={false}
         fixedHeader={true}
+        style={styles.table}
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
         <TableHeader
           displaySelectAll={false}>
           <TableRow>
-            <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
+            <TableHeaderColumn><h2>Results</h2></TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody

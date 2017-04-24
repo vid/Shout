@@ -26,14 +26,14 @@ export default class Map extends React.Component {
         const filteredResources = getFilteredResources();
 
         const map = (
-            <div style={{height, width}}>
+            <div style={{height,width}}>
          <GoogleMap
             defaultCenter={this.defaults.center}
             defaultZoom={this.defaults.zoom}
             hoverDistance={40}
             bootstrapURLKeys={{
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
-            language: 'en'}}
+            libraries : 'places'}}
             onChildClick={(key, childProp)=>displayResult(filteredResources[key])}
             onGoogleApiLoaded={({map, maps}) => onGoogleApiLoad(map, maps)}
             yesIWantToUseGoogleMapApiInternals>
