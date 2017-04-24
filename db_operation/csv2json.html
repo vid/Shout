@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+	<script>
+		d3.csv("housing.csv", function (error, data)
+		{
+			if(error)
+			{
+				console.log(error);
+			}
+
+			for(var i = 0; i < data.length; i++)
+			{
+				id = "Resource_" + data[i]["zip"] + "_" + data[i]["name"];
+				data[i]._id = id.trim();
+				data[i]["services"] = [{
+					key:1,
+					label:data[i]["services"]
+				}];
+				console.log(data[i]._id);
+			}
+
+			var result = JSON.stringify(data);
+
+			console.log(result);
+		});
+	</script>
+</body>
+</html>

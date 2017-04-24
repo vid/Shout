@@ -18,13 +18,15 @@ const styles = {
 export default class Results extends React.Component {
 
     calculateDistance(result) {
+        var userLat = this.props.userLat, userLng = this.props.userLng;
+
         if (result && result.lat && result.lng) {
-            var y_distance = 69 * Math.pow((result.lat - 33.7490), 2);
-            var x_distance = 69 * Math.pow((-84.3880 - result.lng), 2);
-            var distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+            var x_distance = 69 * Math.pow((result.lat - userLat), 2);
+            var y_distance = 69 * Math.pow((result.lng - userLng), 2);
+            var distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 10;
 
             return distance;
-        } else return "?";
+        } else return "N/A";
     }
 
     formatTags(arrTags) {
