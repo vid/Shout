@@ -41,7 +41,7 @@ PouchDB.sync('db', 'remoteCouch');
 const styles = {
 
     appbar: {
-        minHeight: 100
+        minHeight: 150
     },
 
     appbarTitle: {
@@ -293,7 +293,7 @@ export default class App extends React.Component {
         this.setState({ appbarTitle: 'Shout' });
         this.setState({ appbarSubtitle: 'Find Accessible Healthcare.' });
         this.setState({ appbarState: false });
-        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString}/> });
+        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>});
         this.setState({ appbarIcon: <NavigationMenu /> });
         this.requestCurrentPosition();
 
@@ -334,7 +334,6 @@ export default class App extends React.Component {
                 list.rows.forEach(function (res) {
                     if (res.id.startsWith('tags')) {
 
-                        console.log(res.label);
                         db.search({
                             query: res._id,
                             fields: ['name'],
@@ -389,12 +388,12 @@ export default class App extends React.Component {
         var arrSorted = this.state.filteredResources;
         arrSorted.sort((a, b) => {
             if (a.lat && b.lat) {
-                var y_distance = 69 * Math.pow((a.lat - this.state.userLat), 2);
-                var x_distance = 69 * Math.pow((this.state.userLng - a.lng), 2);
+                var y_distance = Math.pow((a.lat - this.state.userLat), 2);
+                var x_distance = Math.pow((this.state.userLng - a.lng), 2);
                 var a_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
 
-                y_distance = 69 * Math.pow((b.lat - this.state.userLat), 2);
-                x_distance = 69 * Math.pow((this.state.userLng - b.lng), 2);
+                y_distance = Math.pow((b.lat - this.state.userLat), 2);
+                x_distance = Math.pow((this.state.userLng - b.lng), 2);
                 var b_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
 
                 return (a_distance - b_distance);
@@ -425,6 +424,9 @@ export default class App extends React.Component {
 //A function that's called by the React Google Maps library after map component loads the API
 //Currently doing nothing! ShoutApp is not using geocoder. May be necessary in the future.
     onGoogleApiLoad(map, maps) {
+
+        this.setState({gmaps:maps});
+        this.setState({gmap:map});
 
         var geo = new google.maps.Geocoder();
         this.setState({ geocoder: geo });
@@ -604,19 +606,21 @@ export default class App extends React.Component {
     return (
 
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <div id='wrapper'>
+        <div id='wrapper' style={{backgroundImage:"url('http://www.graffiti.ee/wp-content/uploads/2016/09/graffiti-art-vandalism.jpg')"}}>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()}
+              <AppBar
+              iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
+              onLeftIconButtonTouchTap={() => this.appbarClick()}
+              style={{backgroundColor:'transparent'}}
               titleStyle={styles.appbar}>
               <div style={styles.column}>
               <div style={styles.row}>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
               </div>
-              <div>
-                {this.state.searchBar}
-              </div>
+
+                  {this.state.searchBar}
             </div>
           </AppBar>
           </div>
@@ -636,10 +640,6 @@ export default class App extends React.Component {
                <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
             </Drawer>
          </div>
-
-                   <div ref='footer' id='footer'>
-                     <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
-                   </div>
 
 
         </div>

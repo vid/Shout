@@ -33,7 +33,7 @@ export default class Map extends React.Component {
             hoverDistance={40}
             bootstrapURLKeys={{
             key: 'AIzaSyClWk0ocan4KfAoOA51Z0HDdIa847fhpTM',
-            language: 'en'}}
+            libraries : 'places'}}
             onChildClick={(key, childProp)=>displayResult(filteredResources[key])}
             onGoogleApiLoaded={({map, maps}) => onGoogleApiLoad(map, maps)}
             yesIWantToUseGoogleMapApiInternals>
