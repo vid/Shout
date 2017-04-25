@@ -34,8 +34,8 @@ PouchDB.plugin(PouchDBQuickSearch);
 
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
-var db = new PouchDB('resources_2017');
-var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resources_2017';
+var db = new PouchDB('resourcesnew');
+var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
 PouchDB.sync('db', 'remoteCouch');
 
 const styles = {
