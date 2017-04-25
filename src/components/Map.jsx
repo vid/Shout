@@ -66,7 +66,7 @@ class Place extends React.Component {
         const styleHover = {
             // initially any map object has left top corner at lat lng coordinates
             // it's on you to set object origin to 0,0 coordinates
-            position: 'absolute',
+            position: 'relative',
             width: K_WIDTH * 15,
             border: '3px solid #4DD0E1',
             backgroundColor: 'white',
@@ -79,7 +79,7 @@ class Place extends React.Component {
             // initially any map object has left top corner at lat lng coordinates
             // it's on you to set object origin to 0,0 coordinates
 
-            marginBottom:'10',
+            marginBottom:10,
             background: '#FFFFFF',
             display: 'inline-block',
             borderRadius: '14px 14px 14px 0',

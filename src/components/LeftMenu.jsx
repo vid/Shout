@@ -44,7 +44,6 @@ export default class LeftMenu extends React.Component {
             <div id='menu'>
             <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
-            <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
 
             <Divider />
 
@@ -55,32 +54,6 @@ export default class LeftMenu extends React.Component {
 
 {/* Below: material-UI hidden Dialogs that will show conditionally */}
 
-            <Dialog
-                title="Change your location"
-                actions={[
-                   <FlatButton
-                     label="Cancel"
-                     primary={true}
-                     onTouchTap={() => this.setState({changelocationOpen: false})}/>,
-                   <FlatButton
-                     label="Submit"
-                     primary={true}
-                     keyboardFocused={true}
-                     onTouchTap={() => this.setState({changelocationOpen: false})}/>]}
-                modal={false}
-                open={this.state.changelocationOpen}
-                onRequestClose={() => this.setState({changelocationOpen: false})}>
-
-                <div>
-                Shout is currently only active in Atlanta. Stay tuned for other cities.
-                </div>
-                <SelectField
-                    floatingLabelText="Select a city"
-                    value={1}
-                  >
-                  <MenuItem value={1} primaryText="Atlanta" />
-                </SelectField>
-            </Dialog>
 
             <Dialog
                 actions={

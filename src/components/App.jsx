@@ -18,6 +18,8 @@ import IconButton from 'material-ui/IconButton';
 import Drawer from 'material-ui/Drawer';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
 
 //import other components
 import Search from './Search.jsx';
@@ -66,6 +68,12 @@ const styles = {
         flexDirection: 'column',
         width: '100%'
     },
+    landing: {
+        maxWidth: 'none',
+        height:'50%',
+    },
+    landingtitle: {
+    },
 
 };
 
@@ -79,6 +87,7 @@ export default class App extends React.Component {
             allResources: [],
             filteredResources: [],
             showMenu: false,                  //toggles left-hand menu
+            landingOpen: true,
             searchString: '',
             appbarState: false,
             selectedFooterIndex: 0,
@@ -629,6 +638,24 @@ export default class App extends React.Component {
             {this.state.screen}
           </CSSTransitionGroup>
           </div>
+
+              <Dialog
+                title="Welcome to ShoutHealth"
+                  actions={<FlatButton
+                  label="Close"
+                  primary={true}
+                  onTouchTap={() => {this.setState({landingOpen: false})}}/>}
+                  modal={true}
+                  contentStyle={styles.landing}
+                  titleStyle={styles.landingtitle}
+                  open={this.state.landingOpen}
+                  onRequestClose={()=>this.setState({landingOpen:false})}
+                  >
+                  <p>Select a location</p>
+                  <TextField
+                    type="text"
+                    placeholder="Address, City, or Zip Code" />
+              </Dialog>
 
 
 

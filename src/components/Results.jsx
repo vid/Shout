@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
 
@@ -87,23 +87,29 @@ export default class Results extends React.Component {
         var searchstring=getSearchstring();
 
         return (
-            <Table
+        <div>
+          <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>
+            <h2>Results</h2>
+            <div style={{padding:15}}>
+            <RaisedButton
+              label="Add Place"
+              labelStyle={{fontWeight:'bold'}}
+              onTouchTap={()=>displayAddResource()}
+              icon={<ContentAdd />}/>
+            </div>
+            </div>
+      <Table
         selectable={false}
         fixedHeader={true}
         style={styles.table}
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
-        <TableHeader
-          displaySelectAll={false}>
-          <TableRow>
-            <h2>Results</h2>
-          </TableRow>
-        </TableHeader>
         <TableBody
             displayRowCheckbox={false}
             showRowHover={true}>
         {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
         </TableBody>
       </Table>
+      </div>
         );
     }
 }
