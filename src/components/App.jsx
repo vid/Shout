@@ -34,8 +34,8 @@ PouchDB.plugin(PouchDBQuickSearch);
 
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
-var db = new PouchDB('resourcesnew');
-var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
+var db = new PouchDB('resources_2017');
+var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resources_2017';
 PouchDB.sync('db', 'remoteCouch');
 
 const styles = {
@@ -55,11 +55,6 @@ const styles = {
         fontSize: 15,
         color: '#ffffff',
         marginLeft: 10
-    },
-
-    stylemenu: {
-        position: 'fixed',
-        height: '100%',
     },
 
     row: {
@@ -101,28 +96,6 @@ export default class App extends React.Component {
 
     }
 
-//This method adds one tag at a time to a particular resource. It create a new "tags" document and updates the existing document
-//Updating already existing documents in a PouchDB database requires submitting a value to the "_rev" field. See:https://pouchdb.com/api.html
-// * Currently does not check for duplicates!
-    addSingleTag(label, tagsdoc) {
-
-        var tag = {
-            value: label,
-            count: 1
-        }
-        tagsdoc.tags.push(tag);
-        db.put({
-            _id: tagsdoc._id,
-            _rev: tagsdoc._rev,
-            type: "tag",
-            tags: tagsdoc.tags,
-        }, function (err, response) {
-            if (err) { return console.log(err); }
-            console.log("success");
-        });
-    }
-
-
 
 // This method is called by the AddResource component. For now, adds a new document directly to the "resourcesnew" database
 // on the couchdb server. Later, this database should be migrated to a "pending" database where we store items before they are approved/moderated
@@ -131,7 +104,6 @@ export default class App extends React.Component {
         //create object to add
         var resource = {
             _id: "Resource" + "_" + res.zip + "_" + res.name,
-            type: "resource",
             name: res.name,
             lat: res.lat,
             lng: res.lng,
@@ -139,8 +111,7 @@ export default class App extends React.Component {
             phone: res.phone,
             website: res.website,
             description: res.description,
-            resourcetype: res.type,
-            services: res.services,
+            resourcetype: res.resourcetype,
             zip: res.zip
 
         };
@@ -152,7 +123,27 @@ export default class App extends React.Component {
             }
         });
 
-        this.addTags(res.tags, res.name);
+        var meta = {
+            _id: "Meta" + "_" + res.name,
+            name: res.name,
+            price: res.price,
+            languages: res.language,
+            population: res.population,
+            waitingtime: res.waitingtime,
+            services: res.services,
+            numberreviews:'0',
+            accessibilityrating: '',
+            availabilityrating: ''
+
+
+        };
+        db.put(meta, function callback(err, result) {
+            if (!err) {
+                console.log('Added metadata');
+            } else {
+                console.log('Error adding metadata' + err);
+            }
+        });
 
         PouchDB.sync('db', 'remoteCouch');
 
@@ -166,12 +157,16 @@ export default class App extends React.Component {
         var review = {
             _id: "Feedback" + "_" + rev.name + "_" + new Date().toISOString(),
             type: "feedback",
+            date: new Date().toISOString(),
             name: rev.name,
             author: rev.author,
             accessibility: rev.accessibility,
             quality: rev.quality,
             affordability: rev.affordability,
             text: rev.text,
+            upvotes: '0',
+            downvotes: '0',
+            language: rev.language,
 
         };
       db.put(review, function callback(err, result) {
@@ -184,41 +179,6 @@ export default class App extends React.Component {
 
 
     }
-
-
-
-//This method is called by the AddResource component, and submits a completely new "Tags" document to the database.
-//It adds multiple tags at once, in contrast to the addSingleTag method above.
-    addTags(tags, res_name) {
-
-        const tagsarr = []
-        tags.forEach(function (element) {
-
-            var tag = {
-                value: element.label,
-                count: 1
-
-            };
-            tagsarr.push(tag);
-
-        });
-        var tagsobj = {
-            _id: "tags" + "_" + res_name,
-            type: "tag",
-            tags: tagsarr,
-        }
-        db.put(tagsobj, function callback(err, result) {
-            if (err) {
-                return console.log(err);
-            }
-        });
-        if (remoteCouch) {
-            this.sync();
-        }
-
-    }
-
-
 
 //This function is called when the left-hand icon in the AppBar is clicked.
 //the action depends on whether the user is currently on the main/landing page or a clinic page result
@@ -637,6 +597,15 @@ export default class App extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id='wrapper' style={{backgroundImage:"url('http://www.graffiti.ee/wp-content/uploads/2016/09/graffiti-art-vandalism.jpg')"}}>
 
+          <div>
+             <Drawer
+             open={this.state.showMenu}
+             docked={false}
+             onRequestChange={(showMenu) => this.setState({showMenu})}>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
+            </Drawer>
+         </div>
+
           <div id='header'>
               <AppBar
               iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
@@ -661,15 +630,6 @@ export default class App extends React.Component {
           </CSSTransitionGroup>
           </div>
 
-          <div id='menu'>
-             <Drawer
-             open={this.state.showMenu}
-             style={styles.stylemenu}
-             docked={false}
-             onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
-            </Drawer>
-         </div>
 
 
         </div>

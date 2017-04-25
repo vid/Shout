@@ -7,7 +7,6 @@ import Paper from 'material-ui/Paper';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import SelectField from 'material-ui/SelectField';
 import RaisedButton from 'material-ui/RaisedButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ActionHome from 'material-ui/svg-icons/action/home';

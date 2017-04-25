@@ -43,8 +43,6 @@ export default class LeftMenu extends React.Component {
         return (
             <div id='menu'>
             <MenuItem primaryText="" />
-            <MenuItem primaryText="" />
-            <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="Change Location" leftIcon={<MapsEditLocation />} onTouchTap={() => this.setState({changelocationOpen: true})}/>
 

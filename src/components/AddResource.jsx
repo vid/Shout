@@ -7,6 +7,7 @@ import Formsy from 'formsy-react';
 
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
+import Checkbox from 'material-ui/Checkbox';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
@@ -37,6 +38,7 @@ const ENTER_KEY = 13;
 const styles = {
     main: {
         padding: '1% 2% 5% 5%',
+        width:'50%',
         alignment: 'right',
         overflow: 'auto'
     },
@@ -47,17 +49,14 @@ const styles = {
     },
 
     input: {
+        margin:10,
         fontColor: 'black',
     },
 
     button: {
         fontSize: 12,
         padding: '2px'
-    },
-
-    floatinglabel: {
-        color: 'black',
-    },
+    }
 
 };
 
@@ -106,27 +105,31 @@ export default class AddResource extends React.Component {
 
     formatSubmission() {
 
-    var type="clinic";
-    if(this.state.value_Type==2){
-      type="emergency";
-    }else if(this.state.value_Type==3){
-      type="housing";
-    }
+      var type;
+        if(this.state.value_Type==1){
+          type="clinic";
+        }else if(this.state.value_Type==2){
+          type="emergency";
+        }else if(this.state.value_Type==3){
+          type="housing";
+        }
 
       var temp = {
             name: this.state.value_Name,
-            type: type,
+            resourcetype: type,
             phone: this.state.value_Phone,
             civic_address: this.state.value_Address + " " + this.state.value_Apt,
             city: this.state.value_City,
             zip: this.state.value_zip,
             website: this.state.value_Website,
             description: this.state.value_Descript,
-            tags: this.state.chipData,
-            services:this.state.serviceData,
             hours: this.state.value_Hours,
             lat: this.state.value_Lat,
-            lng: this.state.value_Lng
+            lng: this.state.value_Lng,
+
+            services:this.state.serviceData,
+            price:this.state.priceData,
+
         }
 
         return temp;
@@ -168,10 +171,9 @@ export default class AddResource extends React.Component {
     }
 
     searchSizer() {
-        const { container, footer } = this.props;
+        const { container} = this.props;
         const { offsetHeight, offsetWidth } = container;
-        const footerOffsetHeight = footer.offsetHeight;
-        this.setState({ offsetHeight, offsetWidth, footerOffsetHeight });
+        this.setState({ offsetHeight, offsetWidth});
     }
 
     componentDidMount() {
@@ -188,7 +190,7 @@ export default class AddResource extends React.Component {
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { addResource, displaySearch} = this.props;
 
-        const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
+        const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
@@ -220,28 +222,27 @@ export default class AddResource extends React.Component {
 
           <div>
 
+
           <div style={styles.row}>
 
-            <FormsyText
-              name="name"
-              validations="isCustom"
-              validationError={customError}
-              required
-              hintText="Resource Name"
-              floatingLabelText="Resource Name *"
-              floatingLabelFixed={true}
-              hintStyle={styles.hint}
-              floatingLabelStyle={styles.floatinglabel}
-              inputStyle={styles.input}
-              onChange={(event) => this.setState({value_Name: event.target.value})}
-            />
-            <br />
+          <b>Name</b>
+            <Paper style={styles.input}>
 
-            </div>
-            <div>
+              <FormsyText
+                name="name"
+                validations="isCustom"
+                validationError={customError}
+                required
+                hintText="Resource Name"
+                hintStyle={styles.hint}
+                onChange={(event) => this.setState({value_Name: event.target.value})}
+              />
+            </Paper>
+
+            <b>Type</b>
+            <Paper style={styles.input}>
+
                        <SelectField
-                           floatingLabelText="Select type *"
-                           floatingLabelStyle={styles.floatinglabel}
                            value={this.state.value_Type}
                            onChange={(event, index, value) => this.setState({value_Type:value})}
                          >
@@ -250,36 +251,38 @@ export default class AddResource extends React.Component {
                          <MenuItem value={3} primaryText="Housing" />
                        </SelectField>
 
+          </Paper>
           </div>
-          <div>
+
+          <b>Address Line 1</b>
+          <Paper style={styles.input}>
 
           <FormsyText
             name="addressline1"
             required
-            floatingLabelText="Street Address"
-            floatingLabelFixed={true}
             hintText="12 Grimmauld Place"
             hintStyle={styles.hint}
-            floatingLabelStyle={styles.floatinglabel}
-            inputStyle={styles.input}
             onChange={(event) => this.setState({value_Address: event.target.value})}
           />
-          </div>
+          </Paper>
 
-          <div>
+          <b>Address Line 2</b>
+          <Paper style={styles.input}>
           <FormsyText
             name="aptnumber"
             validations="isCustom"
             validationError={customError}
-            floatingLabelText="Apt/Office#"
-            floatingLabelFixed={true}
             hintText="'Suite 45' or 'Apt. 11'"
             hintStyle={styles.hint}
-            floatingLabelStyle={styles.floatinglabel}
             inputStyle={styles.input}
             onChange={(event) => this.setState({value_Apt: event.target.value})}
           />
-          </div>
+          </Paper>
+
+          <div style={styles.row}>
+
+          <b>City</b>
+          <Paper style={styles.input}>
 
           <FormsyText
             name="city"
@@ -287,30 +290,28 @@ export default class AddResource extends React.Component {
             validationError={wordsError}
             required
             updateImmediately
-            floatingLabelText="City"
-            floatingLabelFixed={true}
             hintText="Atlanta"
             hintStyle={styles.hint}
-            floatingLabelStyle={styles.floatinglabel}
-            inputStyle={styles.input}
             onChange={(event) => this.setState({value_City: event.target.value})}
           />
+          </Paper>
 
-          <div>
+          <b>Zip</b>
+            <Paper style={styles.input}>
             <FormsyText
                          name="zip"
                          validations="isNumeric"
                          validationError={numericError}
                          hintText="31415"
                          hintStyle={styles.hint}
-                         floatingLabelStyle={styles.floatinglabel}
-                         inputStyle={styles.input}
-                         floatingLabelText="Zip code *"
-                         floatingLabelFixed={true}
                          onChange={(event) => this.setState({value_zip: event.target.value})}
                          /> <br />
+          </Paper>
           </div>
 
+
+          <b>Phone</b>
+            <Paper style={styles.input}>
 
           <FormsyText
                        name="PhoneNumber"
@@ -319,36 +320,133 @@ export default class AddResource extends React.Component {
                        updateImmediately
                        hintText="3225550100"
                        hintStyle={styles.hint}
-                       floatingLabelStyle={styles.floatinglabel}
-                       inputStyle={styles.input}
-                       floatingLabelText="Phone *"
-                       floatingLabelFixed={true}
                        onChange={(event) => this.setState({value_Phone: event.target.value})}
                        /> <br />
+            </Paper>
 
+            <b>Website</b>
+            <Paper style={styles.input}>
 
             <FormsyText
               name="url"
               validations="isUrlCustom"
               validationError={urlError}
               hintText="www.example.com"
-              floatingLabelText="website URL"
-              floatingLabelFixed={true}
               updateImmediately
               hintStyle={styles.hint}
-              floatingLabelStyle={styles.floatinglabel}
-              inputStyle={styles.input}
               onChange={(event) => this.setState({value_Website: event.target.value})}
             />
 
-            <div>
+            </Paper>
+
+            <b> Price </b>
+            <Paper style={styles.input}>
+
+                <Checkbox
+                  label="Medicaid"
+                  style={styles.checkbox}/>
+                <Checkbox
+                  label="Free"
+                  style={styles.checkbox}/>
+                <Checkbox
+                  label="Sliding-scale"
+                  style={styles.checkbox}/>
+
+
+            </Paper>
+            <b> Population </b>
+            <Paper style={styles.input}>
+
+                <Checkbox
+                  label="Adult"
+                  style={styles.checkbox}/>
+                <Checkbox
+                  label="Children/Pediatric"
+                  style={styles.checkbox}/>
+                <Checkbox
+                  label="Women"
+                  style={styles.checkbox}/>
+
+
+            </Paper>
+            <b>Category</b>
+            <Paper style={styles.input}>
+
+            <b> General Medical (Non-emergency care)</b>
+
+            <Checkbox
+              label="Check-up/Physical exam"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Chronic disease management (diabetes, high blood pressure, cholesterol)"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="STD testing"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Prescription assistance"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Podiatry"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Podiatry"
+              style={styles.checkbox}/>
+
+              <b>OB/Gyn and Women's Wellness</b>
+            <Checkbox
+              label="Pregnancy Testing"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Pap smear"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Breast cancer screening (mammograms)"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Birth control/Contraception"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Abortion"
+              style={styles.checkbox}/>
+
+
+            <b>Children under 18</b>
+            <Checkbox
+              label="Check-up/physical"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Breast cancer screening (mammograms)"
+              style={styles.checkbox}/>
+
+            <b>Mental Health and Counseling</b>
+            <Checkbox
+              label="Depression/"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Addiction counseling"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Family counseling"
+              style={styles.checkbox}/>
+
+            <b>Dental</b>
+            <Checkbox
+              label="Tooth Extraction"
+              style={styles.checkbox}/>
+            <Checkbox
+              label="Cavity filling"
+              style={styles.checkbox}/>
+
+            <b>Vision</b>
+            <Checkbox
+              label="Family counseling"
+              style={styles.checkbox}/>
+
+
             <TextField hintText=""
                        hintStyle={styles.hint}
-                       floatingLabelStyle={styles.floatinglabel}
-                       inputStyle={styles.input}
-                       floatingLabelText="Services (press enter to add)"
                        value={this.state.value_Services}
-                       floatingLabelFixed={true}
                        onChange={(event) => this.setState({value_Services: event.target.value})}
                        onKeyPress={(event)=>{
                                    if (event.key === 'Enter') {
@@ -357,120 +455,25 @@ export default class AddResource extends React.Component {
                                    }
                                    }}/><br />
 
-              </div>
+              </Paper>
               <div style={styles.row}>
                Services you entered: {this.state.serviceData.map(this.renderChipService, this)}
               </div>
-              <br />
 
-            <div>
+              <b>Description</b>
+            <Paper style={styles.input}>
             <FormsyText
               name="Description"
               required
               hintText="A summary of the facility/founders/background info"
-              floatingLabelText="Description *"
-              floatingLabelFixed={true}
               hintStyle={styles.hint}
-              floatingLabelStyle={styles.floatinglabel}
-              inputStyle={styles.input}
               onChange={(event) => this.setState({value_Descript: event.target.value})}
               multiLine={true}
               rows={3}/>
 
-              </div>
+              </Paper>
 
 
-              <div style={styles.row}>
-               <TextField hintText=""
-                          hintStyle={styles.hint}
-                          floatingLabelStyle={styles.floatinglabel}
-                          inputStyle={styles.input}
-                          floatingLabelText="Tags (press enter to add)"
-                          floatingLabelFixed={true}
-                          value={this.state.value_Tags}
-                          onChange={(event) => this.setState({value_Tags: event.target.value})}
-                          onKeyPress={(event)=>{
-                                      if (event.key === 'Enter') {
-                                        this.state.chipData.push({key:this.state.chipData.length+1, label: this.state.value_Tags})
-                                        this.setState({value_Tags: ''})
-                                      }
-                                      }}/><br />
-
-               </div>
-
-
-               <div style={styles.row}>
-                Tags you entered: {this.state.chipData.map(this.renderChipTag, this)}
-               </div>
-               <br />
-
-               <div style={styles.column}>
-               Or click to add one or more of the suggested tags below:
-
-              <div>
-
-              <div>
-               <RaisedButton
-                     label="medicaid"
-                     labelPosition="before"
-                     icon={<ContentAdd />}
-                     style={styles.button}
-                     onClick={()=>{
-                                    this.state.chipData.push({key:this.state.chipData.length+1, label: 'medicaid'});
-                                    this.setState({value_Tags: ''});
-                                    }}/>
-               <RaisedButton
-                    label="free"
-                    labelPosition="before"
-                    icon={<ContentAdd />}
-                    style={styles.button}
-                    onClick={()=>{
-                                   this.state.chipData.push({key:this.state.chipData.length+1, label: 'free'});
-                                   this.setState({value_Tags: ''});
-                                   }}/>
-                  <RaisedButton
-                    label="sliding scale"
-                    labelPosition="before"
-                    icon={<ContentAdd />}
-                    style={styles.button}
-                    onClick={()=>{
-                                   this.state.chipData.push({key:this.state.chipData.length+1, label: 'sliding scale'});
-                                   this.setState({value_Tags: ''});
-                                   }}/>
-
-                  </div>
-                  <div>
-                  <RaisedButton
-                    label="children"
-                    labelPosition="before"
-                    icon={<ContentAdd />}
-                    style={styles.button}
-                    onClick={()=>{
-                                   this.state.chipData.push({key:this.state.chipData.length+1, label: 'children'});
-                                   this.setState({value_Tags: ''});
-                                   }}/>
-                  <RaisedButton
-                    label="adult"
-                    labelPosition="before"
-                    icon={<ContentAdd />}
-                    style={styles.button}
-                    onClick={()=>{
-                                   this.state.chipData.push({key:this.state.chipData.length+1, label: 'adult'});
-                                   this.setState({value_Tags: ''});
-                                   }}/>
-                  <RaisedButton
-                    label="women's health"
-                    labelPosition="before"
-                    icon={<ContentAdd />}
-                    style={styles.button}
-                    onClick={()=>{
-                                   this.state.chipData.push({key:this.state.chipData.length+1, label: 'women'});
-                                   this.setState({value_Tags: ''});
-                                   }}/>
-
-                  </div>
-                </div>
-               </div>
 
               <br />
               <br />

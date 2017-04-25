@@ -6,6 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 const styles = {
 
@@ -94,7 +95,7 @@ export default class Results extends React.Component {
         <TableHeader
           displaySelectAll={false}>
           <TableRow>
-            <TableHeaderColumn><h2>Results</h2></TableHeaderColumn>
+            <h2>Results</h2>
           </TableRow>
         </TableHeader>
         <TableBody
