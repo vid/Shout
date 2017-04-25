@@ -195,6 +195,8 @@ export default class App extends React.Component {
             this.sync();
         }
         this.displaySearch();
+        this.requestCurrentPosition();
+
 
     }
 
@@ -255,8 +257,6 @@ export default class App extends React.Component {
         this.setState({ appbarState: false });
         this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>});
         this.setState({ appbarIcon: <NavigationMenu /> });
-        this.requestCurrentPosition();
-
 
     }
 
