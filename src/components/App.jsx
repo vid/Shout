@@ -10,6 +10,7 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 /*Material-UI theme*/
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 /*Material-UI components*/
 import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
@@ -18,8 +19,12 @@ import IconButton from 'material-ui/IconButton';
 import Drawer from 'material-ui/Drawer';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import MapsPlace from 'material-ui/svg-icons/maps/place';
+
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import PlacesAutocomplete from 'react-places-autocomplete'
+import { geocodeByAddress, geocodeByPlaceId } from 'react-places-autocomplete'
 
 //import other components
 import Search from './Search.jsx';
@@ -29,8 +34,11 @@ import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 
+const pathToBG = require('../img/background.jpeg');
+
 import PouchDB from 'pouchdb';
 import PouchDBQuickSearch from 'pouchdb-quick-search';
+
 
 PouchDB.plugin(PouchDBQuickSearch);
 
@@ -43,37 +51,50 @@ PouchDB.sync('db', 'remoteCouch');
 const styles = {
 
     appbar: {
-        minHeight: 150
     },
-
     appbarTitle: {
         paddingTop: 5,
         color: '#ffffff',
         fontSize: 30,
     },
-
     appbarSubtitle: {
         paddingTop: 13,
         fontSize: 15,
         color: '#ffffff',
         marginLeft: 10
     },
-
     row: {
         display: 'flex',
         flexDirection: 'row'
+    },
+    places: {
+        marginTop:10,
+        marginRight:30
     },
     column: {
         display: 'flex',
         flexDirection: 'column',
         width: '100%'
     },
-    landing: {
-        maxWidth: 'none',
-        height:'50%',
+    headermenu: {
+        position:'absolute',
+        left:'80%',
+        display:'flex',
+        flexDirection:'row',
+        fontColor:'#FFFFFF',
+
+
     },
-    landingtitle: {
+    headerlinks: {
+      fontColor:'#FFFFFF',
+      margin:20
+
     },
+    wrapper: {
+        backgroundImage: 'url(' + pathToBG + ')',
+        backgroundPosition: 'bottom 0px right 0px'
+
+    }
 
 };
 
@@ -85,6 +106,7 @@ export default class App extends React.Component {
         // this component's state acts as the overall store for now
         this.state = {
             allResources: [],
+            address: "Atlanta, GA",
             filteredResources: [],
             showMenu: false,                  //toggles left-hand menu
             landingOpen: true,
@@ -199,6 +221,8 @@ export default class App extends React.Component {
             this.displaySearch();
         }
     }
+
+
     componentDidMount() {
         if (remoteCouch) {
             this.sync();
@@ -208,7 +232,6 @@ export default class App extends React.Component {
 
 
     }
-
 
 
 //This function basically updates the single page app to now display the AddResource component.
@@ -222,7 +245,6 @@ export default class App extends React.Component {
         this.setState({ appbarState: true });
     //showMenu variable controls what function is called when a user clicks on the top lefthand icon
         this.setState({ showMenu: false });
-
         this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/> });
 
     }
@@ -425,12 +447,42 @@ export default class App extends React.Component {
 
         this.setState({gmaps:maps});
         this.setState({gmap:map});
-
+        window.google.maps=maps;
         var geo = new google.maps.Geocoder();
         this.setState({ geocoder: geo });
 
     }
 
+getPlacesComponent(){
+
+    const inputProps = {
+      value: this.state.address,
+      onChange: (address)=>this.setState({address}),
+    }
+    if(this.state.gmap){
+
+      return <PlacesAutocomplete inputProps={inputProps} />;
+
+    }
+
+}
+
+getSearchMenu(){
+
+  if(!this.state.appbarState){
+  return(
+  <div style={{display:'flex', flexDirection:'row'}}>
+  <div style={{marginTop:10}}>
+    <MapsPlace />
+  </div>
+  <div style={styles.places}>
+    {this.getPlacesComponent()}
+  </div>
+    {this.state.searchBar}
+  </div>)
+  }
+
+}
 
 
 //Update the rows of the results table on main page
@@ -604,7 +656,7 @@ export default class App extends React.Component {
     return (
 
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <div id='wrapper' style={{backgroundImage:"url('http://www.graffiti.ee/wp-content/uploads/2016/09/graffiti-art-vandalism.jpg')"}}>
+          <div id='wrapper' style={styles.wrapper}>
 
           <div>
              <Drawer
@@ -625,12 +677,23 @@ export default class App extends React.Component {
               <div style={styles.row}>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
+                <div style={styles.headermenu}>
+                <div style={styles.headerlinks}>
+                About
+                </div>
+                <div style={styles.headerlinks}>
+                <a href="shoutforhealth.org">Blog</a>
+                </div>
+                <div style={styles.headerlinks}>
+                Login
+                </div>
+                </div>
               </div>
-
-                  {this.state.searchBar}
-
-            </div>
+              </div>
           </AppBar>
+
+          {this.getSearchMenu()}
+
           </div>
 
           <div ref='content' id='content'>
@@ -638,25 +701,6 @@ export default class App extends React.Component {
             {this.state.screen}
           </CSSTransitionGroup>
           </div>
-
-              <Dialog
-                title="Welcome to ShoutHealth"
-                  actions={<FlatButton
-                  label="Close"
-                  primary={true}
-                  onTouchTap={() => {this.setState({landingOpen: false})}}/>}
-                  modal={true}
-                  contentStyle={styles.landing}
-                  titleStyle={styles.landingtitle}
-                  open={this.state.landingOpen}
-                  onRequestClose={()=>this.setState({landingOpen:false})}
-                  >
-                  <p>Select a location</p>
-                  <TextField
-                    type="text"
-                    placeholder="Address, City, or Zip Code" />
-              </Dialog>
-
 
 
         </div>

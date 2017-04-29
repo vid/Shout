@@ -90,17 +90,6 @@ export default class SearchInputs extends React.Component {
                 icon={<ActionVisibility />}/>
             </div>
 
-            <Paper style={styles.input}>
-              {/*<b>Find:   </b>*/}
-              {/*<TextField}
-              {/*  onChange={e => filterResources(e.target.value)}*/}
-              {/*  hintText="  e.g. 'pregnancy test' "*/}
-              {/*  hintStyle={styles.hint}*/}
-              {/*  />*/}
-
-              <TextField id="pac-input" type="text" placeholder="Address, City, or Zip Code" />
-
-            </Paper>
         </div>
         );
     }

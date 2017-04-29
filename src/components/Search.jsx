@@ -31,8 +31,8 @@ export default class Search extends React.Component {
 
     render() {
         const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, getPageLoading, userLat, userLng } = this.props;
-        const { offsetWidth, offsetHeight} = this.state;
-        if (offsetHeight === undefined) {
+        var { offsetWidth, offsetHeight} = this.state;
+        if (offsetWidth=== undefined) {
             return null;
         }
 

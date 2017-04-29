@@ -44,9 +44,6 @@ export default class LeftMenu extends React.Component {
             <div id='menu'>
             <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
-
-            <Divider />
-
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>
             <MenuItem primaryText="Blog" leftIcon={<ActionBook />} target="_blank" href="http://www.shoutforhealth.org/blog-2/"/>
             <MenuItem primaryText="Listserv" leftIcon={<ContentMail />} target="_blank" href="http://eepurl.com/cvWx3b"/>
