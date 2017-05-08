@@ -117,7 +117,8 @@ export default class App extends React.Component {
             userLat: '33.7490',
             userLng: '-84.3880',
             clinicpageTags: [],
-            clinicpageFeedbacks: []
+            clinicpageFeedbacks: [],
+            loggedin:false,
         };
 
 
@@ -325,7 +326,7 @@ export default class App extends React.Component {
     displayLogin() {
 
       this.changeHeaderInfo("Login/Register");
-      this.setState({ screen: <LoginRegister container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} registerNew={(user)=>this.registerNew(user)} loginUser={(user)=>this.loginUser(user)} displaySearch={()=>this.displaySearch}/> });
+      this.setState({ screen: <LoginRegister container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} registerNew={(user)=>this.registerNew(user)} loginUser={(user)=>this.loginUser(user)} getLoggedIn={()=>this.state.loggedin} getRegistered={()=>this.state.registered} displaySearch={()=>this.displaySearch}/> });
 
     }
 
@@ -593,12 +594,11 @@ getSearchMenu(){
 
       var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {skip_setup: true});
 
-      dbs.signup(user.username, user.password, function (err, response) {
-        if (err) {
-          console.log(err.name);
-          return err.name
+      dbs.signup(user.username, user.password, (err, response)=>{
+        if (response.ok===true) {
+          this.setState({registered:true});
         }else{
-          return response;
+          this.setState({registered:false});
         }
       });
 
@@ -607,16 +607,13 @@ getSearchMenu(){
     loginUser(user){
 
       var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {skip_setup: true});
-
-      dbs.login(user.username, user.password, function (err, response) {
-        if (err) {
-          console.log(err.name);
-          return err.name
-        }else{
-          return response;
+      dbs.login(user.username, user.password, (err, response)=>{
+        if (response.ok===true) {
+          this.setState({loggedin:true});
+          console.log(response);
         }
+        else this.setState({loggedin:false});
       });
-
     }
 
 

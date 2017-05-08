@@ -67,9 +67,12 @@ export default class LoginRegister extends React.Component {
         super();
         this.state = {
 
+            type:1,
             canSubmit: false,
             registerSuccess: false,
             registerError: false,
+            loginSuccess:false,
+            loginError:false,
         };
 
         this.errorMessages = {
@@ -86,34 +89,40 @@ export default class LoginRegister extends React.Component {
                   username: this.state.usernameL,
                   password: this.state.passwordL,
               }
-          var response = this.loginUser(user);
-
-          if(response==='success'){
-            this.setState({registerSuccess:true});
+          this.loginUser(user);
+          var x=this.getLoggedIn();
+          if(x){
+            this.setState({loginSuccess:true});
           }else{
-            this.setState({registerError:'true'});
-            this.setState({error:response});
+            this.setState({loginError:true});
           }
 
     }
 
     handleRegister() {
-
+        var type=this.getType(this.state.type);
         var user = {
                   username: this.state.username,
                   password: this.state.password,
+                  type: type,
                   email: this.state.email,
                   zip: this.state.zip,
               }
-          var response = this.registerNew(user);
-
-          if(response==='success'){
+          this.registerNew(user);
+          var x=this.getRegistered();
+          if(x){
             this.setState({registerSuccess:true});
           }else{
-            this.setState({registerError:'true'});
-            this.setState({error:response});
+            this.setState({registerError:true});
           }
 
+    }
+
+    getType(value){
+        if(value===1) return "patient";
+        else if(value===2) return "healthcare professional";
+        else if(value===3) return "social worker";
+        else return "undefined";
     }
 
     searchSizer() {
@@ -134,10 +143,12 @@ export default class LoginRegister extends React.Component {
     render() {
 
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
-        const { addResource, displaySearch, registerNew, loginUser} = this.props;
+        const { addResource, displaySearch, registerNew, loginUser, getLoggedIn, getRegistered} = this.props;
 
         this.registerNew=registerNew;
         this.loginUser=loginUser;
+        this.getLoggedIn=getLoggedIn;
+        this.getRegistered=getRegistered;
 
         const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
@@ -189,7 +200,7 @@ export default class LoginRegister extends React.Component {
                     <Paper style={styles.input}>
 
                                <SelectField
-                                   value={this.state.value_Type}
+                                   value={this.state.type}
                                    onChange={(event, index, value) => this.setState({type:value})}
                                  >
                                  <MenuItem value={1} primaryText="Patient" />
@@ -339,6 +350,33 @@ export default class LoginRegister extends React.Component {
                       {this.state.canLogin? "":<b> Please fill out required fields to login</b>}
           </div>
 
+                              <Dialog
+                                title="Completed"
+                                  actions={<FlatButton
+                                  label="Close"
+                                  primary={true}
+                                  keyboardFocused={true}
+                                  onTouchTap={() => {this.setState({loginSuccess: false})}}/>}
+                                  modal={false}
+                                  open={this.state.loginSuccess}
+                                  onRequestClose={()=>this.setState({loginSuccess:false})}
+                                  >
+                                Successfully logged in.
+                              </Dialog>
+
+                              <Dialog
+                                title="Error"
+                                  actions={<FlatButton
+                                  label="Close"
+                                  primary={true}
+                                  keyboardFocused={true}
+                                  onTouchTap={() => this.setState({loginError: false})}/>}
+                                  modal={false}
+                                  open={this.state.loginError}
+                                  onRequestClose={()=>this.setState({loginError:false})}
+                                  >
+                                Wrong username or password {this.state.error}
+                              </Dialog>
 
       </div>
   </Formsy.Form>

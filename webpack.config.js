@@ -31,7 +31,7 @@ const common = {
       loaders: ['style', 'css?url=false'],
       include: PATHS.src,
     }, {
-      test: /\.jpeg$/,
+      test: /\.(jpg|jpeg|png|svg)$/,
       loader: 'file',
       include: PATHS.src,
     }, {
