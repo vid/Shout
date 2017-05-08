@@ -93,6 +93,7 @@ const styles = {
         width: '100%',
         alignment: 'right',
         display: 'inline-block',
+        opacity:0.8
     },
 
     reviews: {
@@ -138,7 +139,6 @@ export default class ClinicPage extends React.Component {
             flagcontentOpen: false,
             feedbackExpanded: false,
             descriptionExpanded: false,
-            tagsExpanded: false,
             vouchSnackbarOpen: false,
             submitSnackbarOpen: false,
 
@@ -148,7 +148,6 @@ export default class ClinicPage extends React.Component {
             qualityRating: 0,
             affordabilityRating: 0,
             value_Descript: "",
-            previous_Tags: [],
             chipData: [],
             value_NewTag: '',
         };
@@ -235,97 +234,9 @@ export default class ClinicPage extends React.Component {
 
     }
 
-    formatTags(previousTags, vouchFor, vouchAgainst, tagdoc){
-
-    if(!previousTags){
-
-      return "loading";
-
-    } else if(previousTags.length<8){
-      return (previousTags.map((tag, i) =>
-          <li style={styles.list} key={i}><div style={styles.wrapper}>
-          <Chip style={styles.chip}>
-          <b>{tag.value+"  "}</b>
-          </Chip>
-          <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
-          <IconButton
-          style={styles.smallIcon}
-          tooltip="vouch for"
-          onTouchTap={()=>{vouchFor(tagdoc, i)
-                          this.setState({vouchSnackbarOpen:true})}}><NavigationArrowUpward /></IconButton>
-          <IconButton
-          style={styles.smallIcon}
-          tooltip="vouch against"
-          onTouchTap={()=>{vouchAgainst(tagdoc, i)
-                          this.setState({vouchSnackbarOpen:true})}}><NavigationArrowDownward /></IconButton>
-          </div>
-                  </li>))
-
-      }
-      else if(this.state.tagsExpanded){
-        return (previousTags.map((tag, i) =>
-                      <li style={styles.list} key={i}><div style={styles.wrapper}>
-                      <Chip style={styles.chip}>
-                      <b>{tag.value+"  "}</b>
-                      </Chip>
-                      <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
-                      <IconButton
-                      style={styles.smallIcon}
-                      tooltip="vouch for"
-                      onTouchTap={()=>{vouchFor(tagdoc, i)
-                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowUpward /></IconButton>
-                      <IconButton
-                      style={styles.smallIcon}
-                      tooltip="vouch against"
-                      onTouchTap={()=>{vouchAgainst(tagdoc, i)
-                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowDownward /></IconButton>
-                      </div>
-                              </li>))
-
-      }
-      else {
-        var tags_a = previousTags.slice(0, 8);
-        return (tags_a.map((tag, i) =>
-                      <li style={styles.list} key={i}><div style={styles.wrapper}>
-                      <Chip style={styles.chip}>
-                      <b>{tag.value+"  "}</b>
-                      </Chip>
-                      <div style={styles.chipInfo}>{"("+tag.count+" users vouched for this)"}</div>
-                      <IconButton
-                      style={styles.smallIcon}
-                      tooltip="vouch for"
-                      onTouchTap={()=>{vouchFor(tagdoc, i)
-                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowUpward /></IconButton>
-                      <IconButton
-                      style={styles.smallIcon}
-                      tooltip="vouch against"
-                      onTouchTap={()=>{vouchAgainst(tagdoc, i)
-                                      this.setState({vouchSnackbarOpen:true})}}><NavigationArrowDownward /></IconButton>
-                      </div>
-                              </li>))
-
-        }
-
-    }
 
     getRating(result, id) {
 
-        if (results.reviews.length() === 0) {
-            return 0;
-        }
-        if (id === '0') {
-            return result.ratings.overall;
-        }
-        if (id === '1') {
-            return result.ratings.quality;
-        }
-        if (id === '2') {
-            return result.ratings.accessibility;
-        }
-        if (id === '3') {
-            return result.ratings.affordability;
-        }
-        return 0;
 
     }
 
@@ -343,18 +254,15 @@ export default class ClinicPage extends React.Component {
 
     searchSizer() {
         const {
-            container,
-            footer
+            container
         } = this.props;
         const {
             offsetHeight,
             offsetWidth
         } = container;
-        const footerOffsetHeight = footer.offsetHeight;
         this.setState({
             offsetHeight,
-            offsetWidth,
-            footerOffsetHeight
+            offsetWidth
         });
     }
 
@@ -383,18 +291,15 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-        const { addTags, getTags, getFeedbacks, vouchFor, vouchAgainst, addSingleTag, addFlag } = this.props;
+        const { getFeedbacks, vouchFor, vouchAgainst, getMeta, addFlag, result, addFeedback } = this.props;
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
-        const tagdoc = getTags();
-        var previousTags=tagdoc.tags;
-        const allFeedbacks = getFeedbacks();
-        const { offsetWidth, offsetHeight, footerOffsetHeight } = this.state;
+        const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
-        const { result } = this.props;
+        const meta = getMeta();
+        const allFeedbacks = getFeedbacks();
         const id = result._id;
-        const { addFeedback } = this.props;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
 
 
@@ -428,44 +333,15 @@ export default class ClinicPage extends React.Component {
 
 
 {/* ***************************************** */}
-{/* Section 2: List of tags */}
+{/* Section 3: Data*/}
 {/* ***************************************** */}
       <Card style ={styles.card}>
-      <CardHeader title="Tags"/>
-        <CardText>
-          <ul style={styles.list}>
-        {this.formatTags(previousTags, vouchFor, vouchAgainst, tagdoc)}
-        <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.tagsExpanded})} label={">> view all"}/>
-          </ul>
-          <div style={styles.row}>
-             <TextField hintText=""
-                        hintStyle={styles.hint}
-                        floatingLabelStyle={styles.floatinglabel}
-                        inputStyle={styles.input}
-                        floatingLabelText="Add New Tags"
-                        floatingLabelFixed={true}
-                        value={this.state.value_Tags}
-                        onChange={(event) => this.setState({value_NewTag: event.target.value})}/><br />
-              <RaisedButton onTouchTap={() => addSingleTag(this.state.value_NewTag, tagdoc)}> Submit</RaisedButton>
-             <br />
-            </div>
-        </CardText>
-      </Card>
-
-      <Snackbar
-          open={this.state.vouchSnackbarOpen}
-          message="Your vote has been recorded"
-          autoHideDuration={3000}
-          onRequestClose={this.handleRequestClose}
-        />
-
-{/* ***************************************** */}
-{/* Section 3: services*/}
-{/* ***************************************** */}
-      <Card style ={styles.card}>
-        <CardHeader title="Services"/>
+        <CardHeader title="Data"/>
           <CardText>
-            {this.formatServices(result.services)}
+            Price:{this.formatServices(meta.doc.price)}
+            Population:{this.formatServices(meta.doc.population)}
+            Services:{this.formatServices(meta.doc.services)}
+            Languages:{this.formatServices(meta.doc.services)}
           </CardText>
         </Card>
 

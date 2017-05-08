@@ -19,6 +19,8 @@ import SocialPerson from 'material-ui/svg-icons/social/person';
 
 
 import AddResource from './AddResource.jsx';
+import ModifyDocs from './ModifyDocs.jsx';
+
 
 export default class LeftMenu extends React.Component {
     constructor() {
@@ -26,16 +28,13 @@ export default class LeftMenu extends React.Component {
 
         this.state = {
             changelocationOpen: false,
-            aboutOpen: false,
         };
 
     }
 
     render() {
 
-        const { displayAddResource } = this.props;
-        const { addResource } = this.props;
-        const { displayAbout } = this.props;
+        const { displayAddResource, addResource, displayAbout, displayModifyDocs} = this.props;
 
 
 
@@ -44,34 +43,8 @@ export default class LeftMenu extends React.Component {
             <div id='menu'>
             <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
-            <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => this.setState({aboutOpen: true})}/>
-            <MenuItem primaryText="Blog" leftIcon={<ActionBook />} target="_blank" href="http://www.shoutforhealth.org/blog-2/"/>
-            <MenuItem primaryText="Listserv" leftIcon={<ContentMail />} target="_blank" href="http://eepurl.com/cvWx3b"/>
-
-
-{/* Below: material-UI hidden Dialogs that will show conditionally */}
-
-
-            <Dialog
-                actions={
-                   <FlatButton
-                     label="Close"
-                     primary={true}
-                     onTouchTap={() => this.setState({aboutOpen: false})}/>}
-                modal={false}
-                open={this.state.aboutOpen}
-                onRequestClose={() => this.setState({aboutOpen: false})}>
-
-                <h1>
-                About
-                </h1>
-                <p>
-                We believe that the best way to spread healthcare information among marginalized communities is to empower them to inform themselves and each other.
-                Read more about our mission at www.shoutforhealth.org
-                </p>
-            </Dialog>
-
-
+            <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => displayAbout()}/>
+            <MenuItem primaryText="Modify docs en masse" target="_blank" onTouchTap={() => displayModifyDocs()}/>
             </div>
         )
     }

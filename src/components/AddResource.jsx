@@ -444,7 +444,8 @@ export default class AddResource extends React.Component {
               style={styles.checkbox}/>
 
 
-            <TextField hintText=""
+            <TextField id="first"
+                       hintText=""
                        hintStyle={styles.hint}
                        value={this.state.value_Services}
                        onChange={(event) => this.setState({value_Services: event.target.value})}

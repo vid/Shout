@@ -20,9 +20,11 @@ import Drawer from 'material-ui/Drawer';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import MapsPlace from 'material-ui/svg-icons/maps/place';
-
+import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+
+/*Modules */
 import PlacesAutocomplete from 'react-places-autocomplete'
 import { geocodeByAddress, geocodeByPlaceId } from 'react-places-autocomplete'
 
@@ -33,69 +35,63 @@ import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
+import LoginRegister from './LoginRegister.jsx';
+import ModifyDocs from './ModifyDocs.jsx';
 
 const pathToBG = require('../img/background.jpeg');
 
 import PouchDB from 'pouchdb';
 import PouchDBQuickSearch from 'pouchdb-quick-search';
-
-
 PouchDB.plugin(PouchDBQuickSearch);
+PouchDB.plugin(require('pouchdb-authentication'));
 
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
+
 var db = new PouchDB('resourcesnew');
 var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
+var db_pending = new PouchDB('resourcespending');
+var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
 PouchDB.sync('db', 'remoteCouch');
+PouchDB.sync('db_pending', 'remoteCouchPending');
+
 
 const styles = {
 
     appbar: {
-    },
-    appbarTitle: {
+    },appbarTitle: {
         paddingTop: 5,
         color: '#ffffff',
         fontSize: 30,
-    },
-    appbarSubtitle: {
+    },appbarSubtitle: {
         paddingTop: 13,
         fontSize: 15,
         color: '#ffffff',
         marginLeft: 10
-    },
-    row: {
+    },row: {
         display: 'flex',
         flexDirection: 'row'
-    },
-    places: {
+    },places: {
         marginTop:10,
         marginRight:30
-    },
-    column: {
+    },button: {
+        marginTop:10
+    },column: {
         display: 'flex',
         flexDirection: 'column',
         width: '100%'
-    },
-    headermenu: {
+    },headermenu: {
         position:'absolute',
-        left:'80%',
+        left:'70%',
         display:'flex',
         flexDirection:'row',
         fontColor:'#FFFFFF',
-
-
-    },
-    headerlinks: {
-      fontColor:'#FFFFFF',
-      margin:20
-
-    },
-    wrapper: {
+    },headerlinks: {
+      color:'#FFFFFF'
+    },wrapper: {
         backgroundImage: 'url(' + pathToBG + ')',
         backgroundPosition: 'bottom 0px right 0px'
-
     }
-
 };
 
 export default class App extends React.Component {
@@ -146,7 +142,7 @@ export default class App extends React.Component {
             zip: res.zip
 
         };
-        db.put(resource, function callback(err, result) {
+        db_pending.put(resource, function callback(err, result) {
             if (!err) {
                 console.log('Added resource');
             } else {
@@ -168,7 +164,7 @@ export default class App extends React.Component {
 
 
         };
-        db.put(meta, function callback(err, result) {
+        db_pending.put(meta, function callback(err, result) {
             if (!err) {
                 console.log('Added metadata');
             } else {
@@ -176,11 +172,84 @@ export default class App extends React.Component {
             }
         });
 
-        PouchDB.sync('db', 'remoteCouch');
+        db_pending.replicate.to(remoteCouchPending, {
+          live: true,
+          retry: true,
+          back_off_function: function (delay) {
+            if (delay === 0) {
+              return 1000;
+            }
+            return delay * 3;
+          }
+        });
 
     }
 
+  changeDoc(res){
 
+      //create a new doc with properties of this
+              var mod = {
+                  name: res.name,
+                  _id: res._id,
+                  _rev:res._rev,
+                  lat: res.lat,
+                  lng: res.lng,
+                  civic_address: res.civic_address,
+                  phone: res.phone,
+                  website: res.website,
+                  description: res.description,
+                  resourcetype: res.resourcetype,
+                  type:res.type,
+                  zip: res.zip,
+                  city:res.city,
+
+              };
+        db.put(mod, function callback(err, result) {
+              if (!err) {
+                  console.log('Modified this doc');
+              }else {
+                  console.log('Error modifying this doc');
+              }
+          });
+
+      //create new Meta object
+              var meta = {
+                  _id: "Meta" + "_" + res.name,
+                  name: res.name,
+                  price: [],
+                  languages: [],
+                  population: [],
+                  waitingtime: res.waitingtime,
+                  services: [],
+                  numberreviews:'0',
+                  accessibilityrating: '',
+                  availabilityrating: '',
+                  tags:[],
+
+
+              };
+        db.put(meta, function callback(err, result) {
+              if (!err) {
+                  console.log('Modified meta');
+              }else {
+                  console.log('Error modifying meta');
+              }
+          });
+      //create new doc and replace old one
+      //delete tags object
+
+      db.replicate.to(remoteCouch, {
+        live: true,
+        retry: true,
+        back_off_function: function (delay) {
+          if (delay === 0) {
+            return 1000;
+          }
+          return delay * 3;
+        }
+      });
+
+  }
 
 //This method is called by ClinicPage, and submits a new "Feedback_" document to the PouchDB database
     addFeedback(rev) {
@@ -200,7 +269,7 @@ export default class App extends React.Component {
             language: rev.language,
 
         };
-      db.put(review, function callback(err, result) {
+      db_pending.put(review, function callback(err, result) {
             if (!err) {
                 console.log('Added review');
             }else {
@@ -225,7 +294,7 @@ export default class App extends React.Component {
 
     componentDidMount() {
         if (remoteCouch) {
-            this.sync();
+            PouchDB.sync('db', 'remoteCouch');
         }
         this.displaySearch();
         this.requestCurrentPosition();
@@ -233,39 +302,49 @@ export default class App extends React.Component {
 
     }
 
+    changeHeaderInfo(title){
+
+      this.setState({ appbarTitle: title});
+      this.setState({ appbarIcon: <NavigationChevronLeft /> });
+      this.setState({ appbarSubtitle: ' ' });
+      this.setState({ appbarState: true });
+      this.setState({ showMenu: false });
+      this.setState({ searchBar: "" });
+
+    }
 
 //This function basically updates the single page app to now display the AddResource component.
 //state variables are changed as needed in order to modify the title and layout of the page.
     displayAddResource() {
 
-    //First update title, subtitle, and icons in AppBar
-        this.setState({ appbarIcon: <NavigationChevronLeft /> });
-        this.setState({ appbarTitle: "Add Resource" });
-        this.setState({ appbarSubtitle: ' ' });
-        this.setState({ appbarState: true });
-    //showMenu variable controls what function is called when a user clicks on the top lefthand icon
-        this.setState({ showMenu: false });
-        this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/> });
+      this.changeHeaderInfo("Add Resource");
+      this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/> });
 
     }
 
+    displayLogin() {
 
+      this.changeHeaderInfo("Login/Register");
+      this.setState({ screen: <LoginRegister container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} registerNew={(user)=>this.registerNew(user)} loginUser={(user)=>this.loginUser(user)} displaySearch={()=>this.displaySearch}/> });
+
+    }
+
+    displayModifyDocs(){
+
+      this.changeHeaderInfo("ModifyDocs");
+      this.setState({ screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/> });
+
+    }
 
 //This function basically updates the single page app to now display the ClinicPage component.
 //state variables are changed as needed in order to modify the title and layout of the page.
     displayResult(result) {
 
-    //first update title, subtitle, and icons in AppBar
         const clinicname = result.name;
-        this.setState({ appbarIcon: <NavigationChevronLeft /> });
-        this.updatePageTags(result.name);
+        this.changeHeaderInfo(clinicname);
+        this.updatePageMeta(result.name);
         this.updateFeedbacks(result.name);
-        this.setState({ appbarTitle: clinicname });
-        this.setState({ appbarSubtitle: '' });
-        this.setState({ searchBar: "" });
-        this.setState({ appbarState: true });
-    //now can load a different component. note: all state variables in App.jsx must be changed before it's unmounted, or React throws an error
-        this.setState({ screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addSingleTag={(a,b)=>this.addSingleTag(a,b)} addFlag={()=>this.addFlag(a,b)}/> });
+        this.setState({ screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addFeedback={(x) => this.addFeedback(x)} getMeta={() => this.state.clinicpageMeta} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addFlag={()=>this.addFlag(a,b)}/> });
 
     }
 
@@ -282,12 +361,12 @@ export default class App extends React.Component {
               this.redrawResources(doc.rows);
             }
         });
-        this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} /> });
-        this.setState({ appbarTitle: 'Shout' });
+        this.setState({ appbarTitle: 'ShoutHealth' });
         this.setState({ appbarSubtitle: 'Find Accessible Healthcare.' });
         this.setState({ appbarState: false });
-        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>});
         this.setState({ appbarIcon: <NavigationMenu /> });
+        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>});
+        this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getMeta={(name) => this.state.clinicpageMeta} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} /> });
 
     }
 
@@ -323,7 +402,7 @@ export default class App extends React.Component {
                 }
                 var matches=[];
                 list.rows.forEach(function (res) {
-                    if (res.id.startsWith('tags')) {
+                    if (res.id.startsWith('Meta')) {
 
                         db.search({
                             query: res._id,
@@ -428,15 +507,9 @@ export default class App extends React.Component {
 //It should refresh the resources when we initially sync the database, but should do nothing otherwise.
     handleChanges(change, changesObject){
 
-      if(this.state.pageLoading){
-        console.log("going to display search bc page loading");
-        this.setState({pageLoading:false});
         this.displaySearch();
-        changes.cancel();
-      }
-      else{
-      console.log("Database update");
-      }
+        changesObject.cancel();
+        console.log("changes cancelled");
     }
 
 
@@ -478,11 +551,28 @@ getSearchMenu(){
   <div style={styles.places}>
     {this.getPlacesComponent()}
   </div>
+  <div style={styles.button}>
+  <RaisedButton
+    label ="Go"
+    onTouchTap={()=>this.addressSearchSubmit()}/>
     {this.state.searchBar}
+    </div>
   </div>)
   }
 
 }
+
+  addressSearchSubmit(){
+    event.preventDefault()
+
+    geocodeByAddress(this.state.address,  (err, latLng) => {
+      if (err) { console.log('Oh no!', err) }
+      this.setState({ userLat: latLng.lat });
+      this.setState({ userLng: latLng.lng });
+    })
+    this.filterNearMe();
+  }
+
 
 
 //Update the rows of the results table on main page
@@ -494,6 +584,38 @@ getSearchMenu(){
         });
         this.setState({ filteredResources: results });
         this.filterNearMe();
+
+    }
+
+
+//Register a new user to the database
+    registerNew(user){
+
+      var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {skip_setup: true});
+
+      dbs.signup(user.username, user.password, function (err, response) {
+        if (err) {
+          console.log(err.name);
+          return err.name
+        }else{
+          return response;
+        }
+      });
+
+    }
+
+    loginUser(user){
+
+      var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {skip_setup: true});
+
+      dbs.login(user.username, user.password, function (err, response) {
+        if (err) {
+          console.log(err.name);
+          return err.name
+        }else{
+          return response;
+        }
+      });
 
     }
 
@@ -519,40 +641,18 @@ getSearchMenu(){
     }
 
 
-
-    syncError() {
-
-        console.log('data-sync-state: error');
-    }
-
-
-
-    sync() {
-
-        var opts = { live: true };
-        db.replicate.to(remoteCouch, opts, this.syncError);
-        db.replicate.from(remoteCouch, opts, this.syncError);
-    }
-
-
-
-//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
+//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page meta & feedback that's
 //currently stored in the state of App.jsx
-    updatePageTags(name) {
+    updatePageMeta(name) {
 
-        db.allDocs({ startkey: 'tags_' + name, endkey: 'tags_' + name + '_\uffff', include_docs: true }, (err, doc) => {
+        db.allDocs({ startkey: 'Meta_' + name, endkey: 'Meta_' + name + '_\uffff', include_docs: true }, (err, doc) => {
 
             if (err) { return this.error(err); }
 
-            var tags = [];
-            doc.rows.forEach(function (result) {
-
-                tags.push(result.doc);
-            });
-            if (tags.length > 0) {
-                this.setState({ clinicpageTags: tags[0] });
+            if (doc.rows.length > 0) {
+                this.setState({ clinicpageMeta: doc.rows[0] });
             } else {
-                this.setState({ clinicpageTags: [{ value: 'No tags yet', count: '' }] });
+                this.setState({ clinicpageMeta: [{ value: 'No meta yet', count: '' }] });
             }
         });
 
@@ -560,7 +660,7 @@ getSearchMenu(){
 
 
 
-//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
+//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page meta & feedback that's
 //currently stored in the state of App.jsx
     updateFeedbacks(name) {
 
@@ -587,7 +687,7 @@ getSearchMenu(){
             count: tag.count + 1,
         };
         tagsdoc.tags[index] = modified_tag;
-        db.put({
+        db_pending.put({
             _id: tagsdoc._id,
             _rev: tagsdoc._rev,
             type: "tag",
@@ -612,7 +712,7 @@ getSearchMenu(){
             };
             tagsdoc.tags[index] = modified_tag;
 
-            db.put({
+            db_pending.put({
                 _id: tagsdoc._id,
                 _rev: tagsdoc._rev,
                 type: "tag",
@@ -623,7 +723,7 @@ getSearchMenu(){
             });
         } else {
             tagsdoc.tags.splice(index, 1);
-            db.put({
+            db_pending.put({
                 _id: tagsdoc._id,
                 _rev: tagsdoc._rev,
                 type: "tag",
@@ -645,11 +745,12 @@ getSearchMenu(){
     //If there are no results yet, then database is still syncing and
     //we should listen for changes to the db and display a "Loading" message in the meantime
     if(this.state.pageLoading){
+      this.setState({pageLoading:false});
+      console.log("setting changes listener");
       var changesObject=db.changes({
         since: 'now',
         live: true,
-        include_docs: true,
-        limit: 1
+        limit: 40
       }).on('change', (change)=>this.handleChanges(change, changesObject)); //When the changes arrive, call displaySearch
     }
 
@@ -663,7 +764,7 @@ getSearchMenu(){
              open={this.state.showMenu}
              docked={false}
              onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()}/>
             </Drawer>
          </div>
 
@@ -678,15 +779,9 @@ getSearchMenu(){
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
                 <div style={styles.headermenu}>
-                <div style={styles.headerlinks}>
-                About
-                </div>
-                <div style={styles.headerlinks}>
-                <a href="shoutforhealth.org">Blog</a>
-                </div>
-                <div style={styles.headerlinks}>
-                Login
-                </div>
+                <FlatButton label ="About" style={styles.headerlinks} />
+                <FlatButton label="Blog" style={styles.headerlinks} />
+                <FlatButton label = "Login/Register" style={styles.headerlinks} onTouchTap={()=>this.displayLogin()} />
                 </div>
               </div>
               </div>
