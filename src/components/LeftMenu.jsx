@@ -44,7 +44,7 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => displayAbout()}/>
-            <MenuItem primaryText="Modify docs en masse" target="_blank" onTouchTap={() => displayModifyDocs()}/>
+            <MenuItem primaryText="Update Resources (Admin only)" onTouchTap={() => displayModifyMeta()}/>
             </div>
         )
     }

@@ -83,23 +83,29 @@ export default class LoginRegister extends React.Component {
         };
     }
 
+
+    loginResponse(res){
+            if(res){
+              this.setState({loginSuccess:true});
+            }else{
+              this.setState({loginError:true});
+            }
+            console.log(res);
+    }
+
     handleLogin() {
 
         var user = {
                   username: this.state.usernameL,
                   password: this.state.passwordL,
               }
-          this.loginUser(user);
-          var x=this.getLoggedIn();
-          if(x){
-            this.setState({loginSuccess:true});
-          }else{
-            this.setState({loginError:true});
-          }
 
+        this.loginUser(user, ()=>this.loginResponse(res));
     }
 
+
     handleRegister() {
+
         var type=this.getType(this.state.type);
         var user = {
                   username: this.state.username,

@@ -60,7 +60,7 @@ const styles = {
 
 };
 
-export default class About extends React.Component {
+export default class MyAccount extends React.Component {
 
 
     constructor() {
@@ -87,7 +87,7 @@ export default class About extends React.Component {
 
         const { addResource, displaySearch, registerNew, loginUser, getLoggedIn, getRegistered} = this.props;
         const { offsetWidth, offsetHeight} = this.state;
-
+        
         if (offsetHeight === undefined) {
             return null;
         }
@@ -97,7 +97,7 @@ export default class About extends React.Component {
 
         <div style={{display:'flex', flexDirection:'row', width:'100%'}}>
 
-          About
+          Account Info Here
         </div>
         );
     }

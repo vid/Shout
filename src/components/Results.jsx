@@ -13,6 +13,15 @@ const styles = {
     table: {
       cursor:'pointer'
     },
+    dist:{
+     color: 'black',
+     margin: '12px',
+     float:'right',
+     backgroundColor: '#F0F8FF',
+     border: '1 px solid #000000',
+     borderRadius: '8',
+     fontSize: '14'
+    }
 }
 
 
@@ -57,8 +66,9 @@ export default class Results extends React.Component {
                   key={i}
                   onClick={() => displayResult()}>
                   <TableRowColumn>
-                  <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><h4>({this.calculateDistance(result)+" mi"})</h4></div>
-                    {result.civic_address}
+                  <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><div style={styles.dist}>({this.calculateDistance(result)+" mi"})</div></div>
+                  <b>Type: </b>{result.resourcetype+" "}
+                  <b>Address: </b>{result.civic_address}
                   </TableRowColumn>
                 </TableRow>
               )))

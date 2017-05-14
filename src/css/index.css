@@ -8,6 +8,7 @@ html, body {
   display: flex;  /* use the flex model */
   height: 100vh;
   flex-direction: column;  /* learn more: http://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/ */
+  background: #708090;
 }
 
 #content {
