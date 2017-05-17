@@ -5,6 +5,7 @@ const merge = require('webpack-merge');
 const path = require('path');
 const webpack = require('webpack');
 var PouchDB = require('pouchdb');
+
 PouchDB.plugin(require('pouchdb-quick-search'));
 
 const ENV = require('./env');
@@ -16,27 +17,28 @@ const PATHS = {
 process.env.BABEL_ENV = ENV;
 
 const common = {
-    entry: [
-   //'webpack-dev-server/client?http://0.0.0.0:80',
-     PATHS.src,
- ],
+  entry: [
+    //'webpack-dev-server/client?http://0.0.0.0:80',
+    PATHS.src,
+  ],
   output: {
     path: PATHS.build,
     filename: 'bundle.js',
   },
   module: {
-    loaders: [
-      {
-        test: /\.css$/,
-        loaders: ['style', 'css?url=false'],
-        include: PATHS.src,
-      },
-      {
-        test: /\.jsx?$/,
-        loader: 'babel?cacheDirectory',
-        include: PATHS.src,
-      }
-    ]
+    loaders: [{
+      test: /\.css$/,
+      loaders: ['style', 'css?url=false'],
+      include: PATHS.src,
+    }, {
+      test: /\.(jpg|jpeg|png|svg)$/,
+      loader: 'file',
+      include: PATHS.src,
+    }, {
+      test: /\.jsx?$/,
+      loader: 'babel?cacheDirectory',
+      include: PATHS.src,
+    }]
   }
 };
 

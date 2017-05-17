@@ -3,13 +3,13 @@
 The main component with the app's actions and 'store.'
 
 **/
-
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 /*Material-UI theme*/
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 /*Material-UI components*/
 import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
@@ -18,6 +18,17 @@ import IconButton from 'material-ui/IconButton';
 import Drawer from 'material-ui/Drawer';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import MapsPlace from 'material-ui/svg-icons/maps/place';
+import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+
+/*Modules */
+import PlacesAutocomplete from 'react-places-autocomplete'
+import {
+    geocodeByAddress,
+    geocodeByPlaceId
+} from 'react-places-autocomplete'
 
 //import other components
 import Search from './Search.jsx';
@@ -26,52 +37,74 @@ import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
+import LoginRegister from './LoginRegister.jsx';
+import ModifyDocs from './ModifyDocs.jsx';
+import MyAccount from './MyAccount.jsx';
+import About from './About.jsx';
+
+const pathToBG = require('../img/background.jpeg');
 
 import PouchDB from 'pouchdb';
 import PouchDBQuickSearch from 'pouchdb-quick-search';
-
 PouchDB.plugin(PouchDBQuickSearch);
+PouchDB.plugin(require('pouchdb-authentication'));
 
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
+
 var db = new PouchDB('resourcesnew');
 var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
+var db_pending = new PouchDB('resourcespending');
+var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
 PouchDB.sync('db', 'remoteCouch');
+PouchDB.sync('db_pending', 'remoteCouchPending');
+
 
 const styles = {
 
-    appbar: {
-        minHeight: 100
-    },
-
+    appbar: {},
     appbarTitle: {
         paddingTop: 5,
         color: '#ffffff',
         fontSize: 30,
     },
-
     appbarSubtitle: {
         paddingTop: 13,
         fontSize: 15,
         color: '#ffffff',
         marginLeft: 10
     },
-
-    stylemenu: {
-        position: 'fixed',
-        height: '100%',
-    },
-
     row: {
         display: 'flex',
         flexDirection: 'row'
+    },
+    places: {
+        marginTop: 10,
+        marginRight: 30
+    },
+    button: {
+        marginTop: 10
     },
     column: {
         display: 'flex',
         flexDirection: 'column',
         width: '100%'
     },
-
+    headermenu: {
+        position: 'absolute',
+        left: '70%',
+        display: 'flex',
+        flexDirection: 'row',
+        fontColor: '#FFFFFF',
+        flexWrap:'wrap'
+    },
+    headerlinks: {
+        color: '#FFFFFF'
+    },
+    wrapper: {
+        backgroundImage: 'url(' + pathToBG + ')',
+        backgroundPosition: 'bottom 0px right 0px'
+    }
 };
 
 export default class App extends React.Component {
@@ -82,56 +115,37 @@ export default class App extends React.Component {
         // this component's state acts as the overall store for now
         this.state = {
             allResources: [],
+            address: "Atlanta, GA",
             filteredResources: [],
-            showMenu: false,                  //toggles left-hand menu
+            showMenu: false, //toggles left-hand menu
+            landingOpen: true,
             searchString: '',
             appbarState: false,
-            selectedFooterIndex: 0,
+            selectedIndex: 0,
             appbarTitle: 'Shout',
             appbarSubtitle: 'Find Accessible Healthcare.',
             appbarIcon: <NavigationMenu />,
             searchBar: "",
-            pageLoading: 'true',              //true if page has not loaded yet
+            searchBar2: "",
+            pageLoading: 'true', //true if page has not loaded yet
             userLat: '33.7490',
             userLng: '-84.3880',
             clinicpageTags: [],
-            clinicpageFeedbacks: []
+            clinicpageFeedbacks: [],
+            loggedin: false,
         };
 
 
     }
 
-//This method adds one tag at a time to a particular resource. It create a new "tags" document and updates the existing document
-//Updating already existing documents in a PouchDB database requires submitting a value to the "_rev" field. See:https://pouchdb.com/api.html
-// * Currently does not check for duplicates!
-    addSingleTag(label, tagsdoc) {
 
-        var tag = {
-            value: label,
-            count: 1
-        }
-        tagsdoc.tags.push(tag);
-        db.put({
-            _id: tagsdoc._id,
-            _rev: tagsdoc._rev,
-            type: "tag",
-            tags: tagsdoc.tags,
-        }, function (err, response) {
-            if (err) { return console.log(err); }
-            console.log("success");
-        });
-    }
-
-
-
-// This method is called by the AddResource component. For now, adds a new document directly to the "resourcesnew" database
-// on the couchdb server. Later, this database should be migrated to a "pending" database where we store items before they are approved/moderated
+    // This method is called by the AddResource component. For now, adds a new document directly to the "resourcesnew" database
+    // on the couchdb server. Later, this database should be migrated to a "pending" database where we store items before they are approved/moderated
     addResource(res) {
 
         //create object to add
         var resource = {
             _id: "Resource" + "_" + res.zip + "_" + res.name,
-            type: "resource",
             name: res.name,
             lat: res.lat,
             lng: res.lng,
@@ -139,12 +153,11 @@ export default class App extends React.Component {
             phone: res.phone,
             website: res.website,
             description: res.description,
-            resourcetype: res.type,
-            services: res.services,
+            resourcetype: res.resourcetype,
             zip: res.zip
 
         };
-        db.put(resource, function callback(err, result) {
+        db_pending.put(resource, function callback(err, result) {
             if (!err) {
                 console.log('Added resource');
             } else {
@@ -152,32 +165,63 @@ export default class App extends React.Component {
             }
         });
 
-        this.addTags(res.tags, res.name);
+        var meta = {
+            _id: "Meta" + "_" + res.name,
+            name: res.name,
+            price: res.price,
+            languages: res.language,
+            population: res.population,
+            waitingtime: res.waitingtime,
+            services: res.services,
+            numberreviews: '0',
+            accessibilityrating: '',
+            availabilityrating: ''
 
-        PouchDB.sync('db', 'remoteCouch');
+
+        };
+        db_pending.put(meta, function callback(err, result) {
+            if (!err) {
+                console.log('Added metadata');
+            } else {
+                console.log('Error adding metadata' + err);
+            }
+        });
+
+        db_pending.replicate.to(remoteCouchPending, {
+            live: true,
+            retry: true,
+            back_off_function: function (delay) {
+                if (delay === 0) {
+                    return 1000;
+                }
+                return delay * 3;
+            }
+        });
 
     }
 
-
-
-//This method is called by ClinicPage, and submits a new "Feedback_" document to the PouchDB database
+    //This method is called by ClinicPage, and submits a new "Feedback_" document to the PouchDB database
     addFeedback(rev) {
 
         var review = {
             _id: "Feedback" + "_" + rev.name + "_" + new Date().toISOString(),
             type: "feedback",
+            date: new Date().toISOString(),
             name: rev.name,
             author: rev.author,
             accessibility: rev.accessibility,
             quality: rev.quality,
             affordability: rev.affordability,
             text: rev.text,
+            upvotes: '0',
+            downvotes: '0',
+            language: rev.language,
 
         };
-      db.put(review, function callback(err, result) {
+        db_pending.put(review, function callback(err, result) {
             if (!err) {
                 console.log('Added review');
-            }else {
+            } else {
                 console.log('Error adding feedback' + err);
             }
         });
@@ -185,167 +229,313 @@ export default class App extends React.Component {
 
     }
 
+    changeDoc(res) {
 
+        //create a new doc with properties of this
+        var mod = {
+            name: res.name,
+            _id: res._id,
+            _rev: res._rev,
+            lat: res.lat,
+            lng: res.lng,
+            civic_address: res.civic_address,
+            phone: res.phone,
+            website: res.website,
+            description: res.description,
+            resourcetype: res.resourcetype,
+            type: res.type,
+            zip: res.zip,
+            city: res.city,
 
-//This method is called by the AddResource component, and submits a completely new "Tags" document to the database.
-//It adds multiple tags at once, in contrast to the addSingleTag method above.
-    addTags(tags, res_name) {
-
-        const tagsarr = []
-        tags.forEach(function (element) {
-
-            var tag = {
-                value: element.label,
-                count: 1
-
-            };
-            tagsarr.push(tag);
-
-        });
-        var tagsobj = {
-            _id: "tags" + "_" + res_name,
-            type: "tag",
-            tags: tagsarr,
-        }
-        db.put(tagsobj, function callback(err, result) {
-            if (err) {
-                return console.log(err);
+        };
+        db.put(mod, function callback(err, result) {
+            if (!err) {
+                console.log('Modified this doc');
+            } else {
+                console.log('Error modifying this doc');
             }
         });
-        if (remoteCouch) {
-            this.sync();
-        }
+
+        //create new Meta object
+        var meta = {
+            _id: "Meta" + "_" + res.name,
+            name: res.name,
+            price: [],
+            languages: [],
+            population: [],
+            waitingtime: res.waitingtime,
+            services: [],
+            numberreviews: '0',
+            accessibilityrating: '',
+            availabilityrating: '',
+            tags: [],
+
+
+        };
+        db.put(meta, function callback(err, result) {
+            if (!err) {
+                console.log('Modified meta');
+            } else {
+                console.log('Error modifying meta');
+            }
+        });
+        //create new doc and replace old one
+        //delete tags object
+
+        db.replicate.to(remoteCouch, {
+            live: true,
+            retry: true,
+            back_off_function: function (delay) {
+                if (delay === 0) {
+                    return 1000;
+                }
+                return delay * 3;
+            }
+        });
 
     }
 
+        updateMeta(res) {
 
 
-//This function is called when the left-hand icon in the AppBar is clicked.
-//the action depends on whether the user is currently on the main/landing page or a clinic page result
+            //create new Meta object
+            var meta = {
+                _id: "Meta" + "_" + res.name,
+                name: res.name,
+                price: [],
+                languages: [],
+                population: [],
+                waitingtime: res.waitingtime,
+                services: [],
+                numberreviews: '0',
+                accessibilityrating: '',
+                availabilityrating: '',
+                tags: [],
+
+
+            };
+            db.put(meta, function callback(err, result) {
+                if (!err) {
+                    console.log('Modified meta');
+                } else {
+                    console.log('Error modifying meta');
+                }
+            });
+            //create new doc and replace old one
+            //delete tags object
+
+            db.replicate.to(remoteCouch, {
+                live: true,
+                retry: true,
+                back_off_function: function (delay) {
+                    if (delay === 0) {
+                        return 1000;
+                    }
+                    return delay * 3;
+                }
+            });
+
+        }
+
+    //This function is called when the left-hand icon in the AppBar is clicked.
+    //the action depends on whether the user is currently on the main/landing page or a clinic page result
     appbarClick() {
 
         if (!this.state.appbarState) {
-            this.setState({ showMenu: !this.state.showMenu });
+            this.setState({
+                showMenu: !this.state.showMenu
+            });
         } else {
             this.displaySearch();
         }
     }
-    componentDidMount() {
-        if (remoteCouch) {
-            this.sync();
-        }
-        this.displaySearch();
+
+    changeHeaderInfo(title) {
+
+        this.setState({
+            appbarTitle: title
+        });
+        this.setState({
+            appbarIcon: <NavigationChevronLeft />
+        });
+        this.setState({
+            appbarSubtitle: ' '
+        });
+        this.setState({
+            appbarState: true
+        });
+        this.setState({
+            showMenu: false
+        });
+        this.setState({
+            searchBar: "",
+            searchBar2: ""
+        });
 
     }
 
-
-
-//This function basically updates the single page app to now display the AddResource component.
-//state variables are changed as needed in order to modify the title and layout of the page.
+    //This function basically updates the single page app to now display the AddResource component.
+    //state variables are changed as needed in order to modify the title and layout of the page.
     displayAddResource() {
 
-    //First update title, subtitle, and icons in AppBar
-        this.setState({ appbarIcon: <NavigationChevronLeft /> });
-        this.setState({ appbarTitle: "Add Resource" });
-        this.setState({ appbarSubtitle: ' ' });
-        this.setState({ appbarState: true });
-    //showMenu variable controls what function is called when a user clicks on the top lefthand icon
-        this.setState({ showMenu: false });
-
-        this.setState({ screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/> });
+        this.changeHeaderInfo("Add Resource");
+        this.setState({
+            screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/>
+        });
 
     }
 
+    displayAbout() {
 
+        this.changeHeaderInfo("About");
+        this.setState({
+            screen: <About container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+        });
 
-//This function basically updates the single page app to now display the ClinicPage component.
-//state variables are changed as needed in order to modify the title and layout of the page.
+    }
+
+    displayLogin() {
+
+        this.changeHeaderInfo("Login/Register");
+        this.setState({
+            screen: <LoginRegister container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} registerNew={(user)=>this.registerNew(user)} loginUser={(user,callback)=>this.loginUser(user,callback)} getLoggedIn={()=>this.state.loggedin} getRegistered={()=>this.state.registered} displaySearch={()=>this.displaySearch}/>
+        });
+
+    }
+
+    displayMyAccount() {
+
+        this.changeHeaderInfo("My Account");
+        this.setState({
+            screen: <MyAccount container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+        });
+
+    }
+
+    displayModifyDocs() {
+
+        this.changeHeaderInfo("ModifyDocs");
+        this.setState({
+            screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+        });
+
+    }
+    displayModifyMeta() {
+
+        this.changeHeaderInfo("ModifyDocs");
+        this.setState({
+            screen: <ModifyMeta container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredMeta={() => this.state.filteredMeta} updateDoc={(res)=>this.updateDoc(res)}/>
+        });
+
+    }
+
+    //This function basically updates the single page app to now display the ClinicPage component.
+    //state variables are changed as needed in order to modify the title and layout of the page.
     displayResult(result) {
 
-    //first update title, subtitle, and icons in AppBar
         const clinicname = result.name;
-        this.setState({ appbarIcon: <NavigationChevronLeft /> });
-        this.updatePageTags(result.name);
+        this.changeHeaderInfo(clinicname);
+        this.updatePageMeta(result.name);
         this.updateFeedbacks(result.name);
-        this.setState({ appbarTitle: clinicname });
-        this.setState({ appbarSubtitle: '' });
-        this.setState({ searchBar: "" });
-        this.setState({ appbarState: true });
-    //now can load a different component. note: all state variables in App.jsx must be changed before it's unmounted, or React throws an error
-        this.setState({ screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addTags={(tags, res_name)=>this.addTags(tags,res_name)} addFeedback={(x) => this.addFeedback(x)} getTags={() => this.state.clinicpageTags} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addSingleTag={(a,b)=>this.addSingleTag(a,b)} addFlag={()=>this.addFlag(a,b)}/> });
+        this.setState({
+            screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addFeedback={(x) => this.addFeedback(x)} getMeta={() => this.state.clinicpageMeta} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addFlag={()=>this.addFlag(a,b)}/>
+        });
 
     }
 
 
 
-//This function basically updates the single page app to now display the main component (App.js) with all results and no filter.
-//state variables are changed as needed in order to modify the title and layout of the page.
+    //This function basically updates the single page app to now display the main component (App.js) with all results and no filter.
+    //state variables are changed as needed in order to modify the title and layout of the page.
     displaySearch() {
 
-    //first retrieve all docs again, to reverse any filters
-        db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
-            if (err) { return this.error(err); }
-            if(doc.rows.length>0){
-              this.redrawResources(doc.rows);
+        //first retrieve all docs again, to reverse any filters
+        db.allDocs({
+            startkey: 'Resource_',
+            endkey: 'Resource_\uffff',
+            include_docs: true
+        }, (err, doc) => {
+            if (err) {
+                return this.error(err);
+            }
+            if (doc.rows.length > 0) {
+                this.redrawResources(doc.rows);
             }
         });
-        this.setState({ screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getTags={(name) => this.state.clinicpageTags} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} /> });
-        this.setState({ appbarTitle: 'Shout' });
-        this.setState({ appbarSubtitle: 'Find Accessible Healthcare.' });
-        this.setState({ appbarState: false });
-        this.setState({ searchBar: <SearchInputs getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString}/> });
-        this.setState({ appbarIcon: <NavigationMenu /> });
-        this.requestCurrentPosition();
-
+        this.setState({
+            appbarTitle: 'ShoutHealth'
+        });
+        this.setState({
+            appbarSubtitle: 'Find Accessible Healthcare.'
+        });
+        this.setState({
+            appbarState: false
+        });
+        this.setState({
+            appbarIcon: <NavigationMenu />
+        });
+        this.setState({
+            searchBar: <SearchInputs container={this.refs.content} getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} getselectedIndex={()=>this.state.selectedIndex} onSelect={(index) => this.footerSelect(index)}/>
+        });
+        this.setState({
+            screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getMeta={(name) => this.state.clinicpageMeta} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} />
+        });
 
     }
 
 
 
-//Error method
+    //Error method
     error(err) {
         console.warn('ERROR(' + err.code + '): ' + err.message);
     }
 
 
 
-//This filter method uses the Pouchdb-Quick-Search library
-//See:  https://github.com/nolanlawson/pouchdb-quick-search
+    //This filter method uses the Pouchdb-Quick-Search library
+    //See:  https://github.com/nolanlawson/pouchdb-quick-search
     filterResources(searchString) {
 
         if (!searchString || searchString.length < 1) {
-            db.allDocs({ startkey: 'Resource_', endkey: 'Resource_\uffff', include_docs: true }, (err, doc) => {
-                this.setState({searchString:""});
-                if (err) { return console.log(err); }
+            console.log("no search string, drawing all resources");
+            db.allDocs({
+                startkey: 'Resource_',
+                endkey: 'Resource_\uffff',
+                include_docs: true
+            }, (err, doc) => {
+                this.setState({
+                    searchString: ""
+                });
+                if (err) {
+                    return console.log(err);
+                }
                 this.redrawResources(doc.rows);
             });
         } else {
-        this.setState({searchString:searchString});
+            this.setState({
+                searchString: searchString
+            });
             db.search({
                 query: searchString,
-                fields: ['name', 'description', '_id', 'services.label', 'text'],
+                fields: ['type', 'population','services.label'],
                 include_docs: true,
-                mm: '33%'
             }, (err, list) => {
                 if (err) {
                     this.error(err);
                 }
-                var matches=[];
+                var matches = [];
                 list.rows.forEach(function (res) {
-                    if (res.id.startsWith('tags')) {
+                    if (res.id.startsWith('Meta')) {
 
-                        console.log(res.label);
                         db.search({
                             query: res._id,
                             fields: ['name'],
                             include_docs: true,
-                            mm: '33%'
                         }, (err, list) => {
 
                             if (err) {
-                                return console.log("error searching DB:"+err);
-                            }
-                            else if (res.id.startsWith('Resource')) {
+                                return console.log("error searching DB:" + err);
+                            } else if (res.id.startsWith('Resource')) {
                                 matches.push(res);
                             }
                         });
@@ -362,92 +552,262 @@ export default class App extends React.Component {
 
 
 
-//This function allows user to filter resources based on the selected icon in the footer
+    //This function allows user to filter resources based on the selected icon in the footer
     footerSelect(index) {
 
-    //first, go back to the main screen
-        this.displaySearch();
-        this.setState({ selectedFooterIndex: index });
+        //first, go back to the main screen
+        this.setState({
+            selectedIndex: index
+        });
         if (index === 0) {
             this.filterResources('');
-            this.setState({searchString:''});
         } else if (index === 1) {
-            this.filterResources('children');
-            this.setState({searchString:'children'});
-        } else if (index === 2) {
-            this.filterResources('mental health');
-            this.setState({searchString:'mental health'});
-        } else if (index === 3) {
             this.filterResources('women');
-            this.setState({searchString:'women'});
+        } else if (index === 2) {
+            this.filterResources('children');
+        } else if (index === 3) {
+            this.filterResources('mental health');
+        } else if (index === 4) {
+            this.filterResources('dental');
+            services = dental
+        } else if (index === 5) {
+            this.filterResources('vision');
+            services = vision
+        } else if (index === 6) {
+            this.filterResources('housing');
         }
+
+         else if (index === 7) {
+            this.filterResources('check-up');
+        }  else if (index === 8) {
+            this.filterResources('emergency');
+        }  else if (index === 9) {
+            this.filterResources('chronic disease');
+        }  else if (index === 9) {
+            this.filterResources('STD testing');
+        }
+
+         else if (index ===11) {
+            this.filterResources('pregnancy testing');
+        } else if (index ===11) {
+           this.filterResources('pap smear');
+       } else if (index ===11) {
+          this.filterResources('mammogram');
+      } else if (index ===11) {
+         this.filterResources('birth control');
+     }
+
+     else if (index ===21) {
+        this.filterResources('immunization');
+     }else if (index ===22) {
+        this.filterResources('pediatric check-up');
+     }
+
     }
 
 
 
-//This function sorts resources based on the distance
+    //This function sorts resources based on the distance
     filterNearMe() {
 
-        var arrSorted = this.state.filteredResources;
-        arrSorted.sort((a, b) => {
-            if (a.lat && b.lat) {
-                var y_distance = 69 * Math.pow((a.lat - this.state.userLat), 2);
-                var x_distance = 69 * Math.pow((this.state.userLng - a.lng), 2);
-                var a_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+        var originalArray = this.state.filteredResources;
 
-                y_distance = 69 * Math.pow((b.lat - this.state.userLat), 2);
-                x_distance = 69 * Math.pow((this.state.userLng - b.lng), 2);
-                var b_distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+        // split original array into 2 arrays, one for locations with coordinates
+        // one for without it
+        var validCoordination = [],
+            invalidCoordination = [];
+        for (var i = 0; i < originalArray.length; i++) {
+            if (originalArray[i].lat && originalArray[i].lng) {
+                validCoordination.push(originalArray[i]);
+            } else {
+                invalidCoordination.push(originalArray[i]);
+            }
+        }
 
-                return (a_distance - b_distance);
-            } else return 10000;
+        validCoordination.sort((a, b) => {
+            if (a.lat && b.lat && b.lng && a.lng) {
+                var a_distance = Math.pow((this.state.userLat - a.lat), 2) + Math.pow((this.state.userLng - a.lng), 2);
+                var b_distance = Math.pow((this.state.userLat - b.lat), 2) + Math.pow((this.state.userLng - b.lng), 2);
+                var diff = a_distance - b_distance;
+                // console.log("Difference: " + diff);
+                return diff;
+            } else {
+                return 10000;
+            }
         });
-        this.setState({ filteredResources: arrSorted });
+
+        // append back those 2 arrays
+        var arrSorted = [];
+        for (var i = 0; i < validCoordination.length; i++) {
+            arrSorted.push(validCoordination[i]);
+        }
+        for (var i = 0; i < invalidCoordination.length; i++) {
+            arrSorted.push(invalidCoordination[i]);
+        }
+
+        this.setState({
+            filteredResources: arrSorted
+        });
     }
 
 
 
-//Function that is called by event listeners attached when we called "db.changes"
-//It should refresh the resources when we initially sync the database, but should do nothing otherwise.
-    handleChanges(change, changesObject){
+    //Function that is called by event listeners attached when we called "db.changes"
+    //It should refresh the resources when we initially sync the database, but should do nothing otherwise.
+    handleChanges(change, changesObject) {
 
-      if(this.state.pageLoading){
-        this.setState({pageLoading:false});
         this.displaySearch();
-        changes.cancel();
-      }
-      else{
-      console.log("Database update");
-      }
+        changesObject.cancel();
+        console.log("changes cancelled");
     }
 
 
 
-//A function that's called by the React Google Maps library after map component loads the API
-//Currently doing nothing! ShoutApp is not using geocoder. May be necessary in the future.
+    //A function that's called by the React Google Maps library after map component loads the API
+    //Currently doing nothing! ShoutApp is not using geocoder. May be necessary in the future.
     onGoogleApiLoad(map, maps) {
 
+        this.setState({
+            gmaps: maps
+        });
+        this.setState({
+            gmap: map
+        });
+        window.google.maps = maps;
         var geo = new google.maps.Geocoder();
-        this.setState({ geocoder: geo });
+        this.setState({
+            geocoder: geo
+        });
 
+    }
+
+    getPlacesComponent() {
+
+        const inputProps = {
+            value: this.state.address,
+            onChange: (address) => this.setState({
+                address
+            }),
+        }
+        if (this.state.gmap) {
+            return <PlacesAutocomplete inputProps={inputProps} />;
+        }
+
+    }
+
+    getSearchMenu() {
+
+        if (!this.state.appbarState) {
+            return (
+              <div>
+                <div style={{display:'flex', flexDirection:'row'}}>
+                  <div style={{marginTop:10}}>
+                    <MapsPlace />
+                  </div>
+                  <div style={styles.places}>
+                    {this.getPlacesComponent()}
+                  </div>
+                  <div style={styles.button}>
+                  <RaisedButton
+                    label ="Go"
+                    onTouchTap={()=>this.addressSearchSubmit()}/>
+                  </div>
+                </div>
+                  {this.state.searchBar}
+              </div>
+                )
+        }
+
+    }
+
+    addressSearchSubmit() {
+        event.preventDefault()
+
+        geocodeByAddress(this.state.address, (err, latLng) => {
+            if (err) {
+                console.log('Oh no!', err)
+            }
+            this.setState({
+                userLat: latLng.lat
+            });
+            this.setState({
+                userLng: latLng.lng
+            });
+        })
+        this.filterNearMe();
     }
 
 
 
-//Update the rows of the results table on main page
+    //Update the rows of the results table on main page
     redrawResources(resources) {
 
-        var results= [];
+        var results = [];
         resources.forEach(function (res) {
             results.push(res.doc);
         });
-        this.setState({ filteredResources: results });
+        this.setState({
+            filteredResources: results
+        });
         this.filterNearMe();
 
     }
 
 
-//user gets prompt to allow browser to access current position
+    //Register a new user to the database
+    registerNew(user) {
+
+        var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {
+            skip_setup: true
+        });
+
+        dbs.signup(user.username, user.password, (err, response) => {
+            if (response.ok === true) {
+                this.setState({
+                    registered: true
+                });
+            } else {
+                this.setState({
+                    registered: false
+                });
+            }
+        });
+
+    }
+
+    loginUser(user, callback) {
+
+        var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {
+            skip_setup: true
+        });
+        dbs.login(user.username, user.password, (err, response) => {
+            if (response.ok === true) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        });
+    }
+
+    getUserSession() {
+
+        db_pending.getSession((err, response) => {
+            if (err) {
+                // network error
+            } else if (!response.userCtx.name) {
+                // nobody's logged in
+            } else {
+                // response.userCtx.name is the current user
+                this.setState({
+                    loggedin: true
+                });
+            }
+        });
+
+    }
+
+
+    //user gets prompt to allow browser to access current position
     requestCurrentPosition() {
 
         var options = {
@@ -460,48 +820,43 @@ export default class App extends React.Component {
                 var crd = pos.coords;
                 const x = crd.latitude;
                 const y = crd.longitude;
-                this.setState({ userLat: x });
-                this.setState({ userLng: y });
+                this.setState({
+                    userLat: x
+                });
+                this.setState({
+                    userLng: y
+                });
             }, this.error, options);
         }
 
     }
 
 
+    //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page meta & feedback that's
+    //currently stored in the state of App.jsx
+    updatePageMeta(name) {
 
-    syncError() {
+        db.allDocs({
+            startkey: 'Meta_' + name,
+            endkey: 'Meta_' + name + '_\uffff',
+            include_docs: true
+        }, (err, doc) => {
 
-        console.log('data-sync-state: error');
-    }
+            if (err) {
+                return this.error(err);
+            }
 
-
-
-    sync() {
-
-        var opts = { live: true };
-        db.replicate.to(remoteCouch, opts, this.syncError);
-        db.replicate.from(remoteCouch, opts, this.syncError);
-    }
-
-
-
-//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
-//currently stored in the state of App.jsx
-    updatePageTags(name) {
-
-        db.allDocs({ startkey: 'tags_' + name, endkey: 'tags_' + name + '_\uffff', include_docs: true }, (err, doc) => {
-
-            if (err) { return this.error(err); }
-
-            var tags = [];
-            doc.rows.forEach(function (result) {
-
-                tags.push(result.doc);
-            });
-            if (tags.length > 0) {
-                this.setState({ clinicpageTags: tags[0] });
+            if (doc.rows.length > 0) {
+                this.setState({
+                    clinicpageMeta: doc.rows[0]
+                });
             } else {
-                this.setState({ clinicpageTags: [{ value: 'No tags yet', count: '' }] });
+                this.setState({
+                    clinicpageMeta: [{
+                        value: 'No meta yet',
+                        count: ''
+                    }]
+                });
             }
         });
 
@@ -509,25 +864,33 @@ export default class App extends React.Component {
 
 
 
-//Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page tags & feedback that's
-//currently stored in the state of App.jsx
+    //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page meta & feedback that's
+    //currently stored in the state of App.jsx
     updateFeedbacks(name) {
 
-        db.allDocs({ startkey: 'Feedback_' + name, endkey: 'Feedback_' + name + '_\uffff', include_docs: true }, (err, doc) => {
+        db.allDocs({
+            startkey: 'Feedback_' + name,
+            endkey: 'Feedback_' + name + '_\uffff',
+            include_docs: true
+        }, (err, doc) => {
 
-            if (err) { return this.error(err); }
+            if (err) {
+                return this.error(err);
+            }
             var feedbacks = [];
             doc.rows.forEach(function (feedback) {
                 feedbacks.push(feedback.doc);
             });
-            this.setState({ clinicpageFeedbacks: feedbacks });
+            this.setState({
+                clinicpageFeedbacks: feedbacks
+            });
         });
 
     }
 
 
 
-//Function called from ClinicPage to upvote a tag.
+    //Function called from ClinicPage to upvote a tag.
     vouchFor(tagsdoc, index) {
 
         var tag = tagsdoc.tags[index];
@@ -536,13 +899,15 @@ export default class App extends React.Component {
             count: tag.count + 1,
         };
         tagsdoc.tags[index] = modified_tag;
-        db.put({
+        db_pending.put({
             _id: tagsdoc._id,
             _rev: tagsdoc._rev,
             type: "tag",
             tags: tagsdoc.tags,
         }, function (err, response) {
-            if (err) { console.log(err); }
+            if (err) {
+                console.log(err);
+            }
             console.log("successfully upvoted");
         });
 
@@ -550,7 +915,7 @@ export default class App extends React.Component {
 
 
 
-//Function called from ClinicPage to downvote a tag
+    //Function called from ClinicPage to downvote a tag
     vouchAgainst(tagsdoc, index) {
 
         var tag = tagsdoc.tags[index];
@@ -561,67 +926,100 @@ export default class App extends React.Component {
             };
             tagsdoc.tags[index] = modified_tag;
 
-            db.put({
+            db_pending.put({
                 _id: tagsdoc._id,
                 _rev: tagsdoc._rev,
                 type: "tag",
                 tags: tagsdoc.tags,
             }, function (err, response) {
-                if (err) { return console.log(err); }
+                if (err) {
+                    return console.log(err);
+                }
                 console.log("success");
             });
         } else {
             tagsdoc.tags.splice(index, 1);
-            db.put({
+            db_pending.put({
                 _id: tagsdoc._id,
                 _rev: tagsdoc._rev,
                 type: "tag",
                 tags: tagsdoc.tags,
             }, function (err, response) {
-                if (err) { return this.error(err); }
+                if (err) {
+                    return this.error(err);
+                }
                 console.log("successfully downvoted");
             });
         }
     }
 
+    componentDidMount() {
+        if (remoteCouch) {
+            PouchDB.sync('db', 'remoteCouch');
+        }
+        this.displaySearch();
+        this.getUserSession();
+        this.requestCurrentPosition();
 
-// End of actions
+
+    }
+
+    // End of actions
 
 
     render() {
 
 
-    //If there are no results yet, then database is still syncing and
-    //we should listen for changes to the db and display a "Loading" message in the meantime
-    if(this.state.pageLoading){
-      var changesObject=db.changes({
-        since: 'now',
-        live: true,
-        include_docs: true,
-        limit: 1
-      }).on('change', (change)=>this.handleChanges(change, changesObject)); //When the changes arrive, call displaySearch
-    }
+        //If there are no results yet, then database is still syncing and
+        //we should listen for changes to the db and display a "Loading" message in the meantime
+        if (this.state.pageLoading) {
+            this.setState({
+                pageLoading: false
+            });
+            console.log("setting changes listener");
+            var changesObject = db.changes({
+                since: 'now',
+                live: true,
+                limit: 40
+            }).on('change', (change) => this.handleChanges(change, changesObject)); //When the changes arrive, call displaySearch
+        }
 
-    return (
+        return (
 
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <div id='wrapper'>
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <div id='wrapper' style={styles.wrapper}>
+
+          <div>
+             <Drawer
+             open={this.state.showMenu}
+             docked={false}
+             onRequestChange={(showMenu) => this.setState({showMenu})}>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()}/>
+            </Drawer>
+         </div>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>} onLeftIconButtonTouchTap={() => this.appbarClick()}
+              <AppBar
+              iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
+              onLeftIconButtonTouchTap={() => this.appbarClick()}
+              style={{backgroundColor:'transparent'}}
               titleStyle={styles.appbar}>
               <div style={styles.column}>
               <div style={styles.row}>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
+                <div style={styles.headermenu}>
+                <FlatButton label ="About" style={styles.headerlinks} onTouchTap={()=>this.displayAbout()} />
+                <FlatButton label="Blog" style={styles.headerlinks} />
+                {this.state.loggedin? <FlatButton label ="My Account" style={styles.headerlinks} onTouchTap={()=>this.displayMyAccount()} />:<FlatButton label ="Login/Register" style={styles.headerlinks} onTouchTap={()=>this.displayLogin()} />}
+                </div>
               </div>
-              <div>
-                {this.state.searchBar}
               </div>
-            </div>
           </AppBar>
-          </div>
 
+          {this.getSearchMenu()}
+
+          </div>
 
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 300 }>
@@ -629,20 +1027,6 @@ export default class App extends React.Component {
           </CSSTransitionGroup>
           </div>
 
-          <div id='menu'>
-             <Drawer
-             open={this.state.showMenu}
-             style={styles.stylemenu}
-             docked={false}
-             onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)}/>
-            </Drawer>
-         </div>
-
-
-          <div ref='footer' id='footer'>
-            <Footer selectedIndex={this.state.selectedFooterIndex} onSelect={(index) => this.footerSelect(index)}/>
-          </div>
 
         </div>
       </MuiThemeProvider>

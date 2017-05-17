@@ -8,6 +8,7 @@ html, body {
   display: flex;  /* use the flex model */
   height: 100vh;
   flex-direction: column;  /* learn more: http://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/ */
+  background: #708090;
 }
 
 #content {
@@ -23,6 +24,10 @@ h3{
   display: flex; /* or inline-flex */
 }
 
-#menu {
-  z-index:10;
+@media screen and (min-width: 0px) and (max-width: 400px) {
+  #hide-mobile { display: none; }  /* hide it on small screens */
+}
+
+@media screen and (min-width: 401px) and (max-width: 1024px) {
+  #hide-mobile { display: block; }   /* show it elsewhere */
 }

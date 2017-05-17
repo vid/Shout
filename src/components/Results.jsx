@@ -6,25 +6,37 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
 
     table: {
       cursor:'pointer'
     },
+    dist:{
+     color: 'black',
+     margin: '12px',
+     float:'right',
+     backgroundColor: '#F0F8FF',
+     border: '1 px solid #000000',
+     borderRadius: '8',
+     fontSize: '14'
+    }
 }
 
 
 export default class Results extends React.Component {
 
     calculateDistance(result) {
+        var userLat = this.props.userLat, userLng = this.props.userLng;
+
         if (result && result.lat && result.lng) {
-            var y_distance = 69 * Math.pow((result.lat - 33.7490), 2);
-            var x_distance = 69 * Math.pow((-84.3880 - result.lng), 2);
-            var distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 100;
+            var x_distance = 69 * Math.pow((result.lat - userLat), 2);
+            var y_distance = 69 * Math.pow((result.lng - userLng), 2);
+            var distance = Math.round(100 * Math.sqrt(x_distance + y_distance)) / 10;
 
             return distance;
-        } else return "?";
+        } else return "N/A";
     }
 
     formatTags(arrTags) {
@@ -53,10 +65,10 @@ export default class Results extends React.Component {
                 <TableRow
                   key={i}
                   onClick={() => displayResult()}>
-                  <TableRowColumn>{this.calculateDistance(result)+" mi"}</TableRowColumn>
-                  <TableRowColumn><h3>{(i+1)+".  "+result.name}</h3> {result.civic_address}</TableRowColumn>
                   <TableRowColumn>
-
+                  <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><div style={styles.dist}>({this.calculateDistance(result)+" mi"})</div></div>
+                  <b>Type: </b>{result.resourcetype+" "}
+                  <b>Address: </b>{result.civic_address}
                   </TableRowColumn>
                 </TableRow>
               )))
@@ -85,26 +97,29 @@ export default class Results extends React.Component {
         var searchstring=getSearchstring();
 
         return (
-            <Table
+        <div>
+          <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>
+            <h2>Results</h2>
+            <div style={{padding:15}}>
+            <RaisedButton
+              label="Add Place"
+              labelStyle={{fontWeight:'bold'}}
+              onTouchTap={()=>displayAddResource()}
+              icon={<ContentAdd />}/>
+            </div>
+            </div>
+      <Table
         selectable={false}
         fixedHeader={true}
         style={styles.table}
         onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
-        <TableHeader
-          displaySelectAll={false}>
-          <TableRow>
-            <TableHeaderColumn><h2>Distance</h2></TableHeaderColumn>
-            <TableHeaderColumn><h2>Name</h2></TableHeaderColumn>
-            {/*<TableHeaderColumn><h2>Services</h2></TableHeaderColumn>*/}
-          </TableRow>
-        </TableHeader>
         <TableBody
-            stripedRows={true}
             displayRowCheckbox={false}
             showRowHover={true}>
         {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
         </TableBody>
       </Table>
+      </div>
         );
     }
 }
