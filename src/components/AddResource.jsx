@@ -415,7 +415,7 @@ export default class AddResource extends React.Component {
               label="Podiatry"
               style={styles.checkbox}/>
 
-              <b>OB/Gyn and Women's Wellness</b>
+              <b>OB/Gyn and Womens Wellness</b>
             <Checkbox
               label="Pregnancy Testing"
               style={styles.checkbox}/>
