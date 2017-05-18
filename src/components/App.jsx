@@ -52,8 +52,8 @@ PouchDB.plugin(require('pouchdb-authentication'));
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
 
-var db = new PouchDB('resourcesnew');
-var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
+var db = new PouchDB('resources2017');
+var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resources2017';
 var db_pending = new PouchDB('resourcespending');
 var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
 PouchDB.sync('db', 'remoteCouch');
@@ -165,28 +165,6 @@ export default class App extends React.Component {
             }
         });
 
-        var meta = {
-            _id: "Meta" + "_" + res.name,
-            name: res.name,
-            price: res.price,
-            languages: res.language,
-            population: res.population,
-            waitingtime: res.waitingtime,
-            services: res.services,
-            numberreviews: '0',
-            accessibilityrating: '',
-            availabilityrating: ''
-
-
-        };
-        db_pending.put(meta, function callback(err, result) {
-            if (!err) {
-                console.log('Added metadata');
-            } else {
-                console.log('Error adding metadata' + err);
-            }
-        });
-
         db_pending.replicate.to(remoteCouchPending, {
             live: true,
             retry: true,
@@ -234,8 +212,7 @@ export default class App extends React.Component {
         //create a new doc with properties of this
         var mod = {
             name: res.name,
-            _id: res._id,
-            _rev: res._rev,
+            _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
             lat: res.lat,
             lng: res.lng,
             civic_address: res.civic_address,
@@ -246,43 +223,28 @@ export default class App extends React.Component {
             type: res.type,
             zip: res.zip,
             city: res.city,
+            price:[],
+            languages:[],
+            population:[],
+            waitingtime:res.waitingtime,
+            services:[],
+            numberreviews:'0',
+            accessibilityrating:'',
+            availabilityrating:'',
+            tags:[],
 
         };
-        db.put(mod, function callback(err, result) {
+        dbnew.put(mod, function callback(err, result) {
             if (!err) {
                 console.log('Modified this doc');
             } else {
                 console.log('Error modifying this doc');
             }
         });
-
-        //create new Meta object
-        var meta = {
-            _id: "Meta" + "_" + res.name,
-            name: res.name,
-            price: [],
-            languages: [],
-            population: [],
-            waitingtime: res.waitingtime,
-            services: [],
-            numberreviews: '0',
-            accessibilityrating: '',
-            availabilityrating: '',
-            tags: [],
-
-
-        };
-        db.put(meta, function callback(err, result) {
-            if (!err) {
-                console.log('Modified meta');
-            } else {
-                console.log('Error modifying meta');
-            }
-        });
         //create new doc and replace old one
         //delete tags object
 
-        db.replicate.to(remoteCouch, {
+        dbnew.replicate.to(remoteCouchnew, {
             live: true,
             retry: true,
             back_off_function: function (delay) {
@@ -295,36 +257,45 @@ export default class App extends React.Component {
 
     }
 
-        updateMeta(res) {
+        updateDoc(res) {
 
-
-            //create new Meta object
-            var meta = {
-                _id: "Meta" + "_" + res.name,
+            //create a new doc with properties of this
+            var mod = {
                 name: res.name,
-                price: [],
-                languages: [],
-                population: [],
-                waitingtime: res.waitingtime,
-                services: [],
-                numberreviews: '0',
-                accessibilityrating: '',
-                availabilityrating: '',
-                tags: [],
-
+                _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
+                _rev:res._rev,
+                lat: res.lat,
+                lng: res.lng,
+                civic_address: res.civic_address,
+                phone: res.phone,
+                website: res.website,
+                description: res.description,
+                resourcetype: res.resourcetype,
+                type: res.type,
+                zip: res.zip,
+                city: res.city,
+                price:res.price,
+                languages:res.languages,
+                population:res.population,
+                waitingtime:res.waitingtime,
+                services:res.services,
+                numberreviews:res.numberreviews,
+                accessibilityrating:res.accessibilityrating,
+                availabilityrating:res.availabilityrating,
+                tags:res.tags,
 
             };
-            db.put(meta, function callback(err, result) {
+            db.put(mod, function callback(err, result) {
                 if (!err) {
-                    console.log('Modified meta');
+                    console.log('Modified this doc');
                 } else {
-                    console.log('Error modifying meta');
+                    console.log('Error modifying this doc');
                 }
             });
             //create new doc and replace old one
             //delete tags object
 
-            db.replicate.to(remoteCouch, {
+            db.replicate.to(remoteCouchnew, {
                 live: true,
                 retry: true,
                 back_off_function: function (delay) {
@@ -336,6 +307,8 @@ export default class App extends React.Component {
             });
 
         }
+
+
 
     //This function is called when the left-hand icon in the AppBar is clicked.
     //the action depends on whether the user is currently on the main/landing page or a clinic page result
@@ -420,14 +393,6 @@ export default class App extends React.Component {
         });
 
     }
-    displayModifyMeta() {
-
-        this.changeHeaderInfo("ModifyDocs");
-        this.setState({
-            screen: <ModifyMeta container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredMeta={() => this.state.filteredMeta} updateDoc={(res)=>this.updateDoc(res)}/>
-        });
-
-    }
 
     //This function basically updates the single page app to now display the ClinicPage component.
     //state variables are changed as needed in order to modify the title and layout of the page.
@@ -435,10 +400,9 @@ export default class App extends React.Component {
 
         const clinicname = result.name;
         this.changeHeaderInfo(clinicname);
-        this.updatePageMeta(result.name);
         this.updateFeedbacks(result.name);
         this.setState({
-            screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addFeedback={(x) => this.addFeedback(x)} getMeta={() => this.state.clinicpageMeta} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addFlag={()=>this.addFlag(a,b)}/>
+            screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addFeedback={(x) => this.addFeedback(x)} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addFlag={()=>this.addFlag(a,b)}/>
         });
 
     }
@@ -478,7 +442,7 @@ export default class App extends React.Component {
             searchBar: <SearchInputs container={this.refs.content} getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} getselectedIndex={()=>this.state.selectedIndex} onSelect={(index) => this.footerSelect(index)}/>
         });
         this.setState({
-            screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} getMeta={(name) => this.state.clinicpageMeta} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} />
+            screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} />
         });
 
     }
@@ -496,6 +460,7 @@ export default class App extends React.Component {
     //See:  https://github.com/nolanlawson/pouchdb-quick-search
     filterResources(searchString) {
 
+      var matches = [];
         if (!searchString || searchString.length < 1) {
             console.log("no search string, drawing all resources");
             db.allDocs({
@@ -517,32 +482,15 @@ export default class App extends React.Component {
             });
             db.search({
                 query: searchString,
-                fields: ['type', 'population','services.label'],
+                fields: ['resourcetype', 'population','services.label'],
                 include_docs: true,
             }, (err, list) => {
                 if (err) {
                     this.error(err);
                 }
-                var matches = [];
                 list.rows.forEach(function (res) {
-                    if (res.id.startsWith('Meta')) {
-
-                        db.search({
-                            query: res._id,
-                            fields: ['name'],
-                            include_docs: true,
-                        }, (err, list) => {
-
-                            if (err) {
-                                return console.log("error searching DB:" + err);
-                            } else if (res.id.startsWith('Resource')) {
-                                matches.push(res);
-                            }
-                        });
-                    } else if (res.id.startsWith('Resource')) {
+                    if (res.id.startsWith('Resource')) {
                         matches.push(res);
-                    } else {
-                        console.log("unknown item type");
                     }
                 });
                 this.redrawResources(matches);
@@ -832,39 +780,7 @@ export default class App extends React.Component {
     }
 
 
-    //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page meta & feedback that's
-    //currently stored in the state of App.jsx
-    updatePageMeta(name) {
-
-        db.allDocs({
-            startkey: 'Meta_' + name,
-            endkey: 'Meta_' + name + '_\uffff',
-            include_docs: true
-        }, (err, doc) => {
-
-            if (err) {
-                return this.error(err);
-            }
-
-            if (doc.rows.length > 0) {
-                this.setState({
-                    clinicpageMeta: doc.rows[0]
-                });
-            } else {
-                this.setState({
-                    clinicpageMeta: [{
-                        value: 'No meta yet',
-                        count: ''
-                    }]
-                });
-            }
-        });
-
-    }
-
-
-
-    //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page meta & feedback that's
+    //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page feedback that's
     //currently stored in the state of App.jsx
     updateFeedbacks(name) {
 

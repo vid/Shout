@@ -67,7 +67,7 @@ export default class Results extends React.Component {
                   onClick={() => displayResult()}>
                   <TableRowColumn>
                   <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><div style={styles.dist}>({this.calculateDistance(result)+" mi"})</div></div>
-                  <b>Type: </b>{result.resourcetype+" "}
+                  <div><b>Type: </b>{result.resourcetype+" "}<div style={styles.dist}>({result.numberreviews+" reviews"})</div></div>
                   <b>Address: </b>{result.civic_address}
                   </TableRowColumn>
                 </TableRow>

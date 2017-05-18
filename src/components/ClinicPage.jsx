@@ -33,6 +33,10 @@ import Snackbar from 'material-ui/Snackbar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import Checkbox from 'material-ui/Checkbox';
+
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
@@ -240,6 +244,48 @@ export default class ClinicPage extends React.Component {
 
     }
 
+    handleUpdate(res){
+
+            try{
+
+              var new={
+                _id:res._id,
+                _rev:res._rev,
+                name: res.name,
+                resourcetype: res.resourcetype,
+                phone: res.phone,
+                civic_address: res.civic_address,
+                city: res.city,
+                zip: res.zip,
+                website: res.website,
+                description: this.state.description,
+                hours: this.state.hours,
+                lat: res.lat,
+                lng: res.lng,
+
+                price:this.state.price,
+                languages:this.state.languages,
+                population:this.state.population,
+                waitingtime:this.state.waitingtime,
+                services:this.state.services,
+
+                numberreviews:res.numberreviews,
+                accessibilityrating:res.accessibilityrating,
+                availabilityrating:res.availabilityrating,
+
+                tags:this.state.tags,
+              }
+
+              this.updateResource(new);
+              this.setState({completedOpen:true});
+            }
+            catch(err){
+              this.setState({errorOpen:true});
+              console.log("error"+err)
+            }
+
+    }
+
     renderChip(data) {
         return (
             <Chip
@@ -291,16 +337,16 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-        const { getFeedbacks, vouchFor, vouchAgainst, getMeta, addFlag, result, addFeedback } = this.props;
+        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result, addFeedback, updateResource } = this.props;
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
-        const meta = getMeta();
         const allFeedbacks = getFeedbacks();
         const id = result._id;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
+        this.updateResource=updateResource;
 
 
         return (
@@ -338,11 +384,13 @@ export default class ClinicPage extends React.Component {
       <Card style ={styles.card}>
         <CardHeader title="Data"/>
           <CardText>
-            Price:{this.formatServices(meta.doc.price)}
-            Population:{this.formatServices(meta.doc.population)}
-            Services:{this.formatServices(meta.doc.services)}
-            Languages:{this.formatServices(meta.doc.services)}
+            Price:{this.formatServices(result.price)}
+            Population:{this.formatServices(result.population)}
+            Services:{this.formatServices(result.services)}
+            Languages:{this.formatServices(result.languages)}
           </CardText>
+
+
         </Card>
 
 {/* ***************************************** */}
