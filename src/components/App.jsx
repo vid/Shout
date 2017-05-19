@@ -389,7 +389,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("About");
         this.setState({
-            screen: <About container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <About container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
@@ -407,7 +407,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("My Account");
         this.setState({
-            screen: <MyAccount container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <MyAccount container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
@@ -416,15 +416,38 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("ModifyDocs");
         this.setState({
-            screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
+
+    displayApproveDocs() {
+      console.log("in approve")
+      db_pending.allDocs({
+          startkey: 'Resource_',
+          endkey: 'Resource_\uffff',
+          include_docs: true
+      }, (err, doc) => {
+          if (err) {
+              return this.error(err);
+          }
+          if (doc.rows.length > 0) {
+            console.log(doc);
+              //this.redrawResources(doc.rows);
+          }
+      });
+
+      // this.changeHeaderInfo("Approve Docs");
+      // this.setState({
+      //   screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer}
+      // })
+    }
+
     displayModifyMeta() {
 
         this.changeHeaderInfo("ModifyDocs");
         this.setState({
-            screen: <ModifyMeta container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredMeta={() => this.state.filteredMeta} updateDoc={(res)=>this.updateDoc(res)}/>
+            screen: <ModifyMeta container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredMeta={() => this.state.filteredMeta} updateDoc={(res)=>this.updateDoc(res)}/>
         });
 
     }
@@ -459,6 +482,7 @@ export default class App extends React.Component {
                 return this.error(err);
             }
             if (doc.rows.length > 0) {
+              console.log(doc)
                 this.redrawResources(doc.rows);
             }
         });
@@ -994,7 +1018,7 @@ export default class App extends React.Component {
              open={this.state.showMenu}
              docked={false}
              onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()}/>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()} displayApproveDocs={()=>this.displayApproveDocs()}/>
             </Drawer>
          </div>
 
