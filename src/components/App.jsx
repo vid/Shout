@@ -566,7 +566,12 @@ export default class App extends React.Component {
     //It should refresh the resources when we initially sync the database, but should do nothing otherwise.
     handleChanges(change, changesObject) {
 
-        this.displaySearch();
+        if(pageLoading){
+          this.displaySearch();
+          this.setState({
+              pageLoading: false
+          });
+        }
     }
 
 
@@ -849,9 +854,6 @@ export default class App extends React.Component {
         //If there are no results yet, then database is still syncing and
         //we should listen for changes to the db and display a "Loading" message in the meantime
         if (this.state.pageLoading) {
-            this.setState({
-                pageLoading: false
-            });
             console.log("setting changes listener");
             var changesObject = db.changes({
                 since: 'now',
