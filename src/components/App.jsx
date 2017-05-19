@@ -59,7 +59,15 @@ PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
 var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
+<<<<<<< HEAD
 PouchDB.sync(db_pending, remoteCouchPending);
+=======
+PouchDB.sync('db', 'remoteCouch', {
+  // live: true,
+  // retry: true
+});
+PouchDB.sync('db_pending', 'remoteCouchPending');
+>>>>>>> 0f2e68df5ae278c8111d4179ec8dd081d47e5327
 
 
 const styles = {
@@ -407,12 +415,14 @@ export default class App extends React.Component {
     displaySearch() {
 
         //first retrieve all docs again, to reverse any filters
+        console.log("in here")
         db.allDocs({
-            startkey: 'Resource_',
-            endkey: 'Resource_\uffff',
+            // startkey: 'Resource_',
+            // endkey: 'Resource_\uffff',
             include_docs: true
         }, (err, doc) => {
             if (err) {
+              console.log(err)
                 return this.error(err);
             }
             if (doc.rows.length > 0) {
