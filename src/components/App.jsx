@@ -52,8 +52,8 @@ PouchDB.plugin(require('pouchdb-authentication'));
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
 
-var db = new PouchDB('resourcesnew');
-var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
+var db = new PouchDB('resources2017');
+var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resources2017';
 PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
@@ -104,7 +104,8 @@ const styles = {
     },
     wrapper: {
         backgroundImage: 'url(' + pathToBG + ')',
-        backgroundPosition: 'bottom 0px right 0px'
+        backgroundPosition: 'center',
+        backgroundAttachment:'fixed'
     }
 };
 
@@ -314,7 +315,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("Add Resource");
         this.setState({
-            screen: <AddResource container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/>
+            screen: <AddResource container={this.refs.content} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/>
         });
 
     }
@@ -323,7 +324,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("About");
         this.setState({
-            screen: <About container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <About container={this.refs.content} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
@@ -332,7 +333,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("Login/Register");
         this.setState({
-            screen: <LoginRegister container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} registerNew={(user)=>this.registerNew(user)} loginUser={(user,callback)=>this.loginUser(user,callback)} getLoggedIn={()=>this.state.loggedin} getRegistered={()=>this.state.registered} displaySearch={()=>this.displaySearch}/>
+            screen: <LoginRegister container={this.refs.content} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} registerNew={(user)=>this.registerNew(user)} loginUser={(user,callback)=>this.loginUser(user,callback)} getLoggedIn={()=>this.state.loggedin} getRegistered={()=>this.state.registered} displaySearch={()=>this.displaySearch}/>
         });
 
     }
@@ -341,7 +342,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("My Account");
         this.setState({
-            screen: <MyAccount container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <MyAccount container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
@@ -350,7 +351,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("ModifyDocs");
         this.setState({
-            screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
@@ -566,8 +567,6 @@ export default class App extends React.Component {
     handleChanges(change, changesObject) {
 
         this.displaySearch();
-        changesObject.cancel();
-        console.log("changes cancelled");
     }
 
 
