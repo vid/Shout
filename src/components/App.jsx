@@ -52,12 +52,13 @@ PouchDB.plugin(require('pouchdb-authentication'));
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
 
-var db = new PouchDB('resources2017');
-var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resources2017';
+var db = new PouchDB('resourcesnew');
+var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resourcesnew';
+PouchDB.replicate(remoteCouch,db);
+
 var db_pending = new PouchDB('resourcespending');
 var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
-PouchDB.sync('db', 'remoteCouch');
-PouchDB.sync('db_pending', 'remoteCouchPending');
+PouchDB.sync(db_pending, remoteCouchPending);
 
 
 const styles = {
@@ -145,16 +146,26 @@ export default class App extends React.Component {
 
         //create object to add
         var resource = {
-            _id: "Resource" + "_" + res.zip + "_" + res.name,
-            name: res.name,
-            lat: res.lat,
-            lng: res.lng,
+            _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
             civic_address: res.civic_address,
             phone: res.phone,
             website: res.website,
             description: res.description,
             resourcetype: res.resourcetype,
-            zip: res.zip
+            type: res.type,
+            zip: res.zip,
+            city: res.city,
+            lat: res.lat,
+            lng: res.lng,
+            price:res.price,
+            languages:res.languages,
+            population:res.population,
+            waitingtime:res.waitingtime,
+            services:res.services,
+            numberreviews:'0',
+            accessibilityrating:'',
+            availabilityrating:'',
+            tags:res.tags,
 
         };
         db_pending.put(resource, function callback(err, result) {
@@ -207,56 +218,6 @@ export default class App extends React.Component {
 
     }
 
-    changeDoc(res) {
-
-        //create a new doc with properties of this
-        var mod = {
-            name: res.name,
-            _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
-            lat: res.lat,
-            lng: res.lng,
-            civic_address: res.civic_address,
-            phone: res.phone,
-            website: res.website,
-            description: res.description,
-            resourcetype: res.resourcetype,
-            type: res.type,
-            zip: res.zip,
-            city: res.city,
-            price:[],
-            languages:[],
-            population:[],
-            waitingtime:res.waitingtime,
-            services:[],
-            numberreviews:'0',
-            accessibilityrating:'',
-            availabilityrating:'',
-            tags:[],
-
-        };
-        dbnew.put(mod, function callback(err, result) {
-            if (!err) {
-                console.log('Modified this doc');
-            } else {
-                console.log('Error modifying this doc');
-            }
-        });
-        //create new doc and replace old one
-        //delete tags object
-
-        dbnew.replicate.to(remoteCouchnew, {
-            live: true,
-            retry: true,
-            back_off_function: function (delay) {
-                if (delay === 0) {
-                    return 1000;
-                }
-                return delay * 3;
-            }
-        });
-
-    }
-
         updateDoc(res) {
 
             //create a new doc with properties of this
@@ -295,7 +256,7 @@ export default class App extends React.Component {
             //create new doc and replace old one
             //delete tags object
 
-            db.replicate.to(remoteCouchnew, {
+            db.replicate.to(remoteCouch, {
                 live: true,
                 retry: true,
                 back_off_function: function (delay) {
