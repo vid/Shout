@@ -59,15 +59,8 @@ PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
 var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
-<<<<<<< HEAD
 PouchDB.sync(db_pending, remoteCouchPending);
-=======
-PouchDB.sync('db', 'remoteCouch', {
-  // live: true,
-  // retry: true
-});
-PouchDB.sync('db_pending', 'remoteCouchPending');
->>>>>>> 0f2e68df5ae278c8111d4179ec8dd081d47e5327
+
 
 
 const styles = {
@@ -294,6 +287,18 @@ export default class App extends React.Component {
         }
     }
 
+    changeDoc(res) {
+      db.put(res, function callback(err, result) {
+          if (!err) {
+              console.log('Added pending resource to official db');
+          } else {
+              console.log('Error modifying this doc');
+          }
+      });
+
+      db_pending.remove(res);
+    }
+
     changeHeaderInfo(title) {
 
         this.setState({
@@ -378,7 +383,7 @@ export default class App extends React.Component {
           if (doc.rows.length > 0) {
             this.changeHeaderInfo("Approve Docs");
             this.setState({
-              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} pendingData={doc} />
+              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} pendingData={doc} changeDoc={(res)=>this.changeDoc(res)}/>
             })
           }
       });

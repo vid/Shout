@@ -19,7 +19,7 @@ export default class ApproveDocs extends React.Component {
 
   //This method returns the pendingData formatted as a table of results
   //If the page has not yet loaded, then it returns a simple message "Loading resources"
-      formatFilteredResources(pendingData){
+      formatFilteredResources(pendingData, handler){
           if(pendingData.length>0){
             console.log(pendingData)
             return (
@@ -32,7 +32,7 @@ export default class ApproveDocs extends React.Component {
                       {result.civic_address}
                     </TableRowColumn>
                     <TableRowColumn>
-                      <RaisedButton label="convert" onTouchTap={()=>this.changeDoc(result)}/>
+                      <RaisedButton label="Approve" onTouchTap={()=>this.changeDoc(result)}/>
                     </TableRowColumn>
                   </TableRow>
                 )))
@@ -49,8 +49,8 @@ export default class ApproveDocs extends React.Component {
       render() {
 
         //const { getFilteredResources, changeDoc} = this.props;
-          const { container, footer, pendingData} = this.props;
-          console.log(pendingData);
+          const { container, footer, pendingData, changeDoc} = this.props;
+          console.log(changeDoc);
           return (
               <div>
                 <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>
@@ -65,7 +65,7 @@ export default class ApproveDocs extends React.Component {
               <TableBody
                   displayRowCheckbox={false}
                   showRowHover={true}>
-              {this.formatFilteredResources(pendingData.rows)}
+              {this.formatFilteredResources(pendingData.rows, changeDoc)}
               </TableBody>
             </Table>
             </div>
