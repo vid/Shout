@@ -142,8 +142,10 @@ export default class App extends React.Component {
     }
 
 
-    // This method is called by the AddResource component. For now, adds a new document directly to the "resourcesnew" database
-    // on the couchdb server. Later, this database should be migrated to a "pending" database where we store items before they are approved/moderated
+    // This method is called by the AddResource component. For now, adds a new
+    // document directly to the "resourcesnew" database on the couchdb server.
+    // Later, this database should be migrated to a "pending" database where we
+    // store items before they are approved/moderated
     addResource(res) {
 
         //create object to add
@@ -195,7 +197,8 @@ export default class App extends React.Component {
 
     }
 
-    //This method is called by ClinicPage, and submits a new "Feedback_" document to the PouchDB database
+    // This method is called by ClinicPage, and submits a new "Feedback_"
+    // document to the PouchDB database
     addFeedback(rev) {
 
         var review = {
@@ -279,8 +282,9 @@ export default class App extends React.Component {
 
 
 
-    //This function is called when the left-hand icon in the AppBar is clicked.
-    //the action depends on whether the user is currently on the main/landing page or a clinic page result
+    // This function is called when the left-hand icon in the AppBar is clicked.
+    // the action depends on whether the user is currently on the main/landing
+    // page or a clinic page result
     appbarClick() {
 
         if (!this.state.appbarState) {
@@ -327,13 +331,16 @@ export default class App extends React.Component {
 
     }
 
-    //This function basically updates the single page app to now display the AddResource component.
-    //state variables are changed as needed in order to modify the title and layout of the page.
+    // This function basically updates the single page app to now display the
+    // AddResource component. State variables are changed as needed in order to
+    // modify the title and layout of the page.
     displayAddResource() {
 
         this.changeHeaderInfo("Add Resource");
         this.setState({
-            screen: <AddResource container={this.refs.content} addResource={(x) => this.addResource(x)} displaySearch={()=>this.displaySearch}/>
+            screen: <AddResource container={this.refs.content}
+                                 addResource={(x) => this.addResource(x)}
+                                 displaySearch={()=>this.displaySearch}/>
         });
 
     }
@@ -342,7 +349,10 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("About");
         this.setState({
-            screen: <About container={this.refs.content} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <About container={this.refs.content}
+                           displaySearch={()=>this.displaySearch}
+                           getFilteredResources={() => this.state.filteredResources}
+                           changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
@@ -351,7 +361,14 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("Login/Register");
         this.setState({
-            screen: <LoginRegister container={this.refs.content} displaySearch={(result) => this.displaySearch()} addResource={(x) => this.addResource(x)} registerNew={(user)=>this.registerNew(user)} loginUser={(user,callback)=>this.loginUser(user,callback)} getLoggedIn={()=>this.state.loggedin} getRegistered={()=>this.state.registered} displaySearch={()=>this.displaySearch}/>
+            screen: <LoginRegister container={this.refs.content}
+                                   displaySearch={(result) => this.displaySearch()}
+                                   addResource={(x) => this.addResource(x)}
+                                   registerNew={(user)=>this.registerNew(user)}
+                                   loginUser={(user,callback)=>this.loginUser(user,callback)}
+                                   getLoggedIn={()=>this.state.loggedin}
+                                   getRegistered={()=>this.state.registered}
+                                   displaySearch={()=>this.displaySearch}/>
         });
 
     }
@@ -360,19 +377,25 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("My Account");
         this.setState({
-            screen: <MyAccount container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <MyAccount container={this.refs.content}
+                               footer={this.refs.footer}
+                               displaySearch={()=>this.displaySearch}
+                               getFilteredResources={() => this.state.filteredResources}
+                               changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
 
     displayModifyDocs() {
-
         this.changeHeaderInfo("ModifyDocs");
         this.setState({
-            screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <ModifyDocs container={this.refs.content}
+                                footer={this.refs.footer}
+                                displaySearch={()=>this.displaySearch}
+                                getFilteredResources={() => this.state.filteredResources}
+                                changeDoc={(res)=>this.changeDoc(res)}/>
 
         });
-
     }
 
     displayApproveDocs() {
@@ -406,34 +429,39 @@ export default class App extends React.Component {
                                 changeDoc={(res)=>this.changeDoc(res)}/>
           })
       });
-
-
     }
 
 
-    //This function basically updates the single page app to now display the ClinicPage component.
-    //state variables are changed as needed in order to modify the title and layout of the page.
+    // This function basically updates the single page app to now display the
+    // ClinicPage component. State variables are changed as needed in order to
+    // modify the title and layout of the page.
     displayResult(result) {
 
         const clinicname = result.name;
         this.changeHeaderInfo(clinicname);
         this.updateFeedbacks(result.name);
         this.setState({
-            screen: <ClinicPage container={this.refs.content} footer={this.refs.footer} displaySearch={(result) => this.displaySearch()} addFeedback={(x) => this.addFeedback(x)} getFeedbacks={()=>this.state.clinicpageFeedbacks} result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)} vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)} addFlag={()=>this.addFlag(a,b)}/>
+            screen: <ClinicPage container={this.refs.content}
+                                footer={this.refs.footer}
+                                displaySearch={(result) => this.displaySearch()}
+                                addFeedback={(x) => this.addFeedback(x)}
+                                getFeedbacks={()=>this.state.clinicpageFeedbacks}
+                                result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)}
+                                vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)}
+                                addFlag={()=>this.addFlag(a,b)}/>
         });
 
     }
 
 
 
-    //This function basically updates the single page app to now display the main component (App.js) with all results and no filter.
-    //state variables are changed as needed in order to modify the title and layout of the page.
+    // This function basically updates the single page app to now display the
+    // main component (App.js) with all results and no filter. State variables
+    //are changed as needed in order to modify the title and layout of the page.
     displaySearch() {
 
         //first retrieve all docs again, to reverse any filters
         db.allDocs({
-            // startkey: 'Resource_',
-            // endkey: 'Resource_\uffff',
             include_docs: true
         }, (err, doc) => {
             if (err) {
@@ -457,10 +485,25 @@ export default class App extends React.Component {
             appbarIcon: <NavigationMenu />
         });
         this.setState({
-            searchBar: <SearchInputs container={this.refs.content} getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} getselectedIndex={()=>this.state.selectedIndex} onSelect={(index) => this.footerSelect(index)}/>
+            searchBar: <SearchInputs container={this.refs.content}
+                                     getSearchstring={()=>this.state.searchString}
+                                     filterResources={(searchString)=>this.filterResources(searchString)}
+                                     searchString={this.state.searchString}
+                                     getselectedIndex={()=>this.state.selectedIndex}
+                                     onSelect={(index) => this.footerSelect(index)}/>
         });
         this.setState({
-            screen: <Search container={this.refs.content} footer={this.refs.footer} displayResult={(result) => this.displayResult(result)} displaySearch={() => this.displaySearch()} filterResources={(string) => this.filterResources(string)} displayAddResource={() => this.displayAddResource()} getFilteredResources={() => this.state.filteredResources} getPageLoading={() => this.state.pageLoading} onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)} userLat={this.state.userLat} userLng={this.state.userLng} getSearchstring={()=>this.state.searchString} />
+            screen: <Search container={this.refs.content}
+                            footer={this.refs.footer}
+                            displayResult={(result) => this.displayResult(result)}
+                            displaySearch={() => this.displaySearch()}
+                            filterResources={(string) => this.filterResources(string)}
+                            displayAddResource={() => this.displayAddResource()}
+                            getFilteredResources={() => this.state.filteredResources}
+                            getPageLoading={() => this.state.pageLoading}
+                            onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)}
+                            userLat={this.state.userLat} userLng={this.state.userLng}
+                            getSearchstring={()=>this.state.searchString} />
         });
 
     }
@@ -590,8 +633,10 @@ export default class App extends React.Component {
 
         validCoordination.sort((a, b) => {
             if (a.lat && b.lat && b.lng && a.lng) {
-                var a_distance = Math.pow((this.state.userLat - a.lat), 2) + Math.pow((this.state.userLng - a.lng), 2);
-                var b_distance = Math.pow((this.state.userLat - b.lat), 2) + Math.pow((this.state.userLng - b.lng), 2);
+                var a_distance = Math.pow((this.state.userLat - a.lat), 2) +
+                                 Math.pow((this.state.userLng - a.lng), 2);
+                var b_distance = Math.pow((this.state.userLat - b.lat), 2) +
+                                 Math.pow((this.state.userLng - b.lng), 2);
                 var diff = a_distance - b_distance;
                 return diff;
             } else {
@@ -615,20 +660,23 @@ export default class App extends React.Component {
 
 
 
-    //Function that is called by event listeners attached when we called "db.changes"
-    //It should refresh the resources when we initially sync the database, but should do nothing otherwise.
+    // Function that is called by event listeners attached when we called
+    // "db.changes. It should refresh the resources when we initially sync the
+    // database, but should do nothing otherwise.
     handleChanges(change, changesObject) {
 
         this.displaySearch();
         changesObject.cancel();
         console.log("changes listener cancelled");
+        console.log("changes are: ", change)
 
     }
 
 
 
-    //A function that's called by the React Google Maps library after map component loads the API
-    //Currently doing nothing! ShoutApp is not using geocoder. May be necessary in the future.
+    // A function that's called by the React Google Maps library after map
+    // component loads the API Currently doing nothing! ShoutApp is not using
+    // geocoder. May be necessary in the future.
     onGoogleApiLoad(map, maps) {
 
         this.setState({
@@ -796,8 +844,9 @@ export default class App extends React.Component {
     }
 
 
-    //Since all state is stored in App.jsx, each clinicpage that is rendered must update the current page feedback that's
-    //currently stored in the state of App.jsx
+    // Since all state is stored in App.jsx, each clinicpage that is rendered
+    // must update the current page feedback that's currently stored in the
+    // state of App.jsx
     updateFeedbacks(name) {
 
         db.allDocs({
@@ -902,8 +951,9 @@ export default class App extends React.Component {
     render() {
 
 
-        //If there are no results yet, then database is still syncing and
-        //we should listen for changes to the db and display a "Loading" message in the meantime
+        // If there are no results yet, then database is still syncing and
+        // we should listen for changes to the db and display a "Loading" message
+        // in the meantime
         if (this.state.pageLoading) {
             this.setState({
                 pageLoading: false
@@ -913,7 +963,8 @@ export default class App extends React.Component {
                 since: 'now',
                 live: true,
                 limit: 40
-            }).on('change', (change) => this.handleChanges(change, changesObject)); //When the changes arrive, call displaySearch
+            // When the changes arrive, call displaySearch
+            }).on('change', (change) => this.handleChanges(change, changesObject));
         }
 
         return (
@@ -926,24 +977,37 @@ export default class App extends React.Component {
              open={this.state.showMenu}
              docked={false}
              onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()} displayApproveDocs={()=>this.displayApproveDocs()}/>
+               <LeftMenu displayAddResource={() => this.displayAddResource()}
+                         displayAbout={() => this.displayAbout()}
+                         addResource={(res)=>this.addResource(res)}
+                         displayModifyDocs={()=>this.displayModifyDocs()}
+                         displayApproveDocs={()=>this.displayApproveDocs()}/>
             </Drawer>
          </div>
 
           <div id='header'>
-              <AppBar
-              iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
-              onLeftIconButtonTouchTap={() => this.appbarClick()}
-              style={{backgroundColor:'transparent'}}
-              titleStyle={styles.appbar}>
+              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
+                      onLeftIconButtonTouchTap={() => this.appbarClick()}
+                      style={{backgroundColor:'transparent'}}
+                      titleStyle={styles.appbar}>
               <div style={styles.column}>
               <div style={styles.row}>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
                 <div style={styles.headermenu}>
-                <FlatButton label ="About" style={styles.headerlinks} onTouchTap={()=>this.displayAbout()} />
+                <FlatButton label ="About"
+                            style={styles.headerlinks}
+                            onTouchTap={()=>this.displayAbout()} />
                 <FlatButton label="Blog" style={styles.headerlinks} />
-                {this.state.loggedin? <FlatButton label ="My Account" style={styles.headerlinks} onTouchTap={()=>this.displayMyAccount()} />:<FlatButton label ="Login/Register" style={styles.headerlinks} onTouchTap={()=>this.displayLogin()} />}
+                {if (this.state.loggedin) {
+                  <FlatButton label ="My Account"
+                              style={styles.headerlinks}
+                              onTouchTap={()=>this.displayMyAccount()} />
+                } else {
+                  <FlatButton label ="Login/Register"
+                              style={styles.headerlinks}
+                              onTouchTap={()=>this.displayLogin()} />}
+                }}
                 </div>
               </div>
               </div>
@@ -954,7 +1018,9 @@ export default class App extends React.Component {
           </div>
 
           <div ref='content' id='content'>
-          <CSSTransitionGroup transitionName='slide' transitionEnterTimeout={ 100 } transitionLeaveTimeout={ 300 }>
+          <CSSTransitionGroup transitionName='slide'
+                              transitionEnterTimeout={ 100 }
+                              transitionLeaveTimeout={ 300 }>
             {this.state.screen}
           </CSSTransitionGroup>
           </div>

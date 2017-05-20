@@ -58,11 +58,10 @@ export default class ApproveDocs extends React.Component {
                   <div style={{padding:15}}>
                 </div>
               </div>
-            <Table
-              selectable={false}
-              fixedHeader={true}
-              style={styles.table}
-              onCellClick={(rowNumber, columnID) => displayResult(pendingData[rowNumber].doc)}>
+            <Table selectable={false}
+                   fixedHeader={true}
+                   style={styles.table}
+                   onCellClick={(rowNumber, columnID) => displayResult(pendingData[rowNumber].doc)}>
               <TableBody
                   displayRowCheckbox={false}
                   showRowHover={true}>
