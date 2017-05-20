@@ -48,7 +48,7 @@ export default class ApproveDocs extends React.Component {
       render() {
 
         //const { getFilteredResources, changeDoc} = this.props;
-          const { container, footer, pendingData, changeDoc} = this.props;
+          const { container, footer, displayResult, pendingData, changeDoc} = this.props;
           this.changeDoc = changeDoc;
           return (
               <div>
@@ -60,7 +60,8 @@ export default class ApproveDocs extends React.Component {
             <Table
               selectable={false}
               fixedHeader={true}
-              style={styles.table}>
+              style={styles.table}
+              onCellClick={(rowNumber, columnID) => displayResult(pendingData.rows[rowNumber].doc)}>
               <TableBody
                   displayRowCheckbox={false}
                   showRowHover={true}>

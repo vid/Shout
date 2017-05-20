@@ -176,7 +176,6 @@ export default class ClinicPage extends React.Component {
     //* ***************************************** *//
 
       formatDescription(description) {
-
             if(description.length<1000){
               return (<div>{description}</div>)
             }else if (this.state.descriptionExpanded) {
@@ -211,7 +210,12 @@ export default class ClinicPage extends React.Component {
     }
 
     formatServices(services) {
-
+        // This check is necessary because if the resource is
+        // from the pending db, then it will not have any
+        // services recorded.
+        if (typeof services == "undefined") {
+          return <p>Not Available</p>
+        }
         if (services.length > 0) {
             return services.map((service, i) =>
                 <li key={i}><b>{service.label}</b></li>
@@ -291,13 +295,12 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-        const { getFeedbacks, vouchFor, vouchAgainst, getMeta, addFlag, result, addFeedback } = this.props;
+        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result, addFeedback } = this.props;
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
-        const meta = getMeta();
         const allFeedbacks = getFeedbacks();
         const id = result._id;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
@@ -338,10 +341,11 @@ export default class ClinicPage extends React.Component {
       <Card style ={styles.card}>
         <CardHeader title="Data"/>
           <CardText>
-            Price:{this.formatServices(meta.doc.price)}
-            Population:{this.formatServices(meta.doc.population)}
-            Services:{this.formatServices(meta.doc.services)}
-            Languages:{this.formatServices(meta.doc.services)}
+
+            Price:{console.log("result is: ", result)} {this.formatServices(result.price)}
+            Population:{this.formatServices(result.population)}
+            Services:{this.formatServices(result.services)}
+            Languages:{this.formatServices(result.services)}
           </CardText>
         </Card>
 

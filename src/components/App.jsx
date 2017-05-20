@@ -382,7 +382,7 @@ export default class App extends React.Component {
           //if (doc.rows.length > 0) {
             this.changeHeaderInfo("Approve Docs");
             this.setState({
-              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} pendingData={doc} changeDoc={(res)=>this.changeDoc(res)}/>
+              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} displayResult={(res)=>this.displayResult(res)} pendingData={doc} changeDoc={(res)=>this.changeDoc(res)}/>
             })
           //}
       });
