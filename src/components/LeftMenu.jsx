@@ -34,7 +34,7 @@ export default class LeftMenu extends React.Component {
 
     render() {
 
-        const { displayAddResource, addResource, displayAbout, displayModifyDocs} = this.props;
+        const { displayAddResource, addResource, displayAbout, displayModifyDocs, displayApproveDocs} = this.props;
 
 
 
@@ -45,6 +45,7 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => displayAbout()}/>
             <MenuItem primaryText="Update Resources (Admin only)" onTouchTap={() => displayModifyDocs()}/>
+            <MenuItem primaryText="View Pending Resources (Admin only)" onTouchTap={() => displayApproveDocs()}/>
             </div>
         )
     }

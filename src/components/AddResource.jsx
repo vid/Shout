@@ -185,6 +185,14 @@ export default class AddResource extends React.Component {
         window.removeEventListener('resize', this.searchSizer, false);
     }
 
+    handlePhoneChange(event) {
+      console.log(event.target.value);
+      // This regex replaces all non-digit numbers with blank space
+      var cleanNumber = event.target.value.replace(/[^\d]/g, '');
+      console.log(cleanNumber);
+      this.setState({value_Phone: cleanNumber})
+    }
+
     render() {
 
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
@@ -206,6 +214,11 @@ export default class AddResource extends React.Component {
           var regobj=/^$|((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
           return regobj.test(value);
         });
+
+        Formsy.addValidationRule('isPhoneNumberCustom', (values, value) => {
+          var regobj = /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/;
+          return regobj.test(value);
+        })
 
         return (
 
@@ -260,6 +273,8 @@ export default class AddResource extends React.Component {
           <FormsyText
             name="addressline1"
             required
+            floatingLabelText="Street Address *"
+            floatingLabelFixed={true}
             hintText="12 Grimmauld Place"
             hintStyle={styles.hint}
             onChange={(event) => this.setState({value_Address: event.target.value})}
@@ -290,6 +305,8 @@ export default class AddResource extends React.Component {
             validationError={wordsError}
             required
             updateImmediately
+            floatingLabelText="City *"
+            floatingLabelFixed={true}
             hintText="Atlanta"
             hintStyle={styles.hint}
             onChange={(event) => this.setState({value_City: event.target.value})}
@@ -315,12 +332,17 @@ export default class AddResource extends React.Component {
 
           <FormsyText
                        name="PhoneNumber"
-                       validations="isInt"
+                       validations="isPhoneNumberCustom"
                        validationError={numericError}
                        updateImmediately
+                       required
                        hintText="3225550100"
                        hintStyle={styles.hint}
-                       onChange={(event) => this.setState({value_Phone: event.target.value})}
+                       floatingLabelStyle={styles.floatinglabel}
+                       inputStyle={styles.input}
+                       floatingLabelText="Phone *"
+                       floatingLabelFixed={true}
+                       onChange={(event) => this.handlePhoneChange(event)}
                        /> <br />
             </Paper>
 
@@ -393,7 +415,7 @@ export default class AddResource extends React.Component {
               label="Podiatry"
               style={styles.checkbox}/>
 
-              <b>OB/Gyn and Women's Wellness</b>
+              <b>OB/Gyn and Womens Wellness</b>
             <Checkbox
               label="Pregnancy Testing"
               style={styles.checkbox}/>

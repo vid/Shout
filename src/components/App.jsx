@@ -41,6 +41,7 @@ import LoginRegister from './LoginRegister.jsx';
 import ModifyDocs from './ModifyDocs.jsx';
 import MyAccount from './MyAccount.jsx';
 import About from './About.jsx';
+import ApproveDocs from './ApproveDocs.jsx'
 
 const pathToBG = require('../img/background.jpeg');
 
@@ -59,7 +60,6 @@ PouchDB.replicate(remoteCouch,db);
 var db_pending = new PouchDB('resourcespending');
 var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
 PouchDB.sync(db_pending, remoteCouchPending);
-
 
 const styles = {
 
@@ -352,9 +352,32 @@ export default class App extends React.Component {
         this.changeHeaderInfo("ModifyDocs");
         this.setState({
             screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+
         });
 
     }
+
+    displayApproveDocs() {
+
+      db_pending.allDocs({
+          startkey: 'Resource_',
+          endkey: 'Resource_\uffff',
+          include_docs: true
+      }, (err, doc) => {
+          if (err) {
+              return this.error(err);
+          }
+          if (doc.rows.length > 0) {
+            this.changeHeaderInfo("Approve Docs");
+            this.setState({
+              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} pendingData={doc} />
+            })
+          }
+      });
+
+
+    }
+
 
     //This function basically updates the single page app to now display the ClinicPage component.
     //state variables are changed as needed in order to modify the title and layout of the page.
@@ -376,12 +399,14 @@ export default class App extends React.Component {
     displaySearch() {
 
         //first retrieve all docs again, to reverse any filters
+        console.log("in here")
         db.allDocs({
-            startkey: 'Resource_',
-            endkey: 'Resource_\uffff',
+            // startkey: 'Resource_',
+            // endkey: 'Resource_\uffff',
             include_docs: true
         }, (err, doc) => {
             if (err) {
+              console.log(err)
                 return this.error(err);
             }
             if (doc.rows.length > 0) {
@@ -415,8 +440,6 @@ export default class App extends React.Component {
     error(err) {
         console.warn('ERROR(' + err.code + '): ' + err.message);
     }
-
-
 
     //This filter method uses the Pouchdb-Quick-Search library
     //See:  https://github.com/nolanlawson/pouchdb-quick-search
@@ -873,7 +896,7 @@ export default class App extends React.Component {
              open={this.state.showMenu}
              docked={false}
              onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()}/>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()} displayApproveDocs={()=>this.displayApproveDocs()}/>
             </Drawer>
          </div>
 
