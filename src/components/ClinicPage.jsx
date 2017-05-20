@@ -244,7 +244,7 @@ export default class ClinicPage extends React.Component {
 
     }
 
-    renderChip(data) {
+  renderChip(data) {
         return (
             <Chip
         key={data.key}
@@ -341,8 +341,7 @@ export default class ClinicPage extends React.Component {
       <Card style ={styles.card}>
         <CardHeader title="Data"/>
           <CardText>
-
-            Price:{console.log("result is: ", result)} {this.formatServices(result.price)}
+            Price:{this.formatServices(result.price)}
             Population:{this.formatServices(result.population)}
             Services:{this.formatServices(result.services)}
             Languages:{this.formatServices(result.services)}

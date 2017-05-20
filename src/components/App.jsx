@@ -61,8 +61,6 @@ var db_pending = new PouchDB('resourcespending');
 var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
 PouchDB.sync(db_pending, remoteCouchPending);
 
-
-
 const styles = {
 
     appbar: {},
@@ -337,7 +335,7 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("About");
         this.setState({
-            screen: <About container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <About container={this.refs.content} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
@@ -365,6 +363,7 @@ export default class App extends React.Component {
         this.changeHeaderInfo("ModifyDocs");
         this.setState({
             screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
+
         });
 
     }
@@ -390,14 +389,6 @@ export default class App extends React.Component {
 
     }
 
-    displayModifyMeta() {
-
-        this.changeHeaderInfo("ModifyDocs");
-        this.setState({
-            screen: <ModifyMeta container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredMeta={() => this.state.filteredMeta} updateDoc={(res)=>this.updateDoc(res)}/>
-        });
-
-    }
 
     //This function basically updates the single page app to now display the ClinicPage component.
     //state variables are changed as needed in order to modify the title and layout of the page.
