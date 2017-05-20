@@ -39,7 +39,7 @@ export default class ApproveDocs extends React.Component {
             }else {
             return (
                   <TableRow>
-                    <TableRowColumn><h1>No results for search</h1></TableRowColumn>
+                    <TableRowColumn><h1>There are no pending clinics</h1></TableRowColumn>
                   </TableRow>
             );
             }
