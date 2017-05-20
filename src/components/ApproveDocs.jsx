@@ -21,7 +21,6 @@ export default class ApproveDocs extends React.Component {
   //If the page has not yet loaded, then it returns a simple message "Loading resources"
       formatFilteredResources(pendingData, handler){
           if(pendingData.length>0){
-            console.log(pendingData)
             return (
 
                 (pendingData.map((result, i) => (
@@ -32,7 +31,7 @@ export default class ApproveDocs extends React.Component {
                       {result.civic_address}
                     </TableRowColumn>
                     <TableRowColumn>
-                      <RaisedButton label="Approve" onTouchTap={()=>this.changeDoc(result)}/>
+                      <RaisedButton label="Approve" onTouchTap={()=>this.changeDoc(result.doc)}/>
                     </TableRowColumn>
                   </TableRow>
                 )))
@@ -50,7 +49,7 @@ export default class ApproveDocs extends React.Component {
 
         //const { getFilteredResources, changeDoc} = this.props;
           const { container, footer, pendingData, changeDoc} = this.props;
-          console.log(changeDoc);
+          this.changeDoc = changeDoc;
           return (
               <div>
                 <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>

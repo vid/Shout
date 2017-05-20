@@ -148,8 +148,12 @@ export default class App extends React.Component {
     addResource(res) {
 
         //create object to add
+
+        //TODO: Is the resource not supposed to have a name?
+
         var resource = {
             _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
+            name: res.name,
             civic_address: res.civic_address,
             phone: res.phone,
             website: res.website,
@@ -227,7 +231,7 @@ export default class App extends React.Component {
             var mod = {
                 name: res.name,
                 _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
-                _rev:res._rev,
+                //_rev:res._rev,
                 lat: res.lat,
                 lng: res.lng,
                 civic_address: res.civic_address,
@@ -249,11 +253,13 @@ export default class App extends React.Component {
                 tags:res.tags,
 
             };
+
             db.put(mod, function callback(err, result) {
                 if (!err) {
                     console.log('Modified this doc');
                 } else {
                     console.log('Error modifying this doc');
+                    console.log(err);
                 }
             });
             //create new doc and replace old one
@@ -288,14 +294,7 @@ export default class App extends React.Component {
     }
 
     changeDoc(res) {
-      db.put(res, function callback(err, result) {
-          if (!err) {
-              console.log('Added pending resource to official db');
-          } else {
-              console.log('Error modifying this doc');
-          }
-      });
-
+      this.updateDoc(res);
       db_pending.remove(res);
     }
 
@@ -420,7 +419,6 @@ export default class App extends React.Component {
     displaySearch() {
 
         //first retrieve all docs again, to reverse any filters
-        console.log("in here")
         db.allDocs({
             // startkey: 'Resource_',
             // endkey: 'Resource_\uffff',
@@ -583,7 +581,6 @@ export default class App extends React.Component {
                 var a_distance = Math.pow((this.state.userLat - a.lat), 2) + Math.pow((this.state.userLng - a.lng), 2);
                 var b_distance = Math.pow((this.state.userLat - b.lat), 2) + Math.pow((this.state.userLng - b.lng), 2);
                 var diff = a_distance - b_distance;
-                // console.log("Difference: " + diff);
                 return diff;
             } else {
                 return 10000;
