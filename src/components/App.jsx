@@ -135,6 +135,7 @@ export default class App extends React.Component {
             clinicpageTags: [],
             clinicpageFeedbacks: [],
             loggedin: false,
+            pendingData: []
         };
 
 
@@ -229,7 +230,7 @@ export default class App extends React.Component {
             var mod = {
                 name: res.name,
                 _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
-                _rev:res._rev,
+                //_rev:res._rev,
                 lat: res.lat,
                 lng: res.lng,
                 civic_address: res.civic_address,
@@ -292,8 +293,14 @@ export default class App extends React.Component {
     }
 
     changeDoc(res) {
-      this.updateDoc(res);
-      db_pending.remove(res);
+      this.updateDoc(res.doc);
+      db_pending.remove(res.doc);
+      var tempPendingData = this.state.pendingData;
+      console.log("res is: ", res);
+      tempPendingData = tempPendingData.filter(function(element) {
+        return element != res;
+      })
+      console.log("after delete: ", tempPendingData);
     }
 
     changeHeaderInfo(title) {
@@ -369,7 +376,6 @@ export default class App extends React.Component {
     }
 
     displayApproveDocs() {
-
       db_pending.allDocs({
           startkey: 'Resource_',
           endkey: 'Resource_\uffff',
@@ -378,12 +384,27 @@ export default class App extends React.Component {
           if (err) {
               return this.error(err);
           }
-          //if (doc.rows.length > 0) {
-            this.changeHeaderInfo("Approve Docs");
-            this.setState({
-              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} displayResult={(res)=>this.displayResult(res)} pendingData={doc} changeDoc={(res)=>this.changeDoc(res)}/>
-            })
-          //}
+          console.log("doc is: ", doc)
+          this.changeHeaderInfo("Approve Docs");
+          var numRows = doc.total_rows;
+          var tempPending = [];
+          console.log("doc length is: ", numRows);
+          if (numRows > 0) {
+            for (var i = 0; i < numRows; i++) {
+              tempPending.push(doc.rows[i]);
+            }
+          }
+          console.log("tempPending is: ", tempPending);
+          this.setState({
+            pendingData: tempPending
+          })
+          this.setState({
+            screen: <ApproveDocs container={this.refs.content}
+                                footer={this.refs.footer}
+                                displayResult={(res)=>this.displayResult(res)}
+                                pendingData={this.state.pendingData}
+                                changeDoc={(res)=>this.changeDoc(res)}/>
+          })
       });
 
 
