@@ -7,6 +7,14 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import RaisedButton from 'material-ui/RaisedButton';
+import {
+    Card,
+    CardActions,
+    CardHeader,
+    CardText,
+    CardTitle,
+    CardMedia
+} from 'material-ui/Card';
 
 const styles = {
 
@@ -25,38 +33,34 @@ export default class ModifyDocs extends React.Component {
               expanded:1
             };
 
-        }
+    }
 
+    getInfo(res,i){
+
+      if(this.state.expanded===res.id){
+
+        return "expanded";
+      }
+    }
 //This method returns the filteredResources formatted as a table of results
 //If the page has not yet loaded, then it returns a simple message "Loading resources"
     formatFilteredResources(filteredResources){
 
-
         if(filteredResources.length>0){
 
-          return (
-
-              (filteredResources.map((result, i) => (
-                <TableRow
-                  key={i}>
-                  <TableRowColumn>
-                  <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3></div>
+          return filteredResources.map((result, i) =>
+              (<Card>
+                <CardText>
+                <h3>{(i+1)+".  "+result.name}</h3>
                     {result.civic_address}
-                    {this.state.expanded===i ? "visible stuff" : this.state.expanded}
-                  </TableRowColumn>
-                  <TableRowColumn>
-                    <RaisedButton label="expand" onTouchTap={()=>this.setState({expanded:{i}})}/>
-                  </TableRowColumn>
-                </TableRow>
-              )))
-          );
-          }else {
-          return (
-                <TableRow>
-                  <TableRowColumn><h1>No results for search</h1></TableRowColumn>
-                </TableRow>
-          );
-          }
+                    <div>
+                      {this.state.expanded===i?"expanded":""}
+                    </div>
+                    <RaisedButton label="expand" onTouchTap={()=>this.setState({expanded:i})}/>
+                </CardText>
+              </Card>)
+              );
+        }
     }
 
       handleUpdate(){
@@ -115,16 +119,7 @@ export default class ModifyDocs extends React.Component {
             <div style={{padding:15}}>
             </div>
             </div>
-      <Table
-        selectable={false}
-        fixedHeader={true}
-        style={styles.table}>
-        <TableBody
-            displayRowCheckbox={false}
-            showRowHover={true}>
         {this.formatFilteredResources(filteredResources)}
-        </TableBody>
-      </Table>
       </div>
         );
     }
