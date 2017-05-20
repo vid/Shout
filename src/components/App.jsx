@@ -146,8 +146,12 @@ export default class App extends React.Component {
     addResource(res) {
 
         //create object to add
+
+        //TODO: Is the resource not supposed to have a name?
+
         var resource = {
             _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
+            name: res.name,
             civic_address: res.civic_address,
             phone: res.phone,
             website: res.website,
@@ -247,11 +251,13 @@ export default class App extends React.Component {
                 tags:res.tags,
 
             };
+
             db.put(mod, function callback(err, result) {
                 if (!err) {
                     console.log('Modified this doc');
                 } else {
                     console.log('Error modifying this doc');
+                    console.log(err);
                 }
             });
             //create new doc and replace old one
@@ -283,6 +289,11 @@ export default class App extends React.Component {
         } else {
             this.displaySearch();
         }
+    }
+
+    changeDoc(res) {
+      this.updateDoc(res);
+      db_pending.remove(res);
     }
 
     changeHeaderInfo(title) {
@@ -367,12 +378,12 @@ export default class App extends React.Component {
           if (err) {
               return this.error(err);
           }
-          if (doc.rows.length > 0) {
+          //if (doc.rows.length > 0) {
             this.changeHeaderInfo("Approve Docs");
             this.setState({
-              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} pendingData={doc} />
+              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} displayResult={(res)=>this.displayResult(res)} pendingData={doc} changeDoc={(res)=>this.changeDoc(res)}/>
             })
-          }
+          //}
       });
 
 
@@ -399,7 +410,6 @@ export default class App extends React.Component {
     displaySearch() {
 
         //first retrieve all docs again, to reverse any filters
-        console.log("in here")
         db.allDocs({
             // startkey: 'Resource_',
             // endkey: 'Resource_\uffff',
@@ -562,7 +572,6 @@ export default class App extends React.Component {
                 var a_distance = Math.pow((this.state.userLat - a.lat), 2) + Math.pow((this.state.userLng - a.lng), 2);
                 var b_distance = Math.pow((this.state.userLat - b.lat), 2) + Math.pow((this.state.userLng - b.lng), 2);
                 var diff = a_distance - b_distance;
-                // console.log("Difference: " + diff);
                 return diff;
             } else {
                 return 10000;

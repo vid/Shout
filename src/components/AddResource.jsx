@@ -186,10 +186,8 @@ export default class AddResource extends React.Component {
     }
 
     handlePhoneChange(event) {
-      console.log(event.target.value);
       // This regex replaces all non-digit numbers with blank space
       var cleanNumber = event.target.value.replace(/[^\d]/g, '');
-      console.log(cleanNumber);
       this.setState({value_Phone: cleanNumber})
     }
 
@@ -512,7 +510,6 @@ export default class AddResource extends React.Component {
                                   }
                                   catch(err){
                                     this.setState({errorOpen:true});
-                                    console.log("error"+err)
                                   }
                                   }}/>
                   {this.state.canSubmit? "":<b> Please fill out required fields</b>}

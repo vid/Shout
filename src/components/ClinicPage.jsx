@@ -176,7 +176,6 @@ export default class ClinicPage extends React.Component {
     //* ***************************************** *//
 
       formatDescription(description) {
-
             if(description.length<1000){
               return (<div>{description}</div>)
             }else if (this.state.descriptionExpanded) {
@@ -211,7 +210,12 @@ export default class ClinicPage extends React.Component {
     }
 
     formatServices(services) {
-
+        // This check is necessary because if the resource is
+        // from the pending db, then it will not have any
+        // services recorded.
+        if (typeof services == "undefined") {
+          return <p>Not Available</p>
+        }
         if (services.length > 0) {
             return services.map((service, i) =>
                 <li key={i}><b>{service.label}</b></li>
