@@ -951,6 +951,18 @@ export default class App extends React.Component {
     render() {
 
 
+        let loginButton = null;
+        const isLoggedIn = this.state.loggedin;
+        if (isLoggedIn) {
+            loginButton = <FlatButton label ="My Account"
+                                 style={styles.headerlinks}
+                                 onTouchTap={()=>this.displayMyAccount()} />
+        } else {
+            loginButton = <FlatButton label ="Login/Register"
+                               style={styles.headerlinks}
+                               onTouchTap={()=>this.displayLogin()} />
+      }
+
         // If there are no results yet, then database is still syncing and
         // we should listen for changes to the db and display a "Loading" message
         // in the meantime
@@ -999,15 +1011,7 @@ export default class App extends React.Component {
                             style={styles.headerlinks}
                             onTouchTap={()=>this.displayAbout()} />
                 <FlatButton label="Blog" style={styles.headerlinks} />
-                {if (this.state.loggedin) {
-                  <FlatButton label ="My Account"
-                              style={styles.headerlinks}
-                              onTouchTap={()=>this.displayMyAccount()} />
-                } else {
-                  <FlatButton label ="Login/Register"
-                              style={styles.headerlinks}
-                              onTouchTap={()=>this.displayLogin()} />}
-                }}
+                {loginButton}
                 </div>
               </div>
               </div>
