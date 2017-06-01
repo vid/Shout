@@ -1,0 +1,21 @@
+export const languagestemplate = [{
+  label: "English",
+  adminvotes: '0',
+  uservotes: '0',
+}, {
+  label: "Spanish",
+  adminvotes: '0',
+  uservotes: '0',
+}, {
+  label: "Korean",
+  adminvotes: '0',
+  uservotes: '0',
+}, {
+  label: "French",
+  adminvotes: '0',
+  uservotes: '0',
+}, {
+  label: "Creole",
+  adminvotes: '0',
+  uservotes: '0',
+}, ];

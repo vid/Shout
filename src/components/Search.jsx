@@ -41,7 +41,7 @@ export default class Search extends React.Component {
         var filteredResources = getFilteredResources();
 
         return (
-          <div width={offsetWidth} style={{display:'flex', flexDirection:'row'}}>
+          <div width={offsetWidth} style={{display:'flex', flexDirection:'row', margin:'auto'}}>
             <div style={{width: ((offsetWidth*0.40)), height: offsetHeight, overflow: 'auto', padding:10}}>
               <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
             </div>
