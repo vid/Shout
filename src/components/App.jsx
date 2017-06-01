@@ -5,6 +5,7 @@ The main component with the app's actions and 'store.'
 **/
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 /*Material-UI theme*/
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -41,7 +42,6 @@ import LoginRegister from './LoginRegister.jsx';
 import UpdateDocs from './UpdateDocs.jsx';
 import MyAccount from './MyAccount.jsx';
 import About from './About.jsx';
-import ApproveDocs from './ApproveDocs.jsx'
 
 const pathToBG = require('../img/background.jpeg');
 
@@ -54,12 +54,13 @@ PouchDB.plugin(require('pouchdb-authentication'));
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
 
 var db = new PouchDB('resources2017');
-var remoteCouch = 'https://generaluser:pass@www.shouthealth.org:6984/resources2017';
-PouchDB.sync(db, remoteCouch);
+var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resources2017';
+PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
-var remoteCouchPending = 'https://generaluser:pass@www.shouthealth.org:6984/resourcespending';
+var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
 PouchDB.sync(db_pending, remoteCouchPending);
+
 
 const styles = {
 
@@ -146,12 +147,8 @@ export default class App extends React.Component {
     addResource(res) {
 
         //create object to add
-
-        //TODO: Is the resource not supposed to have a name?
-
         var resource = {
             _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
-            name: res.name,
             civic_address: res.civic_address,
             phone: res.phone,
             website: res.website,
@@ -240,10 +237,7 @@ export default class App extends React.Component {
                 type: res.type,
                 zip: res.zip,
                 city: res.city,
-                hours: res.hours,
-                fee:res.fee,
-                income:res.income,
-                accepts:res.accepts,
+                price:res.price,
                 languages:res.languages,
                 population:res.population,
                 waitingtime:res.waitingtime,
@@ -254,13 +248,11 @@ export default class App extends React.Component {
                 tags:res.tags,
 
             };
-
             db.put(mod, function callback(err, result) {
                 if (!err) {
                     console.log('Modified this doc');
                 } else {
                     console.log('Error modifying this doc');
-                    console.log(err);
                 }
             });
             //create new doc and replace old one
@@ -292,11 +284,6 @@ export default class App extends React.Component {
         } else {
             this.displaySearch();
         }
-    }
-
-    changeDoc(res) {
-      this.updateDoc(res);
-      db_pending.remove(res);
     }
 
     changeHeaderInfo(title) {
@@ -361,37 +348,14 @@ export default class App extends React.Component {
 
     }
 
-    displayUpdateDocs() {
+    displayModifyDocs() {
 
-        this.changeHeaderInfo("Update Docs");
+        this.changeHeaderInfo("ModifyDocs");
         this.setState({
-            screen: <UpdateDocs container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} updateDoc={(res)=>this.updateDoc(res)}/>
-
+            screen: <ModifyDocs container={this.refs.content} footer={this.refs.footer} displaySearch={()=>this.displaySearch} getFilteredResources={() => this.state.filteredResources} changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
     }
-
-    displayApproveDocs() {
-
-      db_pending.allDocs({
-          startkey: 'Resource_',
-          endkey: 'Resource_\uffff',
-          include_docs: true
-      }, (err, doc) => {
-          if (err) {
-              return this.error(err);
-          }
-          //if (doc.rows.length > 0) {
-            this.changeHeaderInfo("Approve Docs");
-            this.setState({
-              screen: <ApproveDocs container={this.refs.content} footer={this.refs.footer} displayResult={(res)=>this.displayResult(res)} pendingData={doc} changeDoc={(res)=>this.changeDoc(res)}/>
-            })
-          //}
-      });
-
-
-    }
-
 
     //This function basically updates the single page app to now display the ClinicPage component.
     //state variables are changed as needed in order to modify the title and layout of the page.
@@ -414,12 +378,11 @@ export default class App extends React.Component {
 
         //first retrieve all docs again, to reverse any filters
         db.allDocs({
-            // startkey: 'Resource_',
-            // endkey: 'Resource_\uffff',
+            startkey: 'Resource_',
+            endkey: 'Resource_\uffff',
             include_docs: true
         }, (err, doc) => {
             if (err) {
-              console.log(err)
                 return this.error(err);
             }
             if (doc.rows.length > 0) {
@@ -453,6 +416,8 @@ export default class App extends React.Component {
     error(err) {
         console.warn('ERROR(' + err.code + '): ' + err.message);
     }
+
+
 
     //This filter method uses the Pouchdb-Quick-Search library
     //See:  https://github.com/nolanlawson/pouchdb-quick-search
@@ -575,6 +540,7 @@ export default class App extends React.Component {
                 var a_distance = Math.pow((this.state.userLat - a.lat), 2) + Math.pow((this.state.userLng - a.lng), 2);
                 var b_distance = Math.pow((this.state.userLat - b.lat), 2) + Math.pow((this.state.userLng - b.lng), 2);
                 var diff = a_distance - b_distance;
+                // console.log("Difference: " + diff);
                 return diff;
             } else {
                 return 10000;
@@ -603,7 +569,6 @@ export default class App extends React.Component {
 
         this.displaySearch();
         changesObject.cancel();
-        console.log("changes listener cancelled");
 
     }
 
@@ -868,28 +833,13 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-
-        if (this.state.pageLoading) {
-            this.handleLoading();
+        if (remoteCouch) {
+            PouchDB.sync('db', 'remoteCouch');
         }
         this.displaySearch();
         this.getUserSession();
         this.requestCurrentPosition();
 
-
-    }
-
-    handleLoading(){
-
-      this.setState({
-          pageLoading: false
-      });
-      console.log("setting changes listener");
-      var changesObject = db.changes({
-          since: 'now',
-          live: true,
-          limit: 40
-      }).on('change', (change) => this.handleChanges(change, changesObject)); //When the changes arrive, call displaySearch
 
     }
 
@@ -901,6 +851,17 @@ export default class App extends React.Component {
 
         //If there are no results yet, then database is still syncing and
         //we should listen for changes to the db and display a "Loading" message in the meantime
+        if (this.state.pageLoading) {
+            this.setState({
+                pageLoading: false
+            });
+            console.log("setting changes listener");
+            var changesObject = db.changes({
+                since: 'now',
+                live: true,
+                limit: 40
+            }).on('change', (change) => this.handleChanges(change, changesObject)); //When the changes arrive, call displaySearch
+        }
 
         return (
 
@@ -912,7 +873,7 @@ export default class App extends React.Component {
              open={this.state.showMenu}
              docked={false}
              onRequestChange={(showMenu) => this.setState({showMenu})}>
-               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayUpdateDocs={()=>this.displayUpdateDocs()} displayApproveDocs={()=>this.displayApproveDocs()}/>
+               <LeftMenu displayAddResource={() => this.displayAddResource()} displayAbout={() => this.displayAbout()} addResource={(res)=>this.addResource(res)} displayModifyDocs={()=>this.displayModifyDocs()}/>
             </Drawer>
          </div>
 
@@ -926,7 +887,7 @@ export default class App extends React.Component {
               <div style={styles.row}>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
-                <div id="hide-mobile" style={styles.headermenu}>
+                <div style={styles.headermenu}>
                 <FlatButton label ="About" style={styles.headerlinks} onTouchTap={()=>this.displayAbout()} />
                 <FlatButton label="Blog" style={styles.headerlinks} />
                 {this.state.loggedin? <FlatButton label ="My Account" style={styles.headerlinks} onTouchTap={()=>this.displayMyAccount()} />:<FlatButton label ="Login/Register" style={styles.headerlinks} onTouchTap={()=>this.displayLogin()} />}

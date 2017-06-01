@@ -8,6 +8,8 @@ import Results from './Results.jsx';
 import { cyan300, indigo900 } from 'material-ui/styles/colors';
 
 
+
+
 //Begin class definition
 export default class Search extends React.Component {
     constructor(props) {
@@ -45,6 +47,7 @@ export default class Search extends React.Component {
             <div style={{width: ((offsetWidth*0.40)), height: offsetHeight, overflow: 'auto', padding:10}}>
               <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
             </div>
+
             <div style={{padding:10}}>
               <Map width={(offsetWidth*0.60)} height='100%' getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
             </div>
