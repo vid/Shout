@@ -3,12 +3,10 @@
 import React, {
     Component
 } from 'react';
-import Formsy from 'formsy-react';
 
 import StarRatingComponent from 'react-star-rating-component';
 import GoogleMap from 'google-map-react';
 
-import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
 import {
     Card,
@@ -25,32 +23,13 @@ import Checkbox from 'material-ui/Checkbox';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import IconButton from 'material-ui/IconButton';
-import Snackbar from 'material-ui/Snackbar';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import MenuItem from 'material-ui/Menu';
 
-import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import NavigationArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward';
-import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
+import Icon from 'material-ui/Icon';
 
-//Formsy-React is a library used for input validation in this web app
-//See more at https://github.com/christianalfoni/formsy-react
-import {
-    FormsyCheckbox,
-    FormsyDate,
-    FormsyRadio,
-    FormsyRadioGroup,
-    FormsySelect,
-    FormsyText,
-    FormsyTime,
-    FormsyToggle,
-    FormsyAutoComplete
-} from 'formsy-material-ui/lib';
+
 
 //* ***************************************** *//
 //* all styles defined here
@@ -181,13 +160,13 @@ export default class ClinicPage extends React.Component {
             }else if (this.state.descriptionExpanded) {
                 return (<div>
                           {description}
-                          <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={"<< less"}/>
+                          <Button onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={"<< less"}/>
                         </div>)
             } else {
                 var des_a = description.slice(0, 1000);
                 return (<div>
                           {des_a}
-                          <FlatButton onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={">> more"}/>
+                          <Button onClick={()=>this.setState({descriptionExpanded:!this.state.descriptionExpanded})} label={">> more"}/>
                         </div>)
             }
         }
@@ -322,7 +301,7 @@ export default class ClinicPage extends React.Component {
               <div style={styles.data}>
                 <h4> Address: </h4>
                 {result.civic_address}
-                <FlatButton href = {"http://maps.google.com/?daddr=" + result.civic_address} primary = {true} target = "_blank" label={"Click to View Directions"}/>
+                <Button href = {"http://maps.google.com/?daddr=" + result.civic_address} primary = {true} target = "_blank" label={"Click to View Directions"}/>
                 <h4> Phone: </h4>
                 {result.phone}
                 <h4> Website: </h4>
@@ -358,13 +337,13 @@ export default class ClinicPage extends React.Component {
           <CardText>
             <div>
 
-                                  <RaisedButton
+                                  <Button
                                     style={styles.smallButton}
                                     label="Submit Feedback"
                                     primary={true}
                                     onTouchTap={() => this.setState({submitfeedbackOpen: true})}/>
 
-                                  <RaisedButton
+                                  <Button
                                     label="Flag this Content"
                                     style={styles.smallButton}
                                     primary={true}
@@ -387,11 +366,11 @@ export default class ClinicPage extends React.Component {
     title="Submit Feedback"
     autoScrollBodyContent={true}
     actions={[
-       <FlatButton
+       <Button
          label="Cancel"
          primary={true}
          onTouchTap={() => this.setState({submitfeedbackOpen: false})}/>,
-       <FlatButton
+       <Button
          label="Submit"
          primary={true}
          onTouchTap={() =>{
@@ -506,7 +485,7 @@ export default class ClinicPage extends React.Component {
     title="Flag Content"
     autoScrollBodyContent={true}
     actions={[
-       <FlatButton
+       <Button
          label="OK"
          primary={true}
          onTouchTap={() => this.setState({flagcontentOpen: false})}/>]}

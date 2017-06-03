@@ -7,21 +7,17 @@ import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 /*Material-UI theme*/
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 /*Material-UI components*/
 import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
-import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
+import Button from 'material-ui/Button';
 import Drawer from 'material-ui/Drawer';
-import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
-import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
-import MapsPlace from 'material-ui/svg-icons/maps/place';
-import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
 
 /*Modules */
 import PlacesAutocomplete from 'react-places-autocomplete'
@@ -30,13 +26,14 @@ import {
     geocodeByPlaceId
 } from 'react-places-autocomplete'
 
+import Icon from 'material-ui/Icon';
+
 //import other components
 import Search from './Search.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from './ClinicPage.jsx';
-import AddResource from './AddResource.jsx';
 import LoginRegister from './LoginRegister.jsx';
 import UpdateDocs from './UpdateDocs.jsx';
 import MyAccount from './MyAccount.jsx';
@@ -126,7 +123,7 @@ export default class App extends React.Component {
             selectedIndex: 0,
             appbarTitle: 'Shout',
             appbarSubtitle: 'Find Accessible Healthcare.',
-            appbarIcon: <NavigationMenu />,
+            appbarIcon: <Icon>navigation_menu </Icon>,
             searchBar: "",
             searchBar2: "",
             pageLoading: 'true', //true if page has not loaded yet
@@ -305,7 +302,7 @@ export default class App extends React.Component {
             appbarTitle: title
         });
         this.setState({
-            appbarIcon: <NavigationChevronLeft />
+            appbarIcon: <Icon>navigation_chevron_left</Icon>
         });
         this.setState({
             appbarSubtitle: ' '
@@ -436,7 +433,7 @@ export default class App extends React.Component {
             appbarState: false
         });
         this.setState({
-            appbarIcon: <NavigationMenu />
+            appbarIcon: <Icon>navigation_menu </Icon>
         });
         this.setState({
             searchBar: <SearchInputs container={this.refs.content} getSearchstring={()=>this.state.searchString} filterResources={(searchString)=>this.filterResources(searchString)} searchString={this.state.searchString} getselectedIndex={()=>this.state.selectedIndex} onSelect={(index) => this.footerSelect(index)}/>
@@ -648,15 +645,16 @@ export default class App extends React.Component {
               <div>
                 <div style={{display:'flex', flexDirection:'row'}}>
                   <div style={{marginTop:10}}>
-                    <MapsPlace />
+                    <Icon>maps_place</Icon>
                   </div>
                   <div style={styles.places}>
                     {this.getPlacesComponent()}
                   </div>
                   <div style={styles.button}>
-                  <RaisedButton
-                    label ="Go"
-                    onTouchTap={()=>this.addressSearchSubmit()}/>
+                  <Button
+                    onTouchTap={()=>this.addressSearchSubmit()}>
+                    Go
+                  </Button>
                   </div>
                 </div>
                   {this.state.searchBar}
@@ -904,7 +902,7 @@ export default class App extends React.Component {
 
         return (
 
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
+            <MuiThemeProvider>
           <div id='wrapper' style={styles.wrapper}>
 
           <div>
@@ -918,21 +916,20 @@ export default class App extends React.Component {
 
           <div id='header'>
               <AppBar
-              iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
-              onLeftIconButtonTouchTap={() => this.appbarClick()}
               style={{backgroundColor:'transparent'}}
               titleStyle={styles.appbar}>
-              <div style={styles.column}>
-              <div style={styles.row}>
-                <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
+              <Toolbar>
+              <Button onTouchTap={() => this.appbarClick()}>
+                  {this.state.appbarIcon}
+              </Button>
+                <Typography>{this.state.appbarTitle}</Typography>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
                 <div id="hide-mobile" style={styles.headermenu}>
-                <FlatButton label ="About" style={styles.headerlinks} onTouchTap={()=>this.displayAbout()} />
-                <FlatButton label="Blog" style={styles.headerlinks} />
-                {this.state.loggedin? <FlatButton label ="My Account" style={styles.headerlinks} onTouchTap={()=>this.displayMyAccount()} />:<FlatButton label ="Login/Register" style={styles.headerlinks} onTouchTap={()=>this.displayLogin()} />}
+                <Button style={styles.headerlinks} onTouchTap={()=>this.displayAbout()}>About</Button>
+                <Button style={styles.headerlinks} >Blog</Button>
+                {this.state.loggedin? <Button style={styles.headerlinks} onTouchTap={()=>this.displayMyAccount()}>My Account</Button>:<Button style={styles.headerlinks} onTouchTap={()=>this.displayLogin()} >Login/Register</Button>}
                 </div>
-              </div>
-              </div>
+              </Toolbar>
           </AppBar>
 
           {this.getSearchMenu()}

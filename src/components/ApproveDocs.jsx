@@ -4,9 +4,7 @@
 import React from 'react';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
-import IconButton from 'material-ui/IconButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 
 const styles = {
 
@@ -31,7 +29,7 @@ export default class ApproveDocs extends React.Component {
                       {result.civic_address}
                     </TableRowColumn>
                     <TableRowColumn>
-                      <RaisedButton label="Approve" onTouchTap={()=>this.changeDoc(result.doc)}/>
+                      <Button label="Approve" onTouchTap={()=>this.changeDoc(result.doc)}/>
                     </TableRowColumn>
                   </TableRow>
                 )))

@@ -3,35 +3,18 @@
 
 // JavaScript source code
 import React from 'react';
-import Formsy from 'formsy-react';
 
 import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import MenuItem from 'material-ui/Menu';
 import Paper from 'material-ui/Paper';
 import Chip from 'material-ui/Chip';
 import Divider from 'material-ui/Divider';
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
 
-
-import {
-    FormsyCheckbox,
-    FormsyDate,
-    FormsyRadio,
-    FormsyRadioGroup,
-    FormsySelect,
-    FormsyText,
-    FormsyTime,
-    FormsyToggle,
-    FormsyAutoComplete
-} from 'formsy-material-ui/lib';
 
 
 const styles = {
@@ -87,7 +70,7 @@ export default class MyAccount extends React.Component {
 
         const { addResource, displaySearch, registerNew, loginUser, getLoggedIn, getRegistered} = this.props;
         const { offsetWidth, offsetHeight} = this.state;
-        
+
         if (offsetHeight === undefined) {
             return null;
         }

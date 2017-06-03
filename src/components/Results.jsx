@@ -5,8 +5,7 @@ import React from 'react';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
 import IconButton from 'material-ui/IconButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 
 const styles = {
 
@@ -101,11 +100,11 @@ export default class Results extends React.Component {
           <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>
             <h2>Results</h2>
             <div style={{padding:15}}>
-            <RaisedButton
-              label="Add Place"
+            <Button
               labelStyle={{fontWeight:'bold'}}
-              onTouchTap={()=>displayAddResource()}
-              icon={<ContentAdd />}/>
+              onTouchTap={()=>displayAddResource()}>
+              Add Place
+            </Button>
             </div>
             </div>
       <Table

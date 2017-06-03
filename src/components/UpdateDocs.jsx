@@ -5,12 +5,10 @@ import React from 'react';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
 import IconButton from 'material-ui/IconButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import Checkbox from 'material-ui/Checkbox';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui/Button';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import { LabelRadio, RadioGroup } from 'material-ui/Radio';
 
 import {servicestemplate} from '../lib/services.js';
 import {languagestemplate} from '../lib/languages.js';
@@ -252,7 +250,7 @@ export default class UpdateDocs extends React.Component {
                   style={styles.checkbox}/>
 
 
-                <RaisedButton label="Update Resource" onTouchTap={()=>this.handleUpdate(res)}/>
+                <Button label="Update Resource" onTouchTap={()=>this.handleUpdate(res)}/>
 
                 </div>;
 
@@ -279,7 +277,7 @@ export default class UpdateDocs extends React.Component {
                 <div>
                   {this.state.expanded===i?this.getInfo(result):""}
                 </div>
-                <FlatButton label="expand" onTouchTap={()=>this.handleExpand(result,i)}/>
+                <Button label="expand" onTouchTap={()=>this.handleExpand(result,i)}/>
             </CardText>
           </Card>);
           }else{
@@ -294,7 +292,7 @@ export default class UpdateDocs extends React.Component {
                 <div>
                   {this.state.expanded===i?this.getInfo(result):""}
                 </div>
-                <FlatButton label="expand" onTouchTap={()=>this.handleExpand(result,i)}/>
+                <Button label="expand" onTouchTap={()=>this.handleExpand(result,i)}/>
             </CardText>
           </Card>);
           }else{

@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
-import MenuItem from 'material-ui/MenuItem';
+import MenuItem from 'material-ui/Menu';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import SelectField from 'material-ui/SelectField';
+import Button from 'material-ui/Button';
 import Menu from 'material-ui/Menu';
 import Divider from 'material-ui/Divider';
 
 
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import SocialShare from 'material-ui/svg-icons/social/share';
-import ActionSearch from 'material-ui/svg-icons/action/search';
-import ActionBook from 'material-ui/svg-icons/action/book';
-import ContentMail from 'material-ui/svg-icons/content/mail';
-import MapsEditLocation from 'material-ui/svg-icons/maps/edit-location';
-import SocialPerson from 'material-ui/svg-icons/social/person';
+import Icon from 'material-ui/Icon';
 
 
 import AddResource from './AddResource.jsx';
@@ -42,8 +34,8 @@ export default class LeftMenu extends React.Component {
         return (
             <div id='menu'>
             <MenuItem primaryText="" />
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
-            <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => displayAbout()}/>
+            <MenuItem primaryText="Add New Resource" leftIcon={<Icon>content_add</Icon>} onTouchTap={() => displayAddResource()}/>
+            <MenuItem primaryText="About" leftIcon={<Icon>social_person</Icon>} onTouchTap={() => displayAbout()}/>
             <MenuItem primaryText="Update Resources (Admin only)" onTouchTap={() => displayUpdateDocs()}/>
             <MenuItem primaryText="View Pending Resources (Admin only)" onTouchTap={() => displayApproveDocs()}/>
             </div>

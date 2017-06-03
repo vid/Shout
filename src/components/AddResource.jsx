@@ -3,35 +3,17 @@
 
 // JavaScript source code
 import React from 'react';
-import Formsy from 'formsy-react';
 
 import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import MenuItem from 'material-ui/Menu';
 import Paper from 'material-ui/Paper';
 import Chip from 'material-ui/Chip';
 import Divider from 'material-ui/Divider';
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import FlatButton from 'material-ui/FlatButton';
 
 
-import {
-    FormsyCheckbox,
-    FormsyDate,
-    FormsyRadio,
-    FormsyRadioGroup,
-    FormsySelect,
-    FormsyText,
-    FormsyTime,
-    FormsyToggle,
-    FormsyAutoComplete
-} from 'formsy-material-ui/lib';
 
 
 const ENTER_KEY = 13;
@@ -253,14 +235,6 @@ export default class AddResource extends React.Component {
             <b>Type</b>
             <Paper style={styles.input}>
 
-                       <SelectField
-                           value={this.state.value_Type}
-                           onChange={(event, index, value) => this.setState({value_Type:value})}
-                         >
-                         <MenuItem value={1} primaryText="Clinic" />
-                         <MenuItem value={2} primaryText="E.R. or Urgent Care" />
-                         <MenuItem value={3} primaryText="Housing" />
-                       </SelectField>
 
           </Paper>
           </div>

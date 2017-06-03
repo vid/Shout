@@ -4,15 +4,8 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
-import ActionSearch from 'material-ui/svg-icons/action/search';
-import SelectField from 'material-ui/SelectField';
-import RaisedButton from 'material-ui/RaisedButton';
-import ActionFavorite from 'material-ui/svg-icons/action/favorite';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import ActionHome from 'material-ui/svg-icons/action/home';
-import ActionPregnantWoman from 'material-ui/svg-icons/action/pregnant-woman';
-import ActionVisibility from 'material-ui/svg-icons/action/visibility';
-import PlacesChildCare from 'material-ui/svg-icons/places/child-care';
+import Button from 'material-ui/Button';
+
 
 const styles = {
     hint: {
@@ -132,58 +125,60 @@ export default class SearchInputs extends React.Component {
         <div>
         <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap',width: {offsetWidth}, padding:8}}>
             <div style={styles.button}>
-              <RaisedButton
+              <Button
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
-                label="All Results"
-                onTouchTap={()=>onSelect(0)}
-                icon={<ActionHome />}/>
+                onTouchTap={()=>onSelect(0)}>
+                All Results
+              </Button>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <Button
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
-                label="Women's Health"
-                onTouchTap={()=>onSelect(1)}
-                icon={<ActionPregnantWoman />}/>
+                onTouchTap={()=>onSelect(1)}>
+                Women's Health
+              </Button>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <Button
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
-                label="Child"
-                onTouchTap={()=>onSelect(2)}
-                icon={<PlacesChildCare />}/>
+                onTouchTap={()=>onSelect(2)}>
+                child
+            </Button>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <Button
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
-                onTouchTap={()=>onSelect(3)}
-                label="Mental Health"/>
+                onTouchTap={()=>onSelect(3)}>
+                Mental Health
+              </Button>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <Button
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
-                onTouchTap={()=>onSelect(4)}
-                label="Dental"/>
+                onTouchTap={()=>onSelect(4)}>
+                Dental
+              </Button>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <Button
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
-                label="Vision"
-                onTouchTap={()=>onSelect(5)}
-                icon={<ActionVisibility />}/>
+                onTouchTap={()=>onSelect(5)}>
+                Vision
+              </Button>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <Button
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
-                label="Others"
-                onTouchTap={()=>onSelect(6)}
-                icon={<ActionVisibility />}/>
+                onTouchTap={()=>onSelect(6)}>
+                Others
+              </Button>
             </div>
         </div>
         {this.getOptions(index)}

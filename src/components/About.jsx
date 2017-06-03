@@ -3,35 +3,16 @@
 
 // JavaScript source code
 import React from 'react';
-import Formsy from 'formsy-react';
 
 import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import MenuItem from 'material-ui/Menu';
+import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import Chip from 'material-ui/Chip';
 import Divider from 'material-ui/Divider';
 import Dialog from 'material-ui/Dialog';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import FlatButton from 'material-ui/FlatButton';
 
-
-import {
-    FormsyCheckbox,
-    FormsyDate,
-    FormsyRadio,
-    FormsyRadioGroup,
-    FormsySelect,
-    FormsyText,
-    FormsyTime,
-    FormsyToggle,
-    FormsyAutoComplete
-} from 'formsy-material-ui/lib';
 
 
 const styles = {
