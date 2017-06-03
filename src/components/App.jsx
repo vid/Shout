@@ -51,15 +51,15 @@ PouchDB.plugin(PouchDBQuickSearch);
 PouchDB.plugin(require('pouchdb-authentication'));
 
 /*PouchDB server*/
-//Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
+//Create local & remote server, and then sync these. See PouchDB docs at http://pouchdb.com/api.html
 
 var db = new PouchDB('resources2017');
-var remoteCouch = 'https://generaluser:pass@shoutapp.org:6984/resources2017';
-PouchDB.replicate(remoteCouch,db);
+var remoteCouch = 'http://generaluser:pass@shouthealth.org:5984/resources2017';
+//PouchDB.sync(db, remoteCouch);
 
 var db_pending = new PouchDB('resourcespending');
-var remoteCouchPending = 'https://generaluser:pass@shoutapp.org:6984/resourcespending';
-PouchDB.sync(db_pending, remoteCouchPending);
+var remoteCouchPending = 'http://generaluser:pass@shouthealth.org:5984/resourcespending';
+//PouchDB.sync(db_pending, remoteCouchPending);
 
 const styles = {
 
@@ -469,6 +469,9 @@ export default class App extends React.Component {
                 return this.error(err);
             }
             if (doc.rows.length > 0) {
+                this.setState({
+                    pageLoading: false
+                });
                 this.redrawResources(doc.rows);
             }
         });
@@ -516,7 +519,7 @@ export default class App extends React.Component {
     }
 
     //This filter method uses the Pouchdb-Quick-Search library
-    //See:  https://github.com/nolanlawson/pouchdb-quick-search
+    //See:  http://github.com/nolanlawson/pouchdb-quick-search
     filterResources(searchString) {
 
       var matches = [];
@@ -675,7 +678,7 @@ export default class App extends React.Component {
 
 
     // A function that's called by the React Google Maps library after map
-    // component loads the API Currently doing nothing! ShoutApp is not using
+    // component loads the API Currently doing nothing! shouthealth is not using
     // geocoder. May be necessary in the future.
     onGoogleApiLoad(map, maps) {
 
@@ -769,7 +772,7 @@ export default class App extends React.Component {
     //Register a new user to the database
     registerNew(user) {
 
-        var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {
+        var dbs = new PouchDB('http://shouthealth.org:5984/resourcespending', {
             skip_setup: true
         });
 
@@ -789,7 +792,7 @@ export default class App extends React.Component {
 
     loginUser(user, callback) {
 
-        var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {
+        var dbs = new PouchDB('http://shouthealth.org:5984/resourcespending', {
             skip_setup: true
         });
         dbs.login(user.username, user.password, (err, response) => {
@@ -805,6 +808,7 @@ export default class App extends React.Component {
 
         db_pending.getSession((err, response) => {
             if (err) {
+                console.log(err)
                 // network error
             } else if (!response.userCtx.name) {
                 // nobody's logged in
@@ -935,14 +939,16 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        if (remoteCouch) {
-            PouchDB.sync('db', 'remoteCouch');
-        }
-        this.displaySearch();
-        this.getUserSession();
+        // if (remoteCouch) {
+        //     PouchDB.sync('db', 'remoteCouch');
+        // }
+        // may be the wrong place to call these. Might be better to call in
+        // component will mount
+        console.log("component did mount")
+        PouchDB.sync(db, remoteCouch).on('complete',() => this.displaySearch());
+        PouchDB.sync(db_pending, remoteCouchPending);
+        //this.getUserSession();
         this.requestCurrentPosition();
-
-
     }
 
     // End of actions
@@ -966,18 +972,24 @@ export default class App extends React.Component {
         // If there are no results yet, then database is still syncing and
         // we should listen for changes to the db and display a "Loading" message
         // in the meantime
-        if (this.state.pageLoading) {
-            this.setState({
-                pageLoading: false
-            });
-            console.log("setting changes listener");
-            var changesObject = db.changes({
-                since: 'now',
-                live: true,
-                limit: 40
-            // When the changes arrive, call displaySearch
-            }).on('change', (change) => this.handleChanges(change, changesObject));
-        }
+        // if (this.state.pageLoading) {
+        //     this.setState({
+        //         pageLoading: false
+        //     });
+        //     console.log("setting changes listener");
+        //     var changesObject = db.changes({
+        //         since: 'now',
+        //         live: true,
+        //         limit: 40
+        //     // When the changes arrive, call displaySearch
+        //     }).on('change', (change) => this.handleChanges(change, changesObject));
+        // }
+
+        // if (this.state.pageLoading) {
+        //     console.log("page still loading")
+        // } else {
+        //
+        // }
 
         return (
 
