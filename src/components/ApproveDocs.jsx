@@ -7,6 +7,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import RaisedButton from 'material-ui/RaisedButton';
+import TableRowColumnWrapper from './TableRowColumnWrapper.jsx'
 
 const styles = {
 
@@ -19,7 +20,7 @@ export default class ApproveDocs extends React.Component {
 
   //This method returns the pendingData formatted as a table of results
   //If the page has not yet loaded, then it returns a simple message "Loading resources"
-      formatFilteredResources(pendingData, handler){
+      formatFilteredResources(pendingData){
           if(pendingData.length>0){
             return (
 
@@ -30,9 +31,9 @@ export default class ApproveDocs extends React.Component {
                     <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.doc.name}</h3></div>
                       {result.civic_address}
                     </TableRowColumn>
-                    <TableRowColumn>
-                      <RaisedButton label="Approve" onTouchTap={()=>this.changeDoc(result.doc)}/>
-                    </TableRowColumn>
+                    <TableRowColumnWrapper>
+                      <RaisedButton label="Approve" onTouchTap={()=>this.changeDoc(result)}/>
+                    </TableRowColumnWrapper>
                   </TableRow>
                 )))
             );
@@ -57,15 +58,14 @@ export default class ApproveDocs extends React.Component {
                   <div style={{padding:15}}>
                 </div>
               </div>
-            <Table
-              selectable={false}
-              fixedHeader={true}
-              style={styles.table}
-              onCellClick={(rowNumber, columnID) => displayResult(pendingData.rows[rowNumber].doc)}>
+            <Table selectable={false}
+                   fixedHeader={true}
+                   style={styles.table}
+                   onCellClick={(rowNumber, columnID) => displayResult(pendingData[rowNumber].doc)}>
               <TableBody
                   displayRowCheckbox={false}
                   showRowHover={true}>
-              {this.formatFilteredResources(pendingData.rows, changeDoc)}
+              {this.formatFilteredResources(pendingData)}
               </TableBody>
             </Table>
             </div>
