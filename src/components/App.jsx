@@ -5,6 +5,7 @@ The main component with the app's actions and 'store.'
 **/
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 /*Material-UI theme*/
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -38,10 +39,9 @@ import LeftMenu from './LeftMenu.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 import LoginRegister from './LoginRegister.jsx';
-import ModifyDocs from './ModifyDocs.jsx';
+import UpdateDocs from './UpdateDocs.jsx';
 import MyAccount from './MyAccount.jsx';
 import About from './About.jsx';
-import ApproveDocs from './ApproveDocs.jsx'
 
 const pathToBG = require('../img/background.jpeg');
 
@@ -149,12 +149,8 @@ export default class App extends React.Component {
     addResource(res) {
 
         //create object to add
-
-        //TODO: Is the resource not supposed to have a name?
-
         var resource = {
             _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
-            name: res.name,
             civic_address: res.civic_address,
             phone: res.phone,
             website: res.website,
@@ -255,13 +251,11 @@ export default class App extends React.Component {
                 tags:res.tags,
 
             };
-
             db.put(mod, function callback(err, result) {
                 if (!err) {
                     console.log('Modified this doc');
                 } else {
                     console.log('Error modifying this doc');
-                    console.log(err);
                 }
             });
             //create new doc and replace old one
@@ -465,7 +459,6 @@ export default class App extends React.Component {
             include_docs: true
         }, (err, doc) => {
             if (err) {
-              console.log(err)
                 return this.error(err);
             }
             if (doc.rows.length > 0) {
@@ -517,6 +510,8 @@ export default class App extends React.Component {
     error(err) {
         console.warn('ERROR(' + err.code + '): ' + err.message);
     }
+
+
 
     //This filter method uses the Pouchdb-Quick-Search library
     //See:  http://github.com/nolanlawson/pouchdb-quick-search
@@ -641,6 +636,7 @@ export default class App extends React.Component {
                 var b_distance = Math.pow((this.state.userLat - b.lat), 2) +
                                  Math.pow((this.state.userLng - b.lng), 2);
                 var diff = a_distance - b_distance;
+                // console.log("Difference: " + diff);
                 return diff;
             } else {
                 return 10000;
@@ -670,8 +666,6 @@ export default class App extends React.Component {
 
         this.displaySearch();
         changesObject.cancel();
-        console.log("changes listener cancelled");
-        console.log("changes are: ", change)
 
     }
 

@@ -19,7 +19,7 @@ import SocialPerson from 'material-ui/svg-icons/social/person';
 
 
 import AddResource from './AddResource.jsx';
-import ModifyDocs from './ModifyDocs.jsx';
+import UpdateDocs from './UpdateDocs.jsx';
 
 
 export default class LeftMenu extends React.Component {
@@ -34,7 +34,7 @@ export default class LeftMenu extends React.Component {
 
     render() {
 
-        const { displayAddResource, addResource, displayAbout, displayModifyDocs, displayApproveDocs} = this.props;
+        const { displayAddResource, addResource, displayAbout, displayUpdateDocs, displayApproveDocs} = this.props;
 
 
 
@@ -44,7 +44,7 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => displayAbout()}/>
-            <MenuItem primaryText="Update Resources (Admin only)" onTouchTap={() => displayModifyDocs()}/>
+            <MenuItem primaryText="Update Resources (Admin only)" onTouchTap={() => displayUpdateDocs()}/>
             <MenuItem primaryText="View Pending Resources (Admin only)" onTouchTap={() => displayApproveDocs()}/>
             </div>
         )
