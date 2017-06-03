@@ -54,11 +54,11 @@ PouchDB.plugin(require('pouchdb-authentication'));
 //Create local & remote server, and then sync these. See PouchDB docs at https://pouchdb.com/api.html
 
 var db = new PouchDB('resources2017');
-var remoteCouch = 'https://generaluser:pass@www.shouthealth.org:6984/resources2017';
+var remoteCouch = 'http://generaluser:pass@shouthealth.org:6984/resources2017';
 PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
-var remoteCouchPending = 'https://generaluser:pass@www.shouthealth.org:6984/resourcespending';
+var remoteCouchPending = 'http://generaluser:pass@shouthealth.org:6984/resourcespending';
 PouchDB.sync(db_pending, remoteCouchPending);
 
 
@@ -668,7 +668,7 @@ export default class App extends React.Component {
     //Register a new user to the database
     registerNew(user) {
 
-        var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {
+        var dbs = new PouchDB('http://shoutapp.org:6984/resourcespending', {
             skip_setup: true
         });
 
@@ -688,16 +688,11 @@ export default class App extends React.Component {
 
     loginUser(user, callback) {
 
-        var dbs = new PouchDB('https://shoutapp.org:6984/resourcespending', {
+
+        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
             skip_setup: true
         });
-        dbs.login(user.username, user.password, (err, response) => {
-            if (response.ok === true) {
-                callback(true);
-            } else {
-                callback(false);
-            }
-        });
+        return dbs.login(user.username, user.password);
     }
 
     getUserSession() {

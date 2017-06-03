@@ -84,14 +84,6 @@ export default class LoginRegister extends React.Component {
     }
 
 
-    loginResponse(res){
-            if(res){
-              this.setState({loginSuccess:true});
-            }else{
-              this.setState({loginError:true});
-            }
-            console.log(res);
-    }
 
     handleLogin() {
 
@@ -100,7 +92,14 @@ export default class LoginRegister extends React.Component {
                   password: this.state.passwordL,
               }
 
-        this.loginUser(user, ()=>this.loginResponse(res));
+        this.loginUser(user)
+        .then((response)=>{
+          this.setState({loginSuccess:true});
+          })
+        .catch((err)=>{
+          console.log(err)
+          this.setState({loginError:true});
+          });
     }
 
 
