@@ -15,8 +15,6 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {servicestemplate} from '../lib/services.js';
 import {languagestemplate} from '../lib/languages.js';
 
-var Enum = require('enum');
-
 import {
     Card,
     CardActions,
