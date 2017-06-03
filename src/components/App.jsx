@@ -705,7 +705,7 @@ export default class App extends React.Component {
             }),
         }
         if (this.state.gmap) {
-            return <PlacesAutocomplete inputProps={inputProps} />;
+            return <PlacesAutocomplete styles={{ root: { zIndex:1 } }} inputProps={inputProps} />;
         }
 
     }
@@ -939,9 +939,6 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        // if (remoteCouch) {
-        //     PouchDB.sync('db', 'remoteCouch');
-        // }
         // may be the wrong place to call these. Might be better to call in
         // component will mount
         console.log("component did mount")
@@ -968,28 +965,6 @@ export default class App extends React.Component {
                                style={styles.headerlinks}
                                onTouchTap={()=>this.displayLogin()} />
       }
-
-        // If there are no results yet, then database is still syncing and
-        // we should listen for changes to the db and display a "Loading" message
-        // in the meantime
-        // if (this.state.pageLoading) {
-        //     this.setState({
-        //         pageLoading: false
-        //     });
-        //     console.log("setting changes listener");
-        //     var changesObject = db.changes({
-        //         since: 'now',
-        //         live: true,
-        //         limit: 40
-        //     // When the changes arrive, call displaySearch
-        //     }).on('change', (change) => this.handleChanges(change, changesObject));
-        // }
-
-        // if (this.state.pageLoading) {
-        //     console.log("page still loading")
-        // } else {
-        //
-        // }
 
         return (
 
