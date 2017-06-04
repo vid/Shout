@@ -383,6 +383,8 @@ export default class App extends React.Component {
     }
 
     displayUpdateDocs() {
+
+      if(this.state.loggedin){
         this.changeHeaderInfo("Update Docs");
         this.setState({
             screen: <UpdateDocs container={this.refs.content}
@@ -392,10 +394,12 @@ export default class App extends React.Component {
                                 changeDoc={(res)=>this.changeDoc(res)}/>
 
         });
+      }
     }
 
     displayApproveDocs() {
 
+      if(this.state.loggedin) {
         db_pending.allDocs({
             startkey: 'Resource_',
             endkey: 'Resource_\uffff',
@@ -426,6 +430,7 @@ export default class App extends React.Component {
                                   changeDoc={(res)=>this.changeDoc(res)}/>
             })
         });
+        }
     }
 
 
