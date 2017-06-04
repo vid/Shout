@@ -36,6 +36,7 @@ import Search from './Search.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
+import ApproveDocs from './ApproveDocs.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
 import LoginRegister from './LoginRegister.jsx';
@@ -381,10 +382,10 @@ export default class App extends React.Component {
 
     }
 
-    displayModifyDocs() {
-        this.changeHeaderInfo("ModifyDocs");
+    displayUpdateDocs() {
+        this.changeHeaderInfo("Update Docs");
         this.setState({
-            screen: <ModifyDocs container={this.refs.content}
+            screen: <UpdateDocs container={this.refs.content}
                                 footer={this.refs.footer}
                                 displaySearch={()=>this.displaySearch}
                                 getFilteredResources={() => this.state.filteredResources}
@@ -394,36 +395,37 @@ export default class App extends React.Component {
     }
 
     displayApproveDocs() {
-      db_pending.allDocs({
-          startkey: 'Resource_',
-          endkey: 'Resource_\uffff',
-          include_docs: true
-      }, (err, doc) => {
-          if (err) {
-              return this.error(err);
-          }
-          console.log("doc is: ", doc)
-          this.changeHeaderInfo("Approve Docs");
-          var numRows = doc.total_rows;
-          var tempPending = [];
-          console.log("doc length is: ", numRows);
-          if (numRows > 0) {
-            for (var i = 0; i < numRows; i++) {
-              tempPending.push(doc.rows[i]);
+
+        db_pending.allDocs({
+            startkey: 'Resource_',
+            endkey: 'Resource_\uffff',
+            include_docs: true
+        }, (err, doc) => {
+            if (err) {
+                return this.error(err);
             }
-          }
-          console.log("tempPending is: ", tempPending);
-          this.setState({
-            pendingData: tempPending
-          })
-          this.setState({
-            screen: <ApproveDocs container={this.refs.content}
-                                footer={this.refs.footer}
-                                displayResult={(res)=>this.displayResult(res)}
-                                pendingData={this.state.pendingData}
-                                changeDoc={(res)=>this.changeDoc(res)}/>
-          })
-      });
+            console.log("doc is: ", doc)
+            this.changeHeaderInfo("Approve Docs");
+            var numRows = doc.total_rows;
+            var tempPending = [];
+            console.log("doc length is: ", numRows);
+            if (numRows > 0) {
+              for (var i = 0; i < numRows; i++) {
+                tempPending.push(doc.rows[i]);
+              }
+            }
+            console.log("tempPending is: ", tempPending);
+            this.setState({
+              pendingData: tempPending
+            })
+            this.setState({
+              screen: <ApproveDocs container={this.refs.content}
+                                  footer={this.refs.footer}
+                                  displayResult={(res)=>this.displayResult(res)}
+                                  pendingData={this.state.pendingData}
+                                  changeDoc={(res)=>this.changeDoc(res)}/>
+            })
+        });
     }
 
 
@@ -976,7 +978,7 @@ export default class App extends React.Component {
                <LeftMenu displayAddResource={() => this.displayAddResource()}
                          displayAbout={() => this.displayAbout()}
                          addResource={(res)=>this.addResource(res)}
-                         displayModifyDocs={()=>this.displayModifyDocs()}
+                         displayUpdateDocs={()=>this.displayUpdateDocs()}
                          displayApproveDocs={()=>this.displayApproveDocs()}/>
             </Drawer>
          </div>
