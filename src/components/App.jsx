@@ -136,7 +136,8 @@ export default class App extends React.Component {
             clinicpageTags: [],
             clinicpageFeedbacks: [],
             loggedin: false,
-            pendingData: []
+            pendingData: [],
+            userinfo:""
         };
 
 
@@ -335,7 +336,7 @@ export default class App extends React.Component {
         this.setState({
             screen: <AddResource container={this.refs.content}
                                  addResource={(x) => this.addResource(x)}
-                                 displaySearch={()=>this.displaySearch}/>
+                                 displaySearch={()=>this.displaySearch()}/>
         });
 
     }
@@ -345,7 +346,7 @@ export default class App extends React.Component {
         this.changeHeaderInfo("About");
         this.setState({
             screen: <About container={this.refs.content}
-                           displaySearch={()=>this.displaySearch}
+                           displaySearch={()=>this.displaySearch()}
                            getFilteredResources={() => this.state.filteredResources}
                            changeDoc={(res)=>this.changeDoc(res)}/>
         });
@@ -357,13 +358,12 @@ export default class App extends React.Component {
         this.changeHeaderInfo("Login/Register");
         this.setState({
             screen: <LoginRegister container={this.refs.content}
-                                   displaySearch={(result) => this.displaySearch()}
+                                   displaySearch={() => this.displaySearch()}
                                    addResource={(x) => this.addResource(x)}
                                    registerNew={(user)=>this.registerNew(user)}
                                    loginUser={(user,callback)=>this.loginUser(user,callback)}
                                    getLoggedIn={()=>this.state.loggedin}
-                                   getRegistered={()=>this.state.registered}
-                                   displaySearch={()=>this.displaySearch}/>
+                                   getRegistered={()=>this.state.registered}/>
         });
 
     }
@@ -371,11 +371,11 @@ export default class App extends React.Component {
     displayMyAccount() {
 
         this.changeHeaderInfo("My Account");
+        this.getUser();
         this.setState({
             screen: <MyAccount container={this.refs.content}
-                               footer={this.refs.footer}
-                               displaySearch={()=>this.displaySearch}
-                               getFilteredResources={() => this.state.filteredResources}
+                               getLoggedIn={() => this.state.loggedin}
+                               getUserinfo={()=>this.state.userinfo}
                                changeDoc={(res)=>this.changeDoc(res)}/>
         });
 
@@ -659,6 +659,24 @@ export default class App extends React.Component {
     }
 
 
+    getUser(){
+
+        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
+            skip_setup: true
+        });
+
+        dbs.getSession().then((response)=>{
+          return dbs.getUser(response.userCtx.name);
+        }).then((response)=>{
+            console.log("got a response");
+            return this.setState({userinfo:response});
+        }).catch((err)=>{
+            console.log(err);
+            this.setState({loggedin:false});
+            this.setState({userinfo:""});
+        })
+
+    }
 
     // Function that is called by event listeners attached when we called
     // "db.changes. It should refresh the resources when we initially sync the
@@ -765,52 +783,42 @@ export default class App extends React.Component {
 
 
     //Register a new user to the database
-    registerNew(user) {
+    registerNew(user,metadata) {
 
-        var dbs = new PouchDB('http://shoutapp.org:6984/resourcespending', {
+        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
             skip_setup: true
         });
 
-        dbs.signup(user.username, user.password, (err, response) => {
-            if (response.ok === true) {
-                this.setState({
-                    registered: true
-                });
-            } else {
-                this.setState({
-                    registered: false
-                });
-            }
+        return dbs.signup(user.username, user.password)
+        .then((response) => {
+          return true;
+        })
+        .catch((err)=>{
+          return false;
         });
 
     }
 
-    loginUser(user, callback) {
+
+    loginUser(user) {
 
 
         var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
             skip_setup: true
         });
-        return dbs.login(user.username, user.password);
+
+        return dbs.login(user.username, user.password)
+        .then((response)=>{
+          this.setState({loggedin:true});
+          return true;
+          })
+        .catch((err)=>{
+          console.log(err)
+          this.setState({loggedin:false});
+          return false;
+          });;
     }
 
-    getUserSession() {
-
-        db_pending.getSession((err, response) => {
-            if (err) {
-                console.log(err)
-                // network error
-            } else if (!response.userCtx.name) {
-                // nobody's logged in
-            } else {
-                // response.userCtx.name is the current user
-                this.setState({
-                    loggedin: true
-                });
-            }
-        });
-
-    }
 
 
     //user gets prompt to allow browser to access current position
@@ -934,7 +942,6 @@ export default class App extends React.Component {
         console.log("component did mount")
         PouchDB.sync(db, remoteCouch).on('complete',() => this.displaySearch());
         PouchDB.sync(db_pending, remoteCouchPending);
-        //this.getUserSession();
         this.requestCurrentPosition();
     }
 
@@ -947,7 +954,7 @@ export default class App extends React.Component {
         let loginButton = null;
         const isLoggedIn = this.state.loggedin;
         if (isLoggedIn) {
-            loginButton = <FlatButton label ="My Account"
+            loginButton = <FlatButton label ={"My Account ("+this.state.userinfo.name+")"}
                                  style={styles.headerlinks}
                                  onTouchTap={()=>this.displayMyAccount()} />
         } else {

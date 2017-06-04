@@ -37,9 +37,9 @@ import {
 const styles = {
 
     main: {
-        display:'flex',
-        flexDirection:'row',
-        width:'100%',
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
         alignment: 'right',
         overflow: 'auto'
     },
@@ -49,7 +49,7 @@ const styles = {
     },
 
     input: {
-        margin:10,
+        margin: 10,
         fontColor: 'black',
     },
 
@@ -67,12 +67,12 @@ export default class LoginRegister extends React.Component {
         super();
         this.state = {
 
-            type:1,
+            type: 1,
             canSubmit: false,
             registerSuccess: false,
             registerError: false,
-            loginSuccess:false,
-            loginError:false,
+            loginSuccess: false,
+            loginError: false,
         };
 
         this.errorMessages = {
@@ -88,52 +88,86 @@ export default class LoginRegister extends React.Component {
     handleLogin() {
 
         var user = {
-                  username: this.state.usernameL,
-                  password: this.state.passwordL,
-              }
+            username: this.state.usernameL,
+            password: this.state.passwordL,
+        }
 
         this.loginUser(user)
-        .then((response)=>{
-          this.setState({loginSuccess:true});
-          })
-        .catch((err)=>{
-          console.log(err)
-          this.setState({loginError:true});
-          });
+            .then((response) => {
+                return this.setState({
+                    loginSuccess: true
+                });
+            })
+            .catch((err) => {
+                console.log(err)
+                this.setState({
+                    loginError: true
+                });
+            });
     }
 
 
     handleRegister() {
 
-        var type=this.getType(this.state.type);
+        var type = this.getType(this.state.type);
         var user = {
-                  username: this.state.username,
-                  password: this.state.password,
-                  type: type,
-                  email: this.state.email,
-                  zip: this.state.zip,
-              }
-          this.registerNew(user);
-          var x=this.getRegistered();
-          if(x){
-            this.setState({registerSuccess:true});
-          }else{
-            this.setState({registerError:true});
-          }
+            username: this.state.username,
+            password: this.state.password
+        }
+        var metadata={
+          usertype: type,
+          email: this.state.email,
+          zip: this.state.zip,
+        }
+        this.registerNew(user, metadata)
+            .then((response) => {
+                console.log(response);
+                if (response) {
+                    return this.setState({
+                        registerSuccess: true
+                    });
+                } else {
+                    this.setState({
+                        error: "(Please choose a unique username)"
+                    });
+                    return this.setState({
+                        registerError: true
+                    });
+                }
+            })
+            .then(()=>{
+              return this.loginUser(user);
+            })
+            .catch((err) => {
+                this.setState({
+                    error: "(Unknown error)"
+                });
+                this.setState({
+                    registerError: true
+                });
+            });
 
     }
 
-    getType(value){
-        if(value===1) return "patient";
-        else if(value===2) return "healthcare professional";
-        else if(value===3) return "social worker";
+    getType(value) {
+        if (value === 1) return "patient";
+        else if (value === 2) return "healthcare professional";
+        else if (value === 3) return "social worker";
         else return "undefined";
     }
 
     searchSizer() {
-        const { container} = this.props;
-        const { offsetHeight, offsetWidth } = container;
-        this.setState({ offsetHeight, offsetWidth});
+        const {
+            container
+        } = this.props;
+        const {
+            offsetHeight,
+            offsetWidth
+        } = container;
+        this.setState({
+            offsetHeight,
+            offsetWidth
+        });
     }
 
     componentDidMount() {
@@ -147,28 +181,44 @@ export default class LoginRegister extends React.Component {
 
     render() {
 
-        const { customError, wordsError, numericError, urlError } = this.errorMessages;
-        const { addResource, displaySearch, registerNew, loginUser, getLoggedIn, getRegistered} = this.props;
+        const {
+            customError,
+            wordsError,
+            numericError,
+            urlError
+        } = this.errorMessages;
+        const {
+            addResource,
+            displaySearch,
+            registerNew,
+            loginUser,
+            getLoggedIn,
+            getRegistered
+        } = this.props;
 
-        this.registerNew=registerNew;
-        this.loginUser=loginUser;
-        this.getLoggedIn=getLoggedIn;
-        this.getRegistered=getRegistered;
+        this.registerNew = registerNew;
+        this.loginUser = loginUser;
+        this.displaySearch = displaySearch;
+        this.getLoggedIn = getLoggedIn;
+        this.getRegistered = getRegistered;
 
-        const { offsetWidth, offsetHeight} = this.state;
+        const {
+            offsetWidth,
+            offsetHeight
+        } = this.state;
         if (offsetHeight === undefined) {
             return null;
         }
 
         Formsy.addValidationRule('isCustom', (values, value) => {
 
-          var regobj=/^[a-zA-Z0-9,.!?')( ]*$/;
-          return regobj.test(value);
+            var regobj = /^[a-zA-Z0-9,.!?')( ]*$/;
+            return regobj.test(value);
         });
 
         return (
 
-        <div style={{display:'flex', flexDirection:'row', width:'100%'}}>
+            <div style={{display:'flex', flexDirection:'row', width:'100%'}}>
           <Formsy.Form
               onValid={()=>this.setState({ canSubmit: true })}
               onInvalid={()=>this.setState({ canSubmit: false })}
@@ -268,17 +318,20 @@ export default class LoginRegister extends React.Component {
               </div>
 
                               <Dialog
-                                title="Completed"
+                                title="Success"
                                   actions={<FlatButton
                                   label="Close"
                                   primary={true}
                                   keyboardFocused={true}
-                                  onTouchTap={() => {this.setState({registerSuccess: false})}}/>}
+                                  onTouchTap={() => {
+                                    this.setState({registerSuccess: false});
+                                    displaySearch();
+                                    }}/>}
                                   modal={false}
                                   open={this.state.registerSuccess}
                                   onRequestClose={()=>this.setState({registerSuccess:false})}
                                   >
-                                Thanks! Your entry has been submitted for approval by a moderator.
+                                  You have been registered.
                               </Dialog>
 
                               <Dialog
@@ -292,7 +345,7 @@ export default class LoginRegister extends React.Component {
                                   open={this.state.registerError}
                                   onRequestClose={()=>this.setState({registerError:false})}
                                   >
-                                Error {this.state.error}
+                                There was an error registering you. {this.state.error}
                               </Dialog>
           </div>
       </Formsy.Form>
@@ -356,16 +409,16 @@ export default class LoginRegister extends React.Component {
           </div>
 
                               <Dialog
-                                title="Completed"
+                                title="Login Successful"
                                   actions={<FlatButton
                                   label="Close"
                                   primary={true}
-                                  keyboardFocused={true}
-                                  onTouchTap={() => {this.setState({loginSuccess: false})}}/>}
+                                  onTouchTap={() => { this.setState({loginSuccess: false});
+                                                      displaySearch();
+                                                      }}/>}
                                   modal={false}
                                   open={this.state.loginSuccess}
-                                  onRequestClose={()=>this.setState({loginSuccess:false})}
-                                  >
+                                  onRequestClose={()=>{this.setState({loginSuccess: false})}}>
                                 Successfully logged in.
                               </Dialog>
 

@@ -48,7 +48,8 @@ const styles = {
         padding: '1% 2% 5% 5%',
     },
 
-    input: {
+    info: {
+        padding:12,
         margin:10,
         fontColor: 'black',
     },
@@ -85,9 +86,11 @@ export default class MyAccount extends React.Component {
 
     render() {
 
-        const { addResource, displaySearch, registerNew, loginUser, getLoggedIn, getRegistered} = this.props;
+        const { getLoggedIn, getUserinfo} = this.props;
         const { offsetWidth, offsetHeight} = this.state;
-        
+
+        var userinfo=getUserinfo();
+
         if (offsetHeight === undefined) {
             return null;
         }
@@ -95,9 +98,14 @@ export default class MyAccount extends React.Component {
 
         return (
 
-        <div style={{display:'flex', flexDirection:'row', width:'100%'}}>
+        <div style={{width:'100%', padding:20}}>
 
-          Account Info Here
+          <div style={{display:'flex', flexDirection:'row'}}>
+          <h4>Name:</h4><div style={styles.info}>{userinfo.name}</div>
+          </div>
+          <div style={{display:'flex', flexDirection:'row'}}>
+          <h4>Type:</h4><div style={styles.info}>{userinfo.type}</div>
+          </div>
         </div>
         );
     }
