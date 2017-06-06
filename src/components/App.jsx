@@ -36,6 +36,7 @@ import Search from './Search.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
+import Logout from './Logout.jsx';
 import ApproveDocs from './ApproveDocs.jsx';
 import ClinicPage from './ClinicPage.jsx';
 import AddResource from './AddResource.jsx';
@@ -826,7 +827,23 @@ export default class App extends React.Component {
           });;
     }
 
+    logoutUser() {
+      var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
+          skip_setup: true
+      });
 
+      dbs.logout(function (err, response) {
+        if (err) {
+          console.log(err)
+          console.log("ERROR when logging out");
+        }
+      }).then((response)=>{
+        this.setState({ loggedin: false })
+      }).catch((err)=>{
+        console.log(err)
+        this.setState({ loggedin:true });
+      });;
+    }
 
     //user gets prompt to allow browser to access current position
     requestCurrentPosition() {
@@ -961,9 +978,13 @@ export default class App extends React.Component {
         let loginButton = null;
         const isLoggedIn = this.state.loggedin;
         if (isLoggedIn) {
-            loginButton = <FlatButton label ={"My Account ("+this.state.userinfo.name+")"}
-                                 style={styles.headerlinks}
-                                 onTouchTap={()=>this.displayMyAccount()} />
+            loginButton = <div>
+                            <FlatButton label ={"My Account ("+this.state.userinfo.name+")"}
+                                   style={styles.headerlinks}
+                                   onTouchTap={()=>this.displayMyAccount()} />
+                            <Logout handleLogout={(user)=>this.logoutUser(user)}
+                                    style={styles.headerlinks}/>
+                          </div>
         } else {
             loginButton = <FlatButton label ="Login/Register"
                                style={styles.headerlinks}
