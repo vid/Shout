@@ -94,9 +94,15 @@ export default class LoginRegister extends React.Component {
 
         this.loginUser(user)
             .then((response) => {
-                return this.setState({
-                    loginSuccess: true
+                if(response){
+                  return this.setState({
+                      loginSuccess: true
+                  });
+                }else{
+                this.setState({
+                    loginError: true
                 });
+                }
             })
             .catch((err) => {
                 console.log(err)

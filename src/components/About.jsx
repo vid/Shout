@@ -3,60 +3,23 @@
 
 // JavaScript source code
 import React from 'react';
-import Formsy from 'formsy-react';
 
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import Chip from 'material-ui/Chip';
-import Divider from 'material-ui/Divider';
-import Dialog from 'material-ui/Dialog';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
-
-
-import {
-    FormsyCheckbox,
-    FormsyDate,
-    FormsyRadio,
-    FormsyRadioGroup,
-    FormsySelect,
-    FormsyText,
-    FormsyTime,
-    FormsyToggle,
-    FormsyAutoComplete
-} from 'formsy-material-ui/lib';
 
 
 const styles = {
 
     main: {
-        display:'flex',
-        flexDirection:'row',
+        padding:15,
+        opacity:0.8,
         width:'100%',
         alignment: 'right',
         overflow: 'auto'
     },
-
-    section: {
-        padding: '1% 2% 5% 5%',
-    },
-
-    input: {
-        margin:10,
-        fontColor: 'black',
-    },
-
-    button: {
-        fontSize: 12,
-        padding: '2px'
-    }
 
 };
 
@@ -85,7 +48,6 @@ export default class About extends React.Component {
 
     render() {
 
-        const { addResource, displaySearch, registerNew, loginUser, getLoggedIn, getRegistered} = this.props;
         const { offsetWidth, offsetHeight} = this.state;
 
         if (offsetHeight === undefined) {
@@ -95,10 +57,14 @@ export default class About extends React.Component {
 
         return (
 
-        <div style={{display:'flex', flexDirection:'row', width:'100%'}}>
-
-          About
-        </div>
+        <Paper style={styles.main}>
+          <h2>Mission</h2>
+            <p>Every year, hundreds of Atlanta residents fail to access primary healthcare, even when it’s free. The biggest discrepancy is in marginalized populations- minorities and low-income families.
+            Why? A major reason for this is a barrier to information.</p>
+            <p>Our Goal: Decentralize information.</p>
+            <p>We believe that the best way to achieve good healthcare among marginalized communities is to empower them to inform themselves and each other.</p>
+          
+        </Paper>
         );
     }
 }
