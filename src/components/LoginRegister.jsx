@@ -60,6 +60,8 @@ const styles = {
 
 };
 
+const MIN_PASSWORD_LEN = 8;
+
 export default class LoginRegister extends React.Component {
 
 
@@ -80,6 +82,8 @@ export default class LoginRegister extends React.Component {
             wordsError: "Please only use letters",
             numericError: "Please provide a number",
             urlError: "Please provide a valid URL",
+            passwordError: "Password must be at least " + MIN_PASSWORD_LEN
+                                                        + " characters long"
         };
     }
 
@@ -191,7 +195,8 @@ export default class LoginRegister extends React.Component {
             customError,
             wordsError,
             numericError,
-            urlError
+            urlError,
+            passwordError
         } = this.errorMessages;
         const {
             addResource,
@@ -220,6 +225,13 @@ export default class LoginRegister extends React.Component {
 
             var regobj = /^[a-zA-Z0-9,.!?')( ]*$/;
             return regobj.test(value);
+        });
+
+        Formsy.addValidationRule('isPassword', (values, value) => {
+
+          if (value) {
+            return value.length > MIN_PASSWORD_LEN;
+          }
         });
 
         return (
@@ -289,8 +301,8 @@ export default class LoginRegister extends React.Component {
                             <FormsyText
                               name="password"
                               type="password"
-                              validations="isCustom"
-                              validationError={customError}
+                              validations="isPassword"
+                              validationError={passwordError}
                               required
                               hintText="Password"
                               hintStyle={styles.hint}
@@ -395,8 +407,7 @@ export default class LoginRegister extends React.Component {
                         <FormsyText
                           name="password"
                           type="password"
-                          validations="isCustom"
-                          validationError={customError}
+                          validations="isPassword"
                           required
                           hintText="Password"
                           hintStyle={styles.hint}
