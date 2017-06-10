@@ -35,7 +35,7 @@ export default class Logout extends React.Component {
                             primary={true}
                             onTouchTap={()=>this.handleClose()}
                           />
-                          
+
     return (
 
       <div>
