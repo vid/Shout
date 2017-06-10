@@ -826,6 +826,24 @@ export default class App extends React.Component {
           });;
     }
 
+    logoutUser(user) {
+
+
+        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
+            skip_setup: true
+        });
+
+        return dbs.logout(user.username, user.password)
+        .then((response)=>{
+          return this.setState({loggedin:false});
+          })
+        .catch((err)=>{
+          console.log(err)
+          this.setState({loggedin:false});
+          return false;
+          });;
+    }
+
 
 
     //user gets prompt to allow browser to access current position
