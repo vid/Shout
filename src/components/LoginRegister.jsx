@@ -288,6 +288,7 @@ export default class LoginRegister extends React.Component {
 
                             <FormsyText
                               name="password"
+                              type="password"
                               validations="isCustom"
                               validationError={customError}
                               required
@@ -393,6 +394,7 @@ export default class LoginRegister extends React.Component {
 
                         <FormsyText
                           name="password"
+                          type="password"
                           validations="isCustom"
                           validationError={customError}
                           required
