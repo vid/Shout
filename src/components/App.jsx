@@ -373,7 +373,6 @@ export default class App extends React.Component {
     displayMyAccount() {
 
         this.changeHeaderInfo("My Account");
-        this.getUser();
         this.setState({
             screen: <MyAccount container={this.refs.content}
                                getLoggedIn={() => this.state.loggedin}
@@ -818,8 +817,11 @@ export default class App extends React.Component {
         return dbs.login(user.username, user.password)
         .then((response)=>{
           this.setState({loggedin:true});
-          return true;
           })
+        .then((response)=>{
+          this.getUser();
+          return true;
+        })
         .catch((err)=>{
           console.log(err)
           this.setState({loggedin:false});
@@ -839,7 +841,8 @@ export default class App extends React.Component {
           console.log("ERROR when logging out");
         }
       }).then((response)=>{
-        this.setState({ loggedin: false })
+        this.setState({ loggedin: false });
+        this.setState({userinfo:""});
       }).catch((err)=>{
         console.log(err)
         this.setState({ loggedin:true });
@@ -1006,7 +1009,8 @@ export default class App extends React.Component {
                          displayAbout={() => this.displayAbout()}
                          addResource={(res)=>this.addResource(res)}
                          displayUpdateDocs={()=>this.displayUpdateDocs()}
-                         displayApproveDocs={()=>this.displayApproveDocs()}/>
+                         displayApproveDocs={()=>this.displayApproveDocs()}
+                         getUserinfo={()=>this.state.userinfo}/>
             </Drawer>
          </div>
 

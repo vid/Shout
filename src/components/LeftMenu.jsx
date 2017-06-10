@@ -32,10 +32,28 @@ export default class LeftMenu extends React.Component {
 
     }
 
+    getAdminOptions(){
+
+      var userinfo=this.getUserinfo();
+      if(userinfo){
+          const role=userinfo.roles.indexOf("admin");
+          if(role<0){
+            return "";
+          }else{
+            return (<div><MenuItem primaryText="Update Resources" onTouchTap={() => displayUpdateDocs()}/>
+            <MenuItem primaryText="View Pending Resources" onTouchTap={() => displayApproveDocs()}/></div>);
+            }
+        }else{
+          return ""
+        }
+    }
+
     render() {
 
-        const { displayAddResource, addResource, displayAbout, displayUpdateDocs, displayApproveDocs} = this.props;
-
+        const { displayAddResource, addResource, displayAbout, displayUpdateDocs, displayApproveDocs, getUserinfo} = this.props;
+        this.displayUpdateDocs=displayUpdateDocs;
+        this.displayApproveDocs=displayApproveDocs;
+        this.getUserinfo=getUserinfo;
 
 
 
@@ -44,8 +62,7 @@ export default class LeftMenu extends React.Component {
             <MenuItem primaryText="" />
             <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
             <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => displayAbout()}/>
-            <MenuItem primaryText="Update Resources (Admin only)" onTouchTap={() => displayUpdateDocs()}/>
-            <MenuItem primaryText="View Pending Resources (Admin only)" onTouchTap={() => displayApproveDocs()}/>
+            {this.getAdminOptions()}
             </div>
         )
     }
