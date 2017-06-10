@@ -21,6 +21,11 @@ const styles = {
      border: '1 px solid #000000',
      borderRadius: '8',
      fontSize: '14'
+   },
+
+    raisedButton: {
+        position: 'relative',
+        zIndex: 0
     }
 }
 
@@ -105,7 +110,8 @@ export default class Results extends React.Component {
               label="Add Place"
               labelStyle={{fontWeight:'bold'}}
               onTouchTap={()=>displayAddResource()}
-              icon={<ContentAdd />}/>
+              icon={<ContentAdd />}
+              style={styles.raisedButton}/>
             </div>
             </div>
       <Table
