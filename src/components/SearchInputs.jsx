@@ -41,7 +41,8 @@ const styles = {
         fontSize: '14',
     },
     raisedButton: {
-        position: 'relative'
+        position: 'relative',
+        zIndex: 0
     }
 };
 
@@ -207,7 +208,8 @@ export default class SearchInputs extends React.Component {
                 labelColor="#FFFFFF"
                 label="Women's Health"
                 onTouchTap={()=>onSelect(1)}
-                icon={<ActionPregnantWoman />}/>
+                icon={<ActionPregnantWoman />}
+                style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
               <RaisedButton
@@ -215,21 +217,24 @@ export default class SearchInputs extends React.Component {
                 labelColor="#FFFFFF"
                 label="Child"
                 onTouchTap={()=>onSelect(2)}
-                icon={<PlacesChildCare />}/>
+                icon={<PlacesChildCare />}
+                style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
               <RaisedButton
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
                 onTouchTap={()=>onSelect(3)}
-                label="Mental Health"/>
+                label="Mental Health"
+                style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
               <RaisedButton
                 backgroundColor="#000000"
                 labelColor="#FFFFFF"
                 onTouchTap={()=>onSelect(4)}
-                label="Dental"/>
+                label="Dental"
+                style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
               <RaisedButton
@@ -237,7 +242,8 @@ export default class SearchInputs extends React.Component {
                 labelColor="#FFFFFF"
                 label="Vision"
                 onTouchTap={()=>onSelect(5)}
-                icon={<ActionVisibility />}/>
+                icon={<ActionVisibility />}
+                style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
               <RaisedButton
@@ -245,7 +251,8 @@ export default class SearchInputs extends React.Component {
                 labelColor="#FFFFFF"
                 label="Others"
                 onTouchTap={()=>onSelect(6)}
-                icon={<ActionVisibility />}/>
+                icon={<ActionVisibility />}
+                style={styles.raisedButton}/>
             </div>
         </div>
         {this.getOptions(index)}

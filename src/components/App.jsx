@@ -724,7 +724,7 @@ export default class App extends React.Component {
             }),
         }
         if (this.state.gmap) {
-            return <PlacesAutocomplete styles={{ root: { zIndex:1 } }} inputProps={inputProps} />;
+            return <PlacesAutocomplete styles={{ root: {zIndex: 1}  }} inputProps={inputProps} />;
         }
 
     }
