@@ -362,7 +362,7 @@ export default class App extends React.Component {
             screen: <LoginRegister container={this.refs.content}
                                    displaySearch={() => this.displaySearch()}
                                    addResource={(x) => this.addResource(x)}
-                                   registerNew={(user)=>this.registerNew(user)}
+                                   registerNew={(user,metadata)=>this.registerNew(user,metadata)}
                                    loginUser={(user,callback)=>this.loginUser(user,callback)}
                                    getLoggedIn={()=>this.state.loggedin}
                                    getRegistered={()=>this.state.registered}/>
@@ -675,7 +675,6 @@ export default class App extends React.Component {
         dbs.getSession().then((response)=>{
           return dbs.getUser(response.userCtx.name);
         }).then((response)=>{
-            console.log("got a response");
             return this.setState({userinfo:response});
         }).catch((err)=>{
             console.log(err);
@@ -790,21 +789,22 @@ export default class App extends React.Component {
 
 
     //Register a new user to the database
-    registerNew(user,metadata) {
+    registerNew(user, metadata) {
 
         var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
             skip_setup: true
         });
 
-        return dbs.signup(user.username, user.password)
-        .then((response) => {
-          return true;
+        return dbs.signup(user.username, user.password, metadata)
+        .then((response)=>{
+        return true;
         })
         .catch((err)=>{
           return false;
         });
 
     }
+
 
 
     loginUser(user) {

@@ -125,11 +125,13 @@ export default class LoginRegister extends React.Component {
             password: this.state.password
         }
         var metadata={
-          usertype: type,
-          email: this.state.email,
-          zip: this.state.zip,
+          metadata:{
+            usertype: type,
+            email: this.state.email,
+            zip: this.state.zip,
+          }
         }
-        this.registerNew(user, metadata)
+        this.registerNew(user,metadata)
             .then((response) => {
                 console.log(response);
                 if (response) {
@@ -145,7 +147,7 @@ export default class LoginRegister extends React.Component {
                     });
                 }
             })
-            .then(()=>{
+            .then((response)=>{
               return this.loginUser(user);
             })
             .catch((err) => {
