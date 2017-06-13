@@ -37,12 +37,13 @@ import {
 const styles = {
 
     main: {
-        display:'flex',
-        flexDirection:'row',
+        padding:15,
+        opacity:0.8,
         width:'100%',
         alignment: 'right',
         overflow: 'auto'
     },
+
 
     section: {
         padding: '1% 2% 5% 5%',
@@ -66,6 +67,38 @@ export default class MyAccount extends React.Component {
 
     constructor() {
         super();
+
+    }
+
+    formatData(userinfo){
+
+      if(userinfo){
+
+        var email=userinfo.email;
+        var usertype=userinfo.usertype;
+        var zip=userinfo.zip;
+
+        if(!email){
+          email="";
+          usertype="";
+          zip="";
+        }
+        return (<div>
+        <div style={{display:'flex', flexDirection:'row'}}>
+        <h4>Name:</h4><div style={styles.info}>{userinfo.name}</div>
+        </div>
+        <div style={{display:'flex', flexDirection:'row'}}>
+        <h4>Email:</h4><div style={styles.info}>{email}</div>
+        </div>
+        <div style={{display:'flex', flexDirection:'row'}}>
+        <h4>Type:</h4><div style={styles.info}>{usertype}</div>
+        </div>
+        <div style={{display:'flex', flexDirection:'row'}}>
+        <h4>Zip:</h4><div style={styles.info}>{zip}</div>
+        </div>
+        </div>)
+
+      }else return "no data found"
 
     }
 
@@ -98,15 +131,10 @@ export default class MyAccount extends React.Component {
 
         return (
 
-        <div style={{width:'100%', padding:20}}>
+        <Paper style={styles.main}>
 
-          <div style={{display:'flex', flexDirection:'row'}}>
-          <h4>Name:</h4><div style={styles.info}>{userinfo.name}</div>
-          </div>
-          <div style={{display:'flex', flexDirection:'row'}}>
-          <h4>Type:</h4><div style={styles.info}>{userinfo.type}</div>
-          </div>
-        </div>
+          {this.formatData(userinfo)}
+        </Paper>
         );
     }
 }
