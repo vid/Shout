@@ -12,8 +12,8 @@ import FlatButton from 'material-ui/FlatButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
+import {languagestemplate, feetemplate, populationtemplate, incometemplate, acceptstemplate} from '../lib/templates.js';
 import {servicestemplate} from '../lib/services.js';
-import {languagestemplate} from '../lib/languages.js';
 
 import {
     Card,
@@ -31,6 +31,11 @@ const styles = {
     },
     servicetype: {
         padding:10
+    },
+    row:{
+    display:'flex',
+    flexDirection:'row',
+    padding:10
     }
 }
 
@@ -41,15 +46,25 @@ export default class UpdateDocs extends React.Component {
         constructor(props) {
             super(props);
 
+            this.templates = {
+
+              services:servicestemplate,
+              accepts:acceptstemplate,
+              fee:feetemplate,
+              income:incometemplate,
+              languages:languagestemplate,
+              population:populationtemplate,
+            };
+
             this.state = {
               tab:"1",
               expanded:1,
-              accepts:[],
-              income:[],
-              fee:[],
-              population:[],
-              languages:[],
-              services:[],
+              accepts:acceptstemplate,
+              income:incometemplate,
+              fee:feetemplate,
+              population:populationtemplate,
+              languages:languagestemplate,
+              services:servicestemplate,
             };
 
     }
@@ -99,18 +114,20 @@ export default class UpdateDocs extends React.Component {
     }
 
     handleExpand(res, i){
+      console.log("resetting values");
+      this.setState({population:this.templates.population});
+      this.setState({services:this.templates.services});
+      this.setState({languages:this.templates.languages});
+      this.setState({fee:this.templates.fee});
+      this.setState({income:this.templates.income});
+      this.setState({accepts:this.templates.accepts});
       this.setState({expanded:i});
-      this.setState({price:res.price});
-      this.setState({population:res.population});
-      if(this.state.services.length<1){
-        this.setState({services:servicestemplate});
-      }
-      this.setState({languages:res.languages});
     }
 
     getServices(type){
 
       var servicesarr=[];
+
       if(type==="adult"){servicesarr=this.state.services.general;}
       else if(type==="women"){servicesarr=this.state.services.women;}
       else if(type==="pediatric"){servicesarr=this.state.services.pediatric;}
@@ -147,9 +164,10 @@ export default class UpdateDocs extends React.Component {
 
       var arr=[];
       if(type==="languages"){arr=this.state.languages;}
+      else if(type==="population"){arr=this.state.population;}
       else if(type==="fee"){arr=this.state.fee;}
-      else if(type==="income"){arr=this.state.services.income;}
-      else if(type==="accepts"){arr=this.state.services.accepts;}
+      else if(type==="income"){arr=this.state.income;}
+      else if(type==="accepts"){arr=this.state.accepts;}
 
       return arr.map((element, i)=>
       <div>
@@ -186,25 +204,30 @@ export default class UpdateDocs extends React.Component {
     }
     getInfo(res){
 
+
         return <div>
                 <h3>Please add any new info </h3>
                 <p>Accepts:</p>
 
-                      {this.getOthers("accepts")}
+                      <div style={styles.row}>{this.getOthers("accepts")}</div>
 
 
                 <p>Income:</p>
 
-                      {this.getOthers("income")}
+                      <div style={styles.row}>{this.getOthers("income")}</div>
 
 
                 <p>Fees:</p>
 
-                      {this.getOthers("fee")}
+                      <div style={styles.row}>{this.getOthers("fee")}</div>
 
-                <p>Languages</p>
+                <p>Languages:</p>
 
-                      {this.getOthers("languages")}
+                      <div style={styles.row}>{this.getOthers("languages")}</div>
+
+                <p>Population:</p>
+
+                      <div style={styles.row}>{this.getOthers("population")}</div>
 
                 <p>Services:</p>
                 <div style={{display:'flex', flexDirection:'row',flexWrap:'wrap'}}>
@@ -234,20 +257,6 @@ export default class UpdateDocs extends React.Component {
                   {this.getServices("vision")}
                 </div>
                 </div>
-
-                <p>Population:</p>
-                <Checkbox
-                  label="Adult"
-                  style={styles.checkbox}/>
-                <Checkbox
-                  label="Children"
-                  style={styles.checkbox}/>
-                <Checkbox
-                  label="Women"
-                  style={styles.checkbox}/>
-                <Checkbox
-                  label="Seniors"
-                  style={styles.checkbox}/>
 
 
                 <RaisedButton label="Update Resource" onTouchTap={()=>this.handleUpdate(res)}/>
@@ -354,10 +363,9 @@ export default class UpdateDocs extends React.Component {
 
         return (
 
-         <Tabs
+        <Tabs
         value={this.state.tab}
-        onChange={(value)=>this.tabChange(value)}
-      >
+        onChange={(value)=>this.tabChange(value)}>
         <Tab label="Health-related" value="1">
           <div>
             <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>
@@ -379,10 +387,10 @@ export default class UpdateDocs extends React.Component {
       </div>
         </Tab>
         <Tab label="Food" value="3">
-
+          Nothing here
         </Tab>
         <Tab label="Other" value="4">
-
+          Nothing here
         </Tab>
       </Tabs>
 

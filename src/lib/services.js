@@ -58,7 +58,7 @@ export const servicestemplate = {
     uservotes: '0',
   }],
   women: [{
-    label: "Obstric (pregnancy) care",
+    label: "Obstetric (pregnancy) care",
     adminvotes: '0',
     uservotes: '0',
   }, {

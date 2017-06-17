@@ -55,8 +55,8 @@ PouchDB.plugin(require('pouchdb-authentication'));
 /*PouchDB server*/
 //Create local & remote server, and then sync these. See PouchDB docs at http://pouchdb.com/api.html
 
-var db = new PouchDB('resources2017');
-var remoteCouch = 'http://shouthealth.org:6984/resources2017';
+var db = new PouchDB('quality_resources');
+var remoteCouch = 'http://shouthealth.org:6984/quality_resources';
 PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
@@ -153,29 +153,12 @@ export default class App extends React.Component {
     addResource(res) {
 
         //create object to add
-        var resource = {
-            _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
-            civic_address: res.civic_address,
-            phone: res.phone,
-            website: res.website,
-            description: res.description,
-            resourcetype: res.resourcetype,
-            type: res.type,
-            zip: res.zip,
-            city: res.city,
-            lat: res.lat,
-            lng: res.lng,
-            price:res.price,
-            languages:res.languages,
-            population:res.population,
-            waitingtime:res.waitingtime,
-            services:res.services,
-            numberreviews:'0',
-            accessibilityrating:'',
-            availabilityrating:'',
-            tags:res.tags,
+        var resource = Object.assign({}, res);
+        resource._id="Resource" + "_" + res.resourcetype + "_" + res.name;
+        resource.numberreviews='0';
+        resource.accessibilityrating="";
+        resource.availabilityrating="";
 
-        };
         db_pending.put(resource, function callback(err, result) {
             if (!err) {
                 console.log('Added resource');
@@ -201,21 +184,13 @@ export default class App extends React.Component {
     // document to the PouchDB database
     addFeedback(rev) {
 
-        var review = {
-            _id: "Feedback" + "_" + rev.name + "_" + new Date().toISOString(),
-            type: "feedback",
-            date: new Date().toISOString(),
-            name: rev.name,
-            author: rev.author,
-            accessibility: rev.accessibility,
-            quality: rev.quality,
-            affordability: rev.affordability,
-            text: rev.text,
-            upvotes: '0',
-            downvotes: '0',
-            language: rev.language,
+        var review = Object.assign({}, rev);
+        review._id="Feedback" + "_" + rev.name + "_" + new Date().toISOString();
+        review.type="feedback";
+        review.date=new Date().toISOString();
+        review.upvotes='0';
+        review.downvotes='0';
 
-        };
         db_pending.put(review, function callback(err, result) {
             if (!err) {
                 console.log('Added review');
@@ -230,31 +205,8 @@ export default class App extends React.Component {
         updateDoc(res) {
 
             //create a new doc with properties of this
-            var mod = {
-                name: res.name,
-                _id: "Resource" + "_" + res.resourcetype + "_" + res.name,
-                //_rev:res._rev,
-                lat: res.lat,
-                lng: res.lng,
-                civic_address: res.civic_address,
-                phone: res.phone,
-                website: res.website,
-                description: res.description,
-                resourcetype: res.resourcetype,
-                type: res.type,
-                zip: res.zip,
-                city: res.city,
-                price:res.price,
-                languages:res.languages,
-                population:res.population,
-                waitingtime:res.waitingtime,
-                services:res.services,
-                numberreviews:res.numberreviews,
-                accessibilityrating:res.accessibilityrating,
-                availabilityrating:res.availabilityrating,
-                tags:res.tags,
-
-            };
+            var mod = Object.assign({}, res);
+            mod._id="Resource" + "_" + res.resourcetype + "_" + res.name;
             db.put(mod, function callback(err, result) {
                 if (!err) {
                     console.log('Modified this doc');
@@ -391,7 +343,7 @@ export default class App extends React.Component {
                                 footer={this.refs.footer}
                                 displaySearch={()=>this.displaySearch}
                                 getFilteredResources={() => this.state.filteredResources}
-                                changeDoc={(res)=>this.changeDoc(res)}/>
+                                updateDoc={(res)=>this.updateDoc(res)}/>
 
         });
       }

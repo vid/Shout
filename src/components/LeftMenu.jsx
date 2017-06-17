@@ -40,8 +40,8 @@ export default class LeftMenu extends React.Component {
           if(role<0){
             return "";
           }else{
-            return (<div><MenuItem primaryText="Update Resources" onTouchTap={() => displayUpdateDocs()}/>
-            <MenuItem primaryText="View Pending Resources" onTouchTap={() => displayApproveDocs()}/></div>);
+            return (<div><MenuItem primaryText="Update Resources" onTouchTap={() => this.displayUpdateDocs()}/>
+            <MenuItem primaryText="View Pending Resources" onTouchTap={() => this.displayApproveDocs()}/></div>);
             }
         }else{
           return ""

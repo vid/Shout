@@ -195,7 +195,7 @@ export default class SearchInputs extends React.Component {
         <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap',width: {offsetWidth}, padding:8}}>
             <div style={styles.button}>
               <RaisedButton
-                backgroundColor="#000000"
+                backgroundColor={index===0?"#707070":"#000000"}
                 labelColor="#FFFFFF"
                 label="All Results"
                 onTouchTap={()=>onSelect(0)}
@@ -204,7 +204,7 @@ export default class SearchInputs extends React.Component {
             </div>
             <div style={styles.button}>
               <RaisedButton
-                backgroundColor="#000000"
+                backgroundColor={index===1?"#707070":"#000000"}
                 labelColor="#FFFFFF"
                 label="Women's Health"
                 onTouchTap={()=>onSelect(1)}
@@ -213,7 +213,7 @@ export default class SearchInputs extends React.Component {
             </div>
             <div style={styles.button}>
               <RaisedButton
-                backgroundColor="#000000"
+                backgroundColor={index===2?"#707070":"#000000"}
                 labelColor="#FFFFFF"
                 label="Child"
                 onTouchTap={()=>onSelect(2)}
@@ -222,7 +222,7 @@ export default class SearchInputs extends React.Component {
             </div>
             <div style={styles.button}>
               <RaisedButton
-                backgroundColor="#000000"
+                backgroundColor={index===3?"#707070":"#000000"}
                 labelColor="#FFFFFF"
                 onTouchTap={()=>onSelect(3)}
                 label="Mental Health"
@@ -230,7 +230,7 @@ export default class SearchInputs extends React.Component {
             </div>
             <div style={styles.button}>
               <RaisedButton
-                backgroundColor="#000000"
+                backgroundColor={index===4?"#707070":"#000000"}
                 labelColor="#FFFFFF"
                 onTouchTap={()=>onSelect(4)}
                 label="Dental"
@@ -238,7 +238,7 @@ export default class SearchInputs extends React.Component {
             </div>
             <div style={styles.button}>
               <RaisedButton
-                backgroundColor="#000000"
+                backgroundColor={index===5?"#707070":"#000000"}
                 labelColor="#FFFFFF"
                 label="Vision"
                 onTouchTap={()=>onSelect(5)}
@@ -247,7 +247,7 @@ export default class SearchInputs extends React.Component {
             </div>
             <div style={styles.button}>
               <RaisedButton
-                backgroundColor="#000000"
+                backgroundColor={index===6?"#707070":"#000000"}
                 labelColor="#FFFFFF"
                 label="Others"
                 onTouchTap={()=>onSelect(6)}
