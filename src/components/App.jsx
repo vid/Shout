@@ -56,11 +56,11 @@ PouchDB.plugin(require('pouchdb-authentication'));
 //Create local & remote server, and then sync these. See PouchDB docs at http://pouchdb.com/api.html
 
 var db = new PouchDB('quality_resources');
-var remoteCouch = 'http://shouthealth.org:6984/quality_resources';
+var remoteCouch = 'https://shouthealth.org:6984/quality_resources';
 PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
-var remoteCouchPending = 'http://shouthealth.org:6984/resourcespending';
+var remoteCouchPending = 'https://shouthealth.org:6984/resourcespending';
 PouchDB.sync(db_pending, remoteCouchPending);
 
 
