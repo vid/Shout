@@ -56,11 +56,11 @@ PouchDB.plugin(require('pouchdb-authentication'));
 //Create local & remote server, and then sync these. See PouchDB docs at http://pouchdb.com/api.html
 
 var db = new PouchDB('quality_resources');
-var remoteCouch = 'http://generaluser:pass@shouthealth.org:6984/quality_resources';
+var remoteCouch = 'https://shouthealth.org/couchdb/quality_resources';
 PouchDB.replicate(remoteCouch,db);
 
 var db_pending = new PouchDB('resourcespending');
-var remoteCouchPending = 'http://generaluser:pass@shouthealth.org:6984/resourcespending';
+var remoteCouchPending = 'https://shouthealth.org/couchdb/resourcespending';
 PouchDB.sync(db_pending, remoteCouchPending);
 
 
@@ -620,7 +620,7 @@ export default class App extends React.Component {
 
     getUser(){
 
-        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
+        var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
             skip_setup: true
         });
 
@@ -743,7 +743,7 @@ export default class App extends React.Component {
     //Register a new user to the database
     registerNew(user, metadata) {
 
-        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
+        var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
             skip_setup: true
         });
 
@@ -762,7 +762,7 @@ export default class App extends React.Component {
     loginUser(user) {
 
 
-        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
+        var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
             skip_setup: true
         });
 
@@ -783,7 +783,7 @@ export default class App extends React.Component {
 
 
     logoutUser() {
-      var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
+      var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
           skip_setup: true
       });
 
