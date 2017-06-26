@@ -40,7 +40,6 @@ const styles = {
         margin: 'auto',
         padding: '1% 2% 5% 5%',
         width:'50%',
-        alignment: 'right',
         overflow: 'auto'
     },
 

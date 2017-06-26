@@ -440,6 +440,7 @@ export default class App extends React.Component {
         this.setState({
             appbarIcon: <NavigationMenu />
         });
+        console.log("index is: ", this.state.selectedIndex)
         this.setState({
             searchBar: <SearchInputs container={this.refs.content}
                                      getSearchstring={()=>this.state.searchString}
@@ -494,6 +495,7 @@ export default class App extends React.Component {
                 this.redrawResources(doc.rows);
             });
         } else {
+            console.log("search string exists")
             this.setState({
                 searchString: searchString
             });
@@ -519,11 +521,13 @@ export default class App extends React.Component {
 
     //This function allows user to filter resources based on the selected icon in the footer
     footerSelect(index) {
-
         //first, go back to the main screen
-        this.setState({
-            selectedIndex: index
-        });
+        if (index < 7) {
+          this.setState({
+              selectedIndex: index
+          });
+        }
+
         if (index === 0) {
             this.filterResources('');
         } else if (index === 1) {
@@ -534,10 +538,8 @@ export default class App extends React.Component {
             this.filterResources('mental health');
         } else if (index === 4) {
             this.filterResources('dental');
-            services = dental
         } else if (index === 5) {
             this.filterResources('vision');
-            services = vision
         } else if (index === 6) {
             this.filterResources('housing');
         }
