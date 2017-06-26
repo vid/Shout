@@ -37,6 +37,7 @@ import {
 const ENTER_KEY = 13;
 const styles = {
     main: {
+        margin: 'auto',
         padding: '1% 2% 5% 5%',
         width:'50%',
         alignment: 'right',
