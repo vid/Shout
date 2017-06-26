@@ -44,6 +44,8 @@ import LoginRegister from './LoginRegister.jsx';
 import UpdateDocs from './UpdateDocs.jsx';
 import MyAccount from './MyAccount.jsx';
 import About from './About.jsx';
+import Blog from './Blog.jsx';
+
 
 const pathToBG = require('../img/background.jpeg');
 
@@ -299,10 +301,16 @@ export default class App extends React.Component {
 
         this.changeHeaderInfo("About");
         this.setState({
-            screen: <About container={this.refs.content}
-                           displaySearch={()=>this.displaySearch()}
-                           getFilteredResources={() => this.state.filteredResources}
-                           changeDoc={(res)=>this.changeDoc(res)}/>
+            screen: <About container={this.refs.content}/>
+        });
+
+    }
+
+    displayBlog() {
+
+        this.changeHeaderInfo("Blog");
+        this.setState({
+            screen: <Blog container={this.refs.content}/>
         });
 
     }
@@ -534,10 +542,8 @@ export default class App extends React.Component {
             this.filterResources('mental health');
         } else if (index === 4) {
             this.filterResources('dental');
-            services = dental
         } else if (index === 5) {
             this.filterResources('vision');
-            services = vision
         } else if (index === 6) {
             this.filterResources('housing');
         }
@@ -620,7 +626,7 @@ export default class App extends React.Component {
 
     getUser(){
 
-        var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
+        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
             skip_setup: true
         });
 
@@ -743,7 +749,7 @@ export default class App extends React.Component {
     //Register a new user to the database
     registerNew(user, metadata) {
 
-        var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
+        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
             skip_setup: true
         });
 
@@ -762,7 +768,7 @@ export default class App extends React.Component {
     loginUser(user) {
 
 
-        var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
+        var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
             skip_setup: true
         });
 
@@ -783,7 +789,7 @@ export default class App extends React.Component {
 
 
     logoutUser() {
-      var dbs = new PouchDB('https://shouthealth.org/couchdb/resourcespending', {
+      var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
           skip_setup: true
       });
 
@@ -979,7 +985,8 @@ export default class App extends React.Component {
                 <FlatButton label ="About"
                             style={styles.headerlinks}
                             onTouchTap={()=>this.displayAbout()} />
-                <FlatButton label="Blog" style={styles.headerlinks} />
+                <FlatButton label="Blog" style={styles.headerlinks}
+                            onTouchTap={()=>this.displayBlog()}/>
                 {loginButton}
                 </div>
               </div>

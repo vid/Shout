@@ -34,18 +34,18 @@ export default class LeftMenu extends React.Component {
 
     getAdminOptions(){
 
-      var userinfo=this.getUserinfo();
-      if(userinfo){
-          const role=userinfo.roles.indexOf("admin");
-          if(role<0){
-            return "";
-          }else{
+    //  var userinfo=this.getUserinfo();
+    //  if(userinfo){
+    //      const role=userinfo.roles.indexOf("admin");
+          //if(role<0){
+    //        return "";
+          //}else{
             return (<div><MenuItem primaryText="Update Resources" onTouchTap={() => this.displayUpdateDocs()}/>
             <MenuItem primaryText="View Pending Resources" onTouchTap={() => this.displayApproveDocs()}/></div>);
-            }
-        }else{
-          return ""
-        }
+          //  }
+    //    }else{
+    //      return ""
+    //    }
     }
 
     render() {

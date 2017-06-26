@@ -15,12 +15,12 @@ const styles = {
     },
     dist:{
      color: 'black',
-     margin: '12px',
+     margin: 12,
      float:'right',
      backgroundColor: '#F0F8FF',
      border: '1 px solid #000000',
-     borderRadius: '8',
-     fontSize: '14'
+     borderRadius: 8,
+     fontSize: 14,
    },
 
     raisedButton: {

@@ -92,11 +92,8 @@ export default class MyAccount extends React.Component {
     }
 
     render() {
-
-        const { getLoggedIn, getUserinfo} = this.props;
         const { offsetWidth, offsetHeight} = this.state;
 
-        var userinfo=getUserinfo();
 
         if (offsetHeight === undefined) {
             return null;
@@ -106,8 +103,6 @@ export default class MyAccount extends React.Component {
         return (
 
         <Paper style={styles.main}>
-
-          {this.formatData(userinfo)}
         </Paper>
         );
     }

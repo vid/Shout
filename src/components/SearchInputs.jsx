@@ -33,12 +33,12 @@ const styles = {
     },
     filterButton: {
         color: 'white',
-        margin: '5px',
+        margin: 5,
         float:'right',
         backgroundColor: '#000000',
         border: 'none',
-        borderRadius: '8',
-        fontSize: '14',
+        borderRadius: 8,
+        fontSize: 14,
     },
     raisedButton: {
         position: 'relative',
@@ -73,7 +73,7 @@ export default class SearchInputs extends React.Component {
                     style={ styles.filterButton }>STD Testing</button>
         </div>);
     }
-    else if(index==1){
+    else if(index==1||(index<20&&index>10)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
