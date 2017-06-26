@@ -37,9 +37,9 @@ import {
 const ENTER_KEY = 13;
 const styles = {
     main: {
+        margin: 'auto',
         padding: '1% 2% 5% 5%',
         width:'50%',
-        alignment: 'right',
         overflow: 'auto'
     },
 
@@ -233,9 +233,6 @@ export default class AddResource extends React.Component {
 
           <div>
 
-
-          <div style={styles.row}>
-
           <b>Name</b>
             <Paper style={styles.input}>
 
@@ -263,7 +260,6 @@ export default class AddResource extends React.Component {
                        </SelectField>
 
           </Paper>
-          </div>
 
           <b>Address Line 1</b>
           <Paper style={styles.input}>
@@ -292,7 +288,6 @@ export default class AddResource extends React.Component {
           />
           </Paper>
 
-          <div style={styles.row}>
 
           <b>City</b>
           <Paper style={styles.input}>
@@ -322,7 +317,6 @@ export default class AddResource extends React.Component {
                          onChange={(event) => this.setState({value_zip: event.target.value})}
                          /> <br />
           </Paper>
-          </div>
 
 
           <b>Phone</b>

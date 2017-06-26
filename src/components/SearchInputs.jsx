@@ -180,13 +180,14 @@ export default class SearchInputs extends React.Component {
 
 
     render() {
-        const { filterResources, getSearchstring, getselectedIndex, onSelect} = this.props;
-        this.onSelect=onSelect;
-        var index=getselectedIndex();
-        var { offsetWidth, offsetHeight} = this.state;
+        const { filterResources, getSearchstring, getselectedIndex, onSelect } = this.props;
+        this.onSelect = onSelect;
+        var index = getselectedIndex();
+        var { offsetWidth, offsetHeight } = this.state;
         if (offsetWidth=== undefined) {
             return null;
         }
+
 
 
         return (
@@ -255,7 +256,7 @@ export default class SearchInputs extends React.Component {
                 style={styles.raisedButton}/>
             </div>
         </div>
-        {this.getOptions(index)}
+          {this.getOptions(index)}
         </div>
         );
     }
