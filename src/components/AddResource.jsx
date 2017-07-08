@@ -493,6 +493,7 @@ export default class AddResource extends React.Component {
               <br />
               <br />
                 <RaisedButton
+                    type="Submit"
                     label="Submit"
                     primary={true}
                     disabled={!this.state.canSubmit}
