@@ -6,6 +6,8 @@ import Map from './Map.jsx';
 import SearchInputs from './SearchInputs.jsx';
 import Results from './Results.jsx';
 import { cyan300, indigo900 } from 'material-ui/styles/colors';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 
 
@@ -30,28 +32,42 @@ export default class Search extends React.Component {
     searchSizer() {
         const { container} = this.props;
         const { offsetHeight, offsetWidth } = container;
-        this.setState({ offsetHeight, offsetWidth });
+        var resultWidth, mapWidth;
+        if(offsetWidth<400){
+          resultWidth=offsetWidth;
+          mapWidth=0;
+        }else{
+         mapWidth=offsetWidth*0.60;
+         resultWidth=offsetWidth*0.40;
+        }
+        this.setState({ mapWidth, resultWidth, offsetHeight, offsetWidth});
     }
 
     render() {
         const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, getPageLoading, userLat, userLng } = this.props;
-        var { offsetWidth, offsetHeight} = this.state;
-        if (offsetWidth=== undefined) {
+        var { mapWidth, resultWidth, offsetHeight, offsetWidth} = this.state;
+        if (mapWidth=== undefined) {
             return null;
         }
 
         var filteredResources = getFilteredResources();
 
         return (
-          <div width={offsetWidth} style={{display:'flex', flexDirection:'row', margin:'auto'}}>
-            <div style={{width: ((offsetWidth*0.40)), height: offsetHeight, overflow: 'auto', padding:10}}>
+          <div width='100%' height='100%' style={{display:'flex', flexDirection:'row', margin:'auto'}}>
+            <div style={{width: resultWidth, height: offsetHeight, overflow: 'auto', paddingLeft:10, paddingRight:5}}>
               <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
             </div>
 
-            <div style={{padding:10}}>
-              <Map width={(offsetWidth*0.60)} height='100%' getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
+            <div style={{paddingLeft:10, paddingRight:10, zIndex:0}}>
+              <Map width={mapWidth} height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
             </div>
-
+            <div style={{zIndex:1, bottom:10, right:10, position:'absolute'}}>
+                        <FloatingActionButton
+                          backgroundColor='#000000'
+                          onTouchTap={()=>displayAddResource()}>
+                          <ContentAdd />
+                        </FloatingActionButton>
+            </div>
           </div>
         );
     }

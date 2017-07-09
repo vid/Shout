@@ -46,8 +46,13 @@ import MyAccount from './MyAccount.jsx';
 import About from './About.jsx';
 import Blog from './Blog.jsx';
 
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+
 
 const pathToBG = require('../img/background.jpeg');
+const pathToLogo = require('../img/logo.png');
 
 import PouchDB from 'pouchdb';
 import PouchDBQuickSearch from 'pouchdb-quick-search';
@@ -70,14 +75,15 @@ const styles = {
 
     appbar: {},
     appbarTitle: {
-        paddingTop: 5,
-        color: '#ffffff',
-        fontSize: 30,
+        paddingTop: 7,
+        paddingLeft:5,
+        color: '#000000',
+        fontSize: 40,
     },
     appbarSubtitle: {
         paddingTop: 13,
         fontSize: 15,
-        color: '#ffffff',
+        color: '#000000',
         marginLeft: 10
     },
     row: {
@@ -98,7 +104,8 @@ const styles = {
     },
     headermenu: {
         position: 'absolute',
-        left: '70%',
+        right:5,
+        paddingTop:7,
         display: 'flex',
         flexDirection: 'row',
         fontColor: '#FFFFFF',
@@ -130,8 +137,8 @@ export default class App extends React.Component {
             appbarState: false,
             selectedIndex: 0,
             appbarTitle: 'Shout',
-            appbarSubtitle: 'Find Accessible Healthcare.',
-            appbarIcon: <NavigationMenu />,
+            appbarSubtitle: '',
+            appbarIcon: '',
             searchBar: "",
             searchBar2: "",
             pageLoading: 'true', //true if page has not loaded yet
@@ -240,9 +247,9 @@ export default class App extends React.Component {
     appbarClick() {
 
         if (!this.state.appbarState) {
-            this.setState({
-                showMenu: !this.state.showMenu
-            });
+            //this.setState({
+            //    showMenu: !this.state.showMenu
+            //});
         } else {
             this.displaySearch();
         }
@@ -440,15 +447,14 @@ export default class App extends React.Component {
             appbarTitle: 'ShoutHealth'
         });
         this.setState({
-            appbarSubtitle: 'Find Accessible Healthcare.'
+            appbarSubtitle: ''
         });
         this.setState({
             appbarState: false
         });
         this.setState({
-            appbarIcon: <NavigationMenu />
+            appbarIcon: ''
         });
-        console.log("index is: ", this.state.selectedIndex)
         this.setState({
             searchBar: <SearchInputs container={this.refs.content}
                                      getSearchstring={()=>this.state.searchString}
@@ -503,13 +509,12 @@ export default class App extends React.Component {
                 this.redrawResources(doc.rows);
             });
         } else {
-            console.log("search string exists")
             this.setState({
                 searchString: searchString
             });
             db.search({
                 query: searchString,
-                fields: ['resourcetype', 'population','services.label'],
+                fields: ['resourcetype', 'population','description', 'services.general.label', 'services.women.label','services.pediatric.label','services.mental_health.label','services.dental.label','services.vision.label'],
                 include_docs: true,
             }, (err, list) => {
                 if (err) {
@@ -529,15 +534,15 @@ export default class App extends React.Component {
 
     //This function allows user to filter resources based on the selected icon in the footer
     footerSelect(index) {
-        //first, go back to the main screen
-        if (index < 7) {
-          this.setState({
-              selectedIndex: index
-          });
-        }
 
-        if (index === 0) {
+        //first, go back to the main screen
+        this.setState({
+            selectedIndex: index
+        });
+        if (index === 100) {
             this.filterResources('');
+        } else if (index === 0) {
+            this.filterResources('clinic');
         } else if (index === 1) {
             this.filterResources('women');
         } else if (index === 2) {
@@ -983,16 +988,21 @@ export default class App extends React.Component {
                       titleStyle={styles.appbar}>
               <div style={styles.column}>
               <div style={styles.row}>
+                <img src={pathToLogo} height="60"></img>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
                 <div style={styles.headermenu}>
-                <FlatButton label ="About"
-                            style={styles.headerlinks}
+              <IconMenu
+                    iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                  >
+                <MenuItem primaryText="About"
                             onTouchTap={()=>this.displayAbout()} />
-                <FlatButton label="Blog" style={styles.headerlinks}
+                <MenuItem primaryText="Blog"
                             onTouchTap={()=>this.displayBlog()}/>
-                {loginButton}
-                </div>
+              </IconMenu>
+              </div>
               </div>
               </div>
           </AppBar>

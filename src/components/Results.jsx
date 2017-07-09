@@ -7,6 +7,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 const styles = {
 
@@ -106,12 +107,7 @@ export default class Results extends React.Component {
           <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>
             <h2>Results</h2>
             <div style={{padding:15}}>
-            <RaisedButton
-              label="Add Place"
-              labelStyle={{fontWeight:'bold'}}
-              onTouchTap={()=>displayAddResource()}
-              icon={<ContentAdd />}
-              style={styles.raisedButton}/>
+
             </div>
             </div>
       <Table

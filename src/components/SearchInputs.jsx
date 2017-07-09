@@ -7,6 +7,7 @@ import Paper from 'material-ui/Paper';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import SelectField from 'material-ui/SelectField';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ActionHome from 'material-ui/svg-icons/action/home';
@@ -42,7 +43,8 @@ const styles = {
     },
     raisedButton: {
         position: 'relative',
-        zIndex: 0
+        zIndex: 0,
+        color:'#FFFFFF'
     }
 };
 
@@ -56,7 +58,7 @@ export default class SearchInputs extends React.Component {
 
     getOptions(index){
 
-    if(index==0){
+    if(index==0||(index<=10&&index>6)){
         return(
         <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
             <button type="button"
@@ -89,7 +91,7 @@ export default class SearchInputs extends React.Component {
                   onClick={() => this.onSelect(14)}
                   style={ styles.filterButton }>Birth Control</button>
       </div>);
-    }else if(index==2){
+    }else if(index==2||(index<30&&index>20)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
@@ -102,7 +104,7 @@ export default class SearchInputs extends React.Component {
                   onClick={() => this.onSelect(23)}
                   style={ styles.filterButton }>Emergency</button>
       </div>);
-    }else if(index==3){
+    }else if(index==3||(index<40&&index>30)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
@@ -115,7 +117,7 @@ export default class SearchInputs extends React.Component {
                   onClick={() => this.onSelect(33)}
                   style={ styles.filterButton }>Psychiatric Emergency</button>
       </div>);
-    }else if(index==4){
+    }else if(index==4||(index<50&&index>40)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
@@ -128,7 +130,7 @@ export default class SearchInputs extends React.Component {
                   onClick={() => this.onSelect(43)}
                   style={ styles.filterButton }>Advanced dental</button>
       </div>);
-    }else if(index==5){
+    }else if(index==5||(index<60&&index>50)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
@@ -138,7 +140,7 @@ export default class SearchInputs extends React.Component {
                   onClick={() => this.onSelect(52)}
                   style={ styles.filterButton }>Surgery</button>
       </div>);
-    }else if(index==6){
+    }else if(index==6||(index<70&&index>60)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
@@ -195,64 +197,71 @@ export default class SearchInputs extends React.Component {
         <div>
         <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap',width: {offsetWidth}, padding:8}}>
             <div style={styles.button}>
-              <RaisedButton
-                backgroundColor={index===0?"#707070":"#000000"}
-                labelColor="#FFFFFF"
+              <FlatButton
+                backgroundColor={index===100?"#707070":"#000000"}
+                hoverColor='#707070'
                 label="All Results"
-                onTouchTap={()=>onSelect(0)}
+                onTouchTap={()=>onSelect(100)}
                 icon={<ActionHome />}
                 style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <FlatButton
+                backgroundColor={index===0?"#707070":"#000000"}
+                label="Adult"
+                hoverColor='#707070'
+                onTouchTap={()=>onSelect(0)}
+                style={styles.raisedButton}/>
+            </div>
+            <div style={styles.button}>
+              <FlatButton
                 backgroundColor={index===1?"#707070":"#000000"}
-                labelColor="#FFFFFF"
                 label="Women's Health"
+                hoverColor='#707070'
                 onTouchTap={()=>onSelect(1)}
                 icon={<ActionPregnantWoman />}
                 style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <FlatButton
                 backgroundColor={index===2?"#707070":"#000000"}
-                labelColor="#FFFFFF"
                 label="Child"
+                hoverColor='#707070'
                 onTouchTap={()=>onSelect(2)}
                 icon={<PlacesChildCare />}
                 style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <FlatButton
                 backgroundColor={index===3?"#707070":"#000000"}
-                labelColor="#FFFFFF"
+                hoverColor='#707070'
                 onTouchTap={()=>onSelect(3)}
                 label="Mental Health"
                 style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <FlatButton
                 backgroundColor={index===4?"#707070":"#000000"}
-                labelColor="#FFFFFF"
                 onTouchTap={()=>onSelect(4)}
+                hoverColor='#707070'
                 label="Dental"
                 style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <FlatButton
                 backgroundColor={index===5?"#707070":"#000000"}
-                labelColor="#FFFFFF"
+                hoverColor='#707070'
                 label="Vision"
                 onTouchTap={()=>onSelect(5)}
                 icon={<ActionVisibility />}
                 style={styles.raisedButton}/>
             </div>
             <div style={styles.button}>
-              <RaisedButton
+              <FlatButton
                 backgroundColor={index===6?"#707070":"#000000"}
-                labelColor="#FFFFFF"
-                label="Others"
+                label="Food, Housing, and other"
+                hoverColor='#707070'
                 onTouchTap={()=>onSelect(6)}
-                icon={<ActionVisibility />}
                 style={styles.raisedButton}/>
             </div>
         </div>
