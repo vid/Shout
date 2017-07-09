@@ -331,6 +331,7 @@ export default class LoginRegister extends React.Component {
                       <br />
                       <br />
                         <RaisedButton
+                            type="Submit"
                             label="Register"
                             primary={true}
                             disabled={!this.state.canSubmit}
@@ -423,6 +424,7 @@ export default class LoginRegister extends React.Component {
                   <br />
                     <RaisedButton
                         label="Login"
+                        type="Submit"
                         primary={true}
                         disabled={!this.state.canLogin}
                         onClick={()=>this.handleLogin()}/>
