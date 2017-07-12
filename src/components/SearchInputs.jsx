@@ -41,6 +41,15 @@ const styles = {
         borderRadius: 8,
         fontSize: 14,
     },
+    selected: {
+        color: 'white',
+        margin: 5,
+        float:'right',
+        backgroundColor: '#707070',
+        border: 'none',
+        borderRadius: 8,
+        fontSize: 14,
+    },
     raisedButton: {
         position: 'relative',
         zIndex: 0,
@@ -63,16 +72,16 @@ export default class SearchInputs extends React.Component {
         <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
             <button type="button"
                     onClick={() => this.onSelect(7)}
-                    style={ styles.filterButton }> Check-up/Physical Exam </button>
+                    style={index===7?styles.selected:styles.filterButton}> Check-up/Physical Exam </button>
             <button type="button"
                     onClick={() => this.onSelect(8)}
-                    style={ styles.filterButton }> Emergency rooms </button>
+                    style={index===8?styles.selected:styles.filterButton}> Emergency rooms </button>
             <button type="button"
                     onClick={() => this.onSelect(9)}
-                    style={ styles.filterButton }>Chronic Disease Management</button>
+                    style={index===9?styles.selected:styles.filterButton}>Chronic Disease Management</button>
             <button type="button"
                     onClick={() => this.onSelect(10)}
-                    style={ styles.filterButton }>STD Testing</button>
+                    style={index===10?styles.selected:styles.filterButton}>STD Testing</button>
         </div>);
     }
     else if(index==1||(index<20&&index>10)){
@@ -80,87 +89,87 @@ export default class SearchInputs extends React.Component {
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
                   onClick={() => this.onSelect(11)}
-                  style={ styles.filterButton }>Pregnancy Test</button>
+                  style={index===11?styles.selected:styles.filterButton}>Pregnancy Test</button>
           <button type="button"
                   onClick={() => this.onSelect(12)}
-                  style={ styles.filterButton }>Pap Smear</button>
+                  style={index===12?styles.selected:styles.filterButton}>Pap Smear</button>
           <button type="button"
                   onClick={() => this.onSelect(13)}
-                  style={ styles.filterButton }>Mammogram</button>
+                  style={index===13?styles.selected:styles.filterButton}>Mammogram</button>
           <button type="button"
                   onClick={() => this.onSelect(14)}
-                  style={ styles.filterButton }>Birth Control</button>
+                  style={index===14?styles.selected:styles.filterButton}>Birth Control</button>
       </div>);
     }else if(index==2||(index<30&&index>20)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
                   onClick={() => this.onSelect(21)}
-                  style={ styles.filterButton }>Immunization</button>
+                  style={index===21?styles.selected:styles.filterButton}>Immunization</button>
           <button type="button"
                   onClick={() => this.onSelect(22)}
-                  style={ styles.filterButton }>Check-up</button>
+                  style={index===22?styles.selected:styles.filterButton}>Check-up</button>
           <button type="button"
                   onClick={() => this.onSelect(23)}
-                  style={ styles.filterButton }>Emergency</button>
+                  style={index===23?styles.selected:styles.filterButton}>Emergency</button>
       </div>);
     }else if(index==3||(index<40&&index>30)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
                   onClick={() => this.onSelect(31)}
-                  style={ styles.filterButton }>Behavioral Health</button>
+                  style={index===31?styles.selected:styles.filterButton}>Behavioral Health</button>
           <button type="button"
                   onClick={() => this.onSelect(32)}
-                  style={ styles.filterButton }>Counseling</button>
+                  style={index===32?styles.selected:styles.filterButton}>Counseling</button>
           <button type="button"
                   onClick={() => this.onSelect(33)}
-                  style={ styles.filterButton }>Psychiatric Emergency</button>
+                  style={index===33?styles.selected:styles.filterButton}>Psychiatric Emergency</button>
       </div>);
     }else if(index==4||(index<50&&index>40)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
                   onClick={() => this.onSelect(41)}
-                  style={ styles.filterButton }>Basic filling/extraction</button>
+                  style={index===41?styles.selected:styles.filterButton}>Basic filling/extraction</button>
           <button type="button"
                   onClick={() => this.onSelect(42)}
-                  style={ styles.filterButton }>Cleaning</button>
+                  style={index===42?styles.selected:styles.filterButton}>Cleaning</button>
           <button type="button"
                   onClick={() => this.onSelect(43)}
-                  style={ styles.filterButton }>Advanced dental</button>
+                  style={index===43?styles.selected:styles.filterButton}>Advanced dental</button>
       </div>);
     }else if(index==5||(index<60&&index>50)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
                   onClick={() => this.onSelect(51)}
-                  style={ styles.filterButton }>Vision testing</button>
+                  style={index===51?styles.selected:styles.filterButton}>Vision testing</button>
           <button type="button"
                   onClick={() => this.onSelect(52)}
-                  style={ styles.filterButton }>Surgery</button>
+                  style={index===52?styles.selected:styles.filterButton}>Retina</button>
       </div>);
     }else if(index==6||(index<70&&index>60)){
       return(
       <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap', paddingLeft:8}}>
           <button type="button"
                   onClick={() => this.onSelect(61)}
-                  style={ styles.filterButton }>Housing and Shelters</button>
+                  style={index===61?styles.selected:styles.filterButton}>Housing and Shelters</button>
           <button type="button"
                   onClick={() => this.onSelect(62)}
-                  style={ styles.filterButton }>Food Pantries</button>
+                  style={index===62?styles.selected:styles.filterButton}>Food Pantries</button>
           <button type="button"
                   onClick={() => this.onSelect(63)}
-                  style={ styles.filterButton }>Employment Assistance</button>
+                  style={index===63?styles.selected:styles.filterButton}>Employment Assistance</button>
           <button type="button"
                   onClick={() => this.onSelect(64)}
-                  style={ styles.filterButton }>Veteran Services</button>
+                  style={index===64?styles.selected:styles.filterButton}>Veteran Services</button>
           <button type="button"
                   onClick={() => this.onSelect(65)}
-                  style={ styles.filterButton }>Clothing</button>
+                  style={index===65?styles.selected:styles.filterButton}>Clothing</button>
           <button type="button"
                   onClick={() => this.onSelect(66)}
-                  style={ styles.filterButton }>Identification</button>
+                  style={index===66?styles.selected:styles.filterButton}>Identification</button>
       </div>);
     }
     }

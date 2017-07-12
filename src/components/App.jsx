@@ -73,7 +73,9 @@ PouchDB.sync(db_pending, remoteCouchPending);
 
 const styles = {
 
-    appbar: {},
+    appbar: {
+      backgroundColor:'transparent'
+    },
     appbarTitle: {
         paddingTop: 7,
         paddingLeft:5,
@@ -796,6 +798,42 @@ export default class App extends React.Component {
           });;
     }
 
+    getMenuOptions(){
+
+        let loginButton = null;
+        const isLoggedIn = this.state.loggedin;
+        if (isLoggedIn) {
+            return
+            <IconMenu
+                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                  anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+              <MenuItem primaryText="About"
+                          onTouchTap={()=>this.displayAbout()} />
+              <MenuItem primaryText="Blog"
+                          onTouchTap={()=>this.displayBlog()}/>
+              <MenuItem primaryText ={"My Account ("+this.state.userinfo.name+")"}
+                     onTouchTap={()=>this.displayMyAccount()} />
+              <MenuItem primaryText="Logout"/>
+            </IconMenu>
+        } else {
+            return <IconMenu
+                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                  anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+              <MenuItem primaryText="About"
+                          onTouchTap={()=>this.displayAbout()} />
+              <MenuItem primaryText="Blog"
+                          onTouchTap={()=>this.displayBlog()}/>
+              <MenuItem primaryText ="Login/Register"
+                                 onTouchTap={()=>this.displayLogin()} />
+            </IconMenu>
+      }
+
+    }
+
 
     logoutUser() {
       var dbs = new PouchDB('http://shouthealth.org:6984/resourcespending', {
@@ -945,23 +983,6 @@ export default class App extends React.Component {
 
     render() {
 
-
-        let loginButton = null;
-        const isLoggedIn = this.state.loggedin;
-        if (isLoggedIn) {
-            loginButton = <div>
-                            <FlatButton label ={"My Account ("+this.state.userinfo.name+")"}
-                                   style={styles.headerlinks}
-                                   onTouchTap={()=>this.displayMyAccount()} />
-                            <Logout handleLogout={(user)=>this.logoutUser(user)}
-                                    style={styles.headerlinks}/>
-                          </div>
-        } else {
-            loginButton = <FlatButton label ="Login/Register"
-                               style={styles.headerlinks}
-                               onTouchTap={()=>this.displayLogin()} />
-      }
-
         return (
 
             <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -984,24 +1005,14 @@ export default class App extends React.Component {
           <div id='header'>
               <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
                       onLeftIconButtonTouchTap={() => this.appbarClick()}
-                      style={{backgroundColor:'transparent'}}
-                      titleStyle={styles.appbar}>
+                      style={styles.appbar}>
               <div style={styles.column}>
               <div style={styles.row}>
                 <img src={pathToLogo} height="60"></img>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
                 <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
                 <div style={styles.headermenu}>
-              <IconMenu
-                    iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                  >
-                <MenuItem primaryText="About"
-                            onTouchTap={()=>this.displayAbout()} />
-                <MenuItem primaryText="Blog"
-                            onTouchTap={()=>this.displayBlog()}/>
-              </IconMenu>
+                {this.getMenuOptions()}
               </div>
               </div>
               </div>
