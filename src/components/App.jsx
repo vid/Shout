@@ -485,6 +485,7 @@ export default class App extends React.Component {
 
     displayVoucher(data) {
         console.log(data);
+        this.changeHeaderInfo("Voucher Page");
 
         // this.changeHeaderInfo("Print Voucher");
         this.setState({
