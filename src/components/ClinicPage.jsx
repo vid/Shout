@@ -64,7 +64,6 @@ const styles = {
         margin: 2,
         padding: 1
     },
-
     chip: {
         margin: 2,
         height: '50%',
@@ -77,11 +76,9 @@ const styles = {
         padding: 6,
         height: '80%'
     },
-
     data: {
         margin: '2px',
     },
-
     list: {
         listStyle: 'none',
         margin: 0,
@@ -99,7 +96,15 @@ const styles = {
     reviews: {
         margin: 10
     },
-
+    information: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+    subinformation: {
+        display:'flex',
+        flexDirection:'column',
+        margin:7
+    },
     stars: {
         marginTop: 5
     },
@@ -217,8 +222,11 @@ export default class ClinicPage extends React.Component {
           return <p>Not Available</p>
         }
         if (services.length > 0) {
-            return services.map((service, i) =>
-                <li key={i}><b>{service.label}</b></li>
+            return services.map((service, i) => {
+                if(service.adminvotes>0){
+                  return <li key={i}>{service.label}</li>
+                  }
+                }
             );
         } else return <p>None specified</p>;
     }
@@ -341,10 +349,24 @@ export default class ClinicPage extends React.Component {
       <Card style ={styles.card}>
         <CardHeader title="Data"/>
           <CardText>
-            Price:{this.formatServices(result.price)}
-            Population:{this.formatServices(result.population)}
-            Services:{this.formatServices(result.services)}
-            Languages:{this.formatServices(result.services)}
+            <div style={styles.information}>
+              <div style={styles.subinformation}>
+                <b>Fee:</b>{this.formatServices(result.fee)}
+                <b>Accepts:</b>{this.formatServices(result.accepts)}
+                <b>Income:</b>{this.formatServices(result.income)}
+                <b>Population:</b>{this.formatServices(result.population)}
+                <b>Languages:</b>{this.formatServices(result.languages)}
+              </div>
+              <div style={styles.subinformation}>
+                <b>Services:</b>
+                <b>General:</b>{this.formatServices(result.services.general)}
+                <b>Women:</b>{this.formatServices(result.services.women)}
+                <b>Pediatric:</b>{this.formatServices(result.services.pediatric)}
+                <b>Mental Health:</b>{this.formatServices(result.services.mental_health)}
+                <b>Dental:</b>{this.formatServices(result.services.dental)}
+                <b>Vision:</b>{this.formatServices(result.services.vision)}
+              </div>
+            </div>
           </CardText>
         </Card>
 
