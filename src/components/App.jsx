@@ -70,6 +70,9 @@ var db_pending = new PouchDB('resourcespending');
 var remoteCouchPending = 'https://shouthealth.org/couchdb/resourcespending';
 PouchDB.sync(db_pending, remoteCouchPending);
 
+var feedback= new PouchDB('feedback');
+var remoteFeedback = 'https://shouthealth.org/couchdb/feedback';
+PouchDB.sync(feedback, remoteFeedback);
 
 const styles = {
 
@@ -202,11 +205,21 @@ export default class App extends React.Component {
         review.upvotes='0';
         review.downvotes='0';
 
-        db_pending.put(review, function callback(err, result) {
+        feedback.put(review, function callback(err, result) {
             if (!err) {
                 console.log('Added review');
             } else {
                 console.log('Error adding feedback' + err);
+            }
+        });
+        feedback.replicate.to(remoteFeedback, {
+            live: true,
+            retry: true,
+            back_off_function: function (delay) {
+                if (delay === 0) {
+                    return 1000;
+                }
+                return delay * 3;
             }
         });
 
@@ -884,7 +897,7 @@ export default class App extends React.Component {
     // state of App.jsx
     updateFeedbacks(name) {
 
-        db.allDocs({
+        feedback.allDocs({
             startkey: 'Feedback_' + name,
             endkey: 'Feedback_' + name + '_\uffff',
             include_docs: true
@@ -901,6 +914,8 @@ export default class App extends React.Component {
                 clinicpageFeedbacks: feedbacks
             });
         });
+
+        console.log(this.state.clinicpageFeedbacks);
 
     }
 
