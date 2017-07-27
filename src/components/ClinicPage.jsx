@@ -32,6 +32,10 @@ import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import MapsLocalPrintshop from 'material-ui/svg-icons/maps/local-printshop';
+
+
 
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -303,7 +307,8 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result, addFeedback } = this.props;
+        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result,
+                addFeedback, displayVoucher } = this.props;
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
@@ -322,6 +327,14 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 {/* Section 1 */}
 {/* ***************************************** */}
+
+        {/* Print Voucher Button */}
+        <div style={{zIndex:1, top:75, right:10, position:'absolute'}}>
+          <RaisedButton
+              onTouchTap={() => displayVoucher(result)}
+              label='Get Voucher!'>
+          </RaisedButton>
+        </div>
 
         <Card style ={styles.card}>
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="http://icons.iconarchive.com/icons/icons8/android/512/Healthcare-Clinic-icon.png"/>
