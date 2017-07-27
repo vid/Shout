@@ -45,6 +45,7 @@ import UpdateDocs from './UpdateDocs.jsx';
 import MyAccount from './MyAccount.jsx';
 import About from './About.jsx';
 import Blog from './Blog.jsx';
+import Voucher from './Voucher.jsx'
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -415,6 +416,7 @@ export default class App extends React.Component {
             screen: <ClinicPage container={this.refs.content}
                                 footer={this.refs.footer}
                                 displaySearch={(result) => this.displaySearch()}
+                                displayVoucher={(data) => this.displayVoucher(data)}
                                 addFeedback={(x) => this.addFeedback(x)}
                                 getFeedbacks={()=>this.state.clinicpageFeedbacks}
                                 result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)}
@@ -481,7 +483,14 @@ export default class App extends React.Component {
 
     }
 
+    displayVoucher(data) {
+        console.log(data);
 
+        // this.changeHeaderInfo("Print Voucher");
+        this.setState({
+            screen: <Voucher clinicInfo={data}/>
+        });
+    }
 
     //Error method
     error(err) {

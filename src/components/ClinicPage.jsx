@@ -299,7 +299,8 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result, addFeedback } = this.props;
+        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result,
+                addFeedback, displayVoucher } = this.props;
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
@@ -321,11 +322,11 @@ export default class ClinicPage extends React.Component {
 
         {/* Print Voucher Button */}
         <div style={{zIndex:1, top:75, right:10, position:'absolute'}}>
-                    <FloatingActionButton
-                      backgroundColor='#000000'
-                      onTouchTap={()=>displayAddResource()}>
-                      <MapsLocalPrintshop />
-                    </FloatingActionButton>
+          <FloatingActionButton
+              backgroundColor='#000000'
+              onTouchTap={() => displayVoucher(result)}>
+              <MapsLocalPrintshop />
+          </FloatingActionButton>
         </div>
 
         <Card style ={styles.card}>
