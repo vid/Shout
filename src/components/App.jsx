@@ -45,7 +45,6 @@ import UpdateDocs from './UpdateDocs.jsx';
 import MyAccount from './MyAccount.jsx';
 import About from './About.jsx';
 import Blog from './Blog.jsx';
-import Voucher from './Voucher.jsx'
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -118,7 +117,7 @@ const styles = {
         color: '#FFFFFF'
     },
     wrapper: {
-        // backgroundImage: 'url(' + pathToBG + ')',
+        backgroundImage: 'url(' + pathToBG + ')',
         backgroundPosition: 'center',
         backgroundAttachment:'fixed'
     }
@@ -416,7 +415,6 @@ export default class App extends React.Component {
             screen: <ClinicPage container={this.refs.content}
                                 footer={this.refs.footer}
                                 displaySearch={(result) => this.displaySearch()}
-                                displayVoucher={(data) => this.displayVoucher(data)}
                                 addFeedback={(x) => this.addFeedback(x)}
                                 getFeedbacks={()=>this.state.clinicpageFeedbacks}
                                 result={result} vouchFor={(a,b,c)=>this.vouchFor(a,b,c)}
@@ -483,15 +481,7 @@ export default class App extends React.Component {
 
     }
 
-    displayVoucher(data) {
-        console.log(data);
-        this.changeHeaderInfo("Voucher Page");
 
-        // this.changeHeaderInfo("Print Voucher");
-        this.setState({
-            screen: <Voucher clinicInfo={data}/>
-        });
-    }
 
     //Error method
     error(err) {
@@ -828,8 +818,7 @@ export default class App extends React.Component {
               <MenuItem primaryText="Logout"/>
             </IconMenu>
         } else {
-            return
-             <IconMenu
+            return <IconMenu
                   iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
                   anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -993,12 +982,6 @@ export default class App extends React.Component {
 
 
     render() {
-
-        var wrapperStyle;
-        // console.log(this.state.screen.type.name)
-        // if (this.state.screen == <Voucher clinicInfo={data}/>) {
-        //   console.log("yes")
-        // }
 
         return (
 

@@ -32,10 +32,6 @@ import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import MapsLocalPrintshop from 'material-ui/svg-icons/maps/local-printshop';
-
-
 
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -68,6 +64,7 @@ const styles = {
         margin: 2,
         padding: 1
     },
+
     chip: {
         margin: 2,
         height: '50%',
@@ -80,9 +77,11 @@ const styles = {
         padding: 6,
         height: '80%'
     },
+
     data: {
         margin: '2px',
     },
+
     list: {
         listStyle: 'none',
         margin: 0,
@@ -100,15 +99,7 @@ const styles = {
     reviews: {
         margin: 10
     },
-    information: {
-        display: 'flex',
-        flexDirection: 'row'
-    },
-    subinformation: {
-        display:'flex',
-        flexDirection:'column',
-        margin:7
-    },
+
     stars: {
         marginTop: 5
     },
@@ -226,11 +217,8 @@ export default class ClinicPage extends React.Component {
           return <p>Not Available</p>
         }
         if (services.length > 0) {
-            return services.map((service, i) => {
-                if(service.adminvotes>0){
-                  return <li key={i}>{service.label}</li>
-                  }
-                }
+            return services.map((service, i) =>
+                <li key={i}><b>{service.label}</b></li>
             );
         } else return <p>None specified</p>;
     }
@@ -307,8 +295,7 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result,
-                addFeedback, displayVoucher } = this.props;
+        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result, addFeedback } = this.props;
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { offsetWidth, offsetHeight} = this.state;
         if (offsetHeight === undefined) {
@@ -327,14 +314,6 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 {/* Section 1 */}
 {/* ***************************************** */}
-
-        {/* Print Voucher Button */}
-        <div style={{zIndex:1, top:75, right:10, position:'absolute'}}>
-          <RaisedButton
-              onTouchTap={() => displayVoucher(result)}
-              label='Get Voucher!'>
-          </RaisedButton>
-        </div>
 
         <Card style ={styles.card}>
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="http://icons.iconarchive.com/icons/icons8/android/512/Healthcare-Clinic-icon.png"/>
@@ -362,24 +341,10 @@ export default class ClinicPage extends React.Component {
       <Card style ={styles.card}>
         <CardHeader title="Data"/>
           <CardText>
-            <div style={styles.information}>
-              <div style={styles.subinformation}>
-                <b>Fee:</b>{this.formatServices(result.fee)}
-                <b>Accepts:</b>{this.formatServices(result.accepts)}
-                <b>Income:</b>{this.formatServices(result.income)}
-                <b>Population:</b>{this.formatServices(result.population)}
-                <b>Languages:</b>{this.formatServices(result.languages)}
-              </div>
-              <div style={styles.subinformation}>
-                <b>Services:</b>
-                <b>General:</b>{this.formatServices(result.services.general)}
-                <b>Women:</b>{this.formatServices(result.services.women)}
-                <b>Pediatric:</b>{this.formatServices(result.services.pediatric)}
-                <b>Mental Health:</b>{this.formatServices(result.services.mental_health)}
-                <b>Dental:</b>{this.formatServices(result.services.dental)}
-                <b>Vision:</b>{this.formatServices(result.services.vision)}
-              </div>
-            </div>
+            Price:{this.formatServices(result.price)}
+            Population:{this.formatServices(result.population)}
+            Services:{this.formatServices(result.services)}
+            Languages:{this.formatServices(result.services)}
           </CardText>
         </Card>
 
