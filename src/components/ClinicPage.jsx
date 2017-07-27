@@ -322,11 +322,10 @@ export default class ClinicPage extends React.Component {
 
         {/* Print Voucher Button */}
         <div style={{zIndex:1, top:75, right:10, position:'absolute'}}>
-          <FloatingActionButton
-              backgroundColor='#000000'
-              onTouchTap={() => displayVoucher(result)}>
-              <MapsLocalPrintshop />
-          </FloatingActionButton>
+          <RaisedButton
+              onTouchTap={() => displayVoucher(result)}
+              label='Get Voucher!'>
+          </RaisedButton>
         </div>
 
         <Card style ={styles.card}>
