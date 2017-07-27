@@ -118,7 +118,7 @@ const styles = {
         color: '#FFFFFF'
     },
     wrapper: {
-        backgroundImage: 'url(' + pathToBG + ')',
+        // backgroundImage: 'url(' + pathToBG + ')',
         backgroundPosition: 'center',
         backgroundAttachment:'fixed'
     }
@@ -828,7 +828,8 @@ export default class App extends React.Component {
               <MenuItem primaryText="Logout"/>
             </IconMenu>
         } else {
-            return <IconMenu
+            return
+             <IconMenu
                   iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
                   anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -992,6 +993,12 @@ export default class App extends React.Component {
 
 
     render() {
+
+        var wrapperStyle;
+        // console.log(this.state.screen.type.name)
+        // if (this.state.screen == <Voucher clinicInfo={data}/>) {
+        //   console.log("yes")
+        // }
 
         return (
 
