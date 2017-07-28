@@ -118,7 +118,7 @@ const styles = {
         color: '#FFFFFF'
     },
     wrapper: {
-        // backgroundImage: 'url(' + pathToBG + ')',
+        backgroundImage: 'url(' + pathToBG + ')',
         backgroundPosition: 'center',
         backgroundAttachment:'fixed'
     }

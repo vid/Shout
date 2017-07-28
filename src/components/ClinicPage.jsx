@@ -34,6 +34,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import MapsLocalPrintshop from 'material-ui/svg-icons/maps/local-printshop';
+import SMSButton from './SMSButton.jsx'
 
 
 
@@ -335,6 +336,11 @@ export default class ClinicPage extends React.Component {
               label='Get Voucher!'>
           </RaisedButton>
         </div>
+
+        <div style={{zIndex:1, top:125, right:10, position:'absolute'}}>
+            <SMSButton> </SMSButton>
+        </div>
+
 
         <Card style ={styles.card}>
         <CardHeader title={result.name} subtitle={result.civic_address} avatar="http://icons.iconarchive.com/icons/icons8/android/512/Healthcare-Clinic-icon.png"/>
