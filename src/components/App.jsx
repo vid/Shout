@@ -196,7 +196,7 @@ export default class App extends React.Component {
 
     // This method is called by ClinicPage, and submits a new "Feedback_"
     // document to the PouchDB database
-    addFeedback(rev) {
+    addFeedback(rev,result) {
 
         var review = Object.assign({}, rev);
         review._id="Feedback" + "_" + rev.name + "_" + new Date().toISOString();
@@ -223,6 +223,36 @@ export default class App extends React.Component {
             }
         });
 
+        this.incrementReviews(result)
+
+    }
+
+    incrementReviews(res){
+
+                //create a new doc with properties of this
+                var mod = Object.assign({}, res);
+                mod.numberreviews=res.numberreviews+1;
+                mod._rev=res._rev;
+                db.put(mod, function callback(err, result) {
+                    if (!err) {
+                        console.log('Modified this doc');
+                    } else {
+                        console.log('Error modifying this doc');
+                    }
+                });
+                //create new doc and replace old one
+                //delete tags object
+
+                db.replicate.to(remoteCouch, {
+                    live: true,
+                    retry: true,
+                    back_off_function: function (delay) {
+                        if (delay === 0) {
+                            return 1000;
+                        }
+                        return delay * 3;
+                    }
+                });
 
     }
 
@@ -505,9 +535,12 @@ export default class App extends React.Component {
 
     //This filter method uses the Pouchdb-Quick-Search library
     //See:  http://github.com/nolanlawson/pouchdb-quick-search
-    filterResources(searchString) {
+    filterResources(searchString, searchType) {
 
       var matches = [];
+      this.setState({
+            searchString: searchString
+      });
         if (!searchString || searchString.length < 1) {
             console.log("no search string, drawing all resources");
             db.allDocs({
@@ -521,28 +554,30 @@ export default class App extends React.Component {
                 if (err) {
                     return console.log(err);
                 }
-                this.redrawResources(doc.rows);
+                list.rows.forEach(function (res) {
+                      matches.push(res);
+                });
             });
-        } else {
-            this.setState({
-                searchString: searchString
-            });
+        } else if(searchType="Any"){
             db.search({
                 query: searchString,
-                fields: ['resourcetype', 'population','description', 'services.general.label', 'services.women.label','services.pediatric.label','services.mental_health.label','services.dental.label','services.vision.label'],
+                fields: ['resourcetype', 'population', 'description'],
                 include_docs: true,
+                highlighting: true,
             }, (err, list) => {
                 if (err) {
                     this.error(err);
                 }
                 list.rows.forEach(function (res) {
-                    if (res.id.startsWith('Resource')) {
-                        matches.push(res);
-                    }
+                            matches.push(res);
+                    
                 });
-                this.redrawResources(matches);
+
             });
+        } else if(searchType="Services"){
+
         }
+        this.redrawResources(matches);
     }
 
 

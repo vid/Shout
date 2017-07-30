@@ -389,7 +389,7 @@ export default class ClinicPage extends React.Component {
 <div id="feedback">
       <Card style ={styles.card}>
           <CardHeader
-          title="Feedback"/>
+          title={"Feedback ("+allFeedbacks.length+" user reviews)"}/>
           <CardText>
             <div>
 
@@ -431,7 +431,7 @@ export default class ClinicPage extends React.Component {
          primary={true}
          onTouchTap={() =>{
                             var x=this.formatSubmission(result.name);
-                            addFeedback(x);
+                            addFeedback(x,result);
                             this.setState({submitfeedbackOpen: false})
                             this.setState({submitSnackbarOpen:true})
                             }}/>]}
