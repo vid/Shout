@@ -28,6 +28,7 @@ export default class SMSButton extends React.Component {
         return (
 
             <RaisedButton
+                primary={true}
                 onTouchTap={() => this.sendSMS()}
                 label='Send SMS'>
             </RaisedButton>

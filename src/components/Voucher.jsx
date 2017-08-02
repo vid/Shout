@@ -5,6 +5,7 @@
 import React from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import MapsLocalPrintshop from 'material-ui/svg-icons/maps/local-printshop';
+import Paper from 'material-ui/Paper';
 
 
 export default class Voucher extends React.Component {
@@ -19,7 +20,7 @@ export default class Voucher extends React.Component {
 
       return (
 
-        <div>
+        <Paper style={{height:'100%', padding:10}}>
 
           {/* Print Voucher Button */
            /* It's probably possible to hide the button in the print dialog */}
@@ -32,17 +33,19 @@ export default class Voucher extends React.Component {
           </div>
 
           <h1>This is a Voucher for {clinicInfo.name}</h1>
-          <p>Get X% off your next visit</p>
+          <p>Reimbursable for $35 or the minimum fee</p>
           <h2> Make sure to bring these with you</h2>
           <ul>
-            <li>Drivers License</li>
-            <li>Utility Bill</li>
-            <li>Something</li>
+            <li>Government-issued photo ID </li>
+            <li>Proof of residency</li>
+            <li>Pay stub or proof of income</li>
           </ul>
-          <p> Address: {clinicInfo.civic_address} </p>
-          <p> Phone: {clinicInfo.phone} </p>
+          <p> <b>Address:</b> {clinicInfo.civic_address} </p>
+          <p> <b>Phone:</b> {clinicInfo.phone} </p>
+          <p> Hours of Operation: </p>
 
-        </div>
+
+        </Paper>
       )
 
     }

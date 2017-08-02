@@ -330,14 +330,15 @@ export default class ClinicPage extends React.Component {
 {/* ***************************************** */}
 
         {/* Print Voucher Button */}
-        <div style={{zIndex:1, top:75, right:10, position:'absolute'}}>
+        <div style={{zIndex:1, top:75, right:'5%', position:'absolute'}}>
           <RaisedButton
+              primary={true}
               onTouchTap={() => displayVoucher(result)}
               label='Get Voucher!'>
           </RaisedButton>
         </div>
 
-        <div style={{zIndex:1, top:125, right:10, position:'absolute'}}>
+        <div style={{zIndex:1, top:125, right:'5%', position:'absolute'}}>
             <SMSButton> </SMSButton>
         </div>
 
