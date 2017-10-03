@@ -103,13 +103,8 @@ export default class Results extends React.Component {
         var searchstring=getSearchstring();
 
         return (
-        <div id="hide-mobile">
-          <div style={{display:'flex', flexDirection:'row', paddingLeft:20, backgroundColor:"#FFFFFF"}}>
+        <div>
             <h2>Results</h2>
-            <div style={{padding:15}}>
-
-            </div>
-            </div>
       <Table
         selectable={false}
         fixedHeader={true}

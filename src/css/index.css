@@ -1,5 +1,4 @@
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -8,18 +7,13 @@ html, body {
   display: flex;  /* use the flex model */
   height: 100vh;
   flex-direction: column;  /* learn more: http://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/ */
-  background: #708090;
+  background: #FFFFFF;
 }
 
 #content {
   flex:1;
-  height:100%;
-  width:100%;
 }
 
-h3{
-  color:#01579B;
-}
 #cliniccomponents{
   display: flex; /* or inline-flex */
 }

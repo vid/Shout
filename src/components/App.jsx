@@ -19,21 +19,16 @@ import IconButton from 'material-ui/IconButton';
 import Drawer from 'material-ui/Drawer';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
-import MapsPlace from 'material-ui/svg-icons/maps/place';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 
-/*Modules */
-import PlacesAutocomplete from 'react-places-autocomplete'
-import {
-    geocodeByAddress,
-    geocodeByPlaceId
-} from 'react-places-autocomplete'
+
 
 //import other components
-import Search from './Search.jsx';
-import SearchInputs from './SearchInputs.jsx';
+import Main from './Main.jsx';
+import PrimaryOptions from './PrimaryOptions.jsx';
+import SecondaryOptions from './SecondaryOptions.jsx';
 import Footer from './Footer.jsx';
 import LeftMenu from './LeftMenu.jsx';
 import Logout from './Logout.jsx';
@@ -43,6 +38,7 @@ import AddResource from './AddResource.jsx';
 import LoginRegister from './LoginRegister.jsx';
 import UpdateDocs from './UpdateDocs.jsx';
 import MyAccount from './MyAccount.jsx';
+import AddressBar from './AddressBar.jsx';
 import About from './About.jsx';
 import Blog from './Blog.jsx';
 
@@ -77,7 +73,7 @@ PouchDB.sync(feedback, remoteFeedback);
 const styles = {
 
     appbar: {
-      backgroundColor:'transparent'
+      backgroundColor:'white'
     },
     appbarTitle: {
         paddingTop: 7,
@@ -94,13 +90,6 @@ const styles = {
     row: {
         display: 'flex',
         flexDirection: 'row'
-    },
-    places: {
-        marginTop: 10,
-        marginRight: 30
-    },
-    button: {
-        marginTop: 10
     },
     column: {
         display: 'flex',
@@ -120,7 +109,6 @@ const styles = {
         color: '#FFFFFF'
     },
     wrapper: {
-        backgroundImage: 'url(' + pathToBG + ')',
         backgroundPosition: 'center',
         backgroundAttachment:'fixed'
     }
@@ -501,15 +489,17 @@ export default class App extends React.Component {
             appbarIcon: ''
         });
         this.setState({
-            searchBar: <SearchInputs container={this.refs.content}
-                                     getSearchstring={()=>this.state.searchString}
-                                     filterResources={(searchString)=>this.filterResources(searchString)}
-                                     searchString={this.state.searchString}
-                                     getselectedIndex={()=>this.state.selectedIndex}
-                                     onSelect={(index) => this.footerSelect(index)}/>
+            searchBar: <div>
+                        <PrimaryOptions container={this.refs.content}
+                                      getselectedIndex={()=>this.state.selectedIndex}
+                                      onSelect={(index) => this.footerSelect(index)}/>
+                        <SecondaryOptions container={this.refs.content}
+                                      getselectedIndex={()=>this.state.selectedIndex}
+                                      onSelect={(index) => this.footerSelect(index)}/>
+                        </div>
         });
         this.setState({
-            screen: <Search container={this.refs.content}
+            screen: <Main container={this.refs.content}
                             footer={this.refs.footer}
                             displayResult={(result) => this.displayResult(result)}
                             displaySearch={() => this.displaySearch()}
@@ -570,7 +560,7 @@ export default class App extends React.Component {
                 }
                 list.rows.forEach(function (res) {
                             matches.push(res);
-                    
+
                 });
 
             });
@@ -732,41 +722,21 @@ export default class App extends React.Component {
 
     }
 
-    getPlacesComponent() {
-
-        const inputProps = {
-            value: this.state.address,
-            onChange: (address) => this.setState({
-                address
-            }),
-        }
-        if (this.state.gmap) {
-            return <PlacesAutocomplete styles={{ root: {zIndex: 1}  }} inputProps={inputProps} />;
-        }
-
-    }
 
     getSearchMenu() {
 
-        if (!this.state.appbarState) {
+        if (!this.state.appbarState&&this.state.gmaps) {
             return (
               <div>
-                <div style={{display:'flex', flexDirection:'row'}}>
-                  <div style={{marginTop:10}}>
-                    <MapsPlace />
-                  </div>
-                  <div style={styles.places}>
-                    {this.getPlacesComponent()}
-                  </div>
-                  <div style={styles.button}>
-                  <RaisedButton
-                    label ="Go"
-                    onTouchTap={()=>this.addressSearchSubmit()}/>
-                  </div>
-                </div>
-                  {this.state.searchBar}
+                <AddressBar submit={()=>this.addressSearchSubmit} maps={this.state.gmaps} address={this.state.address} onChange={(address)=>this.setState({address})}/>
+                {this.state.searchBar}
               </div>
                 )
+        }else if(!this.state.appbarState){
+          return (
+            <div>
+            </div>
+              )
         }
 
     }
@@ -1079,7 +1049,6 @@ export default class App extends React.Component {
             {this.state.screen}
           </CSSTransitionGroup>
           </div>
-
 
         </div>
       </MuiThemeProvider>

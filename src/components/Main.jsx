@@ -3,17 +3,29 @@
 
 import React from 'react';
 import Map from './Map.jsx';
-import SearchInputs from './SearchInputs.jsx';
 import Results from './Results.jsx';
 import { cyan300, indigo900 } from 'material-ui/styles/colors';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
+const styles={
 
+  wrapper:{
+    display:'flex',
+    flexDirection:'row',
+    position:'absolute'
+  },
+  results:{
+    display:'flex',
+    overflow: 'auto',
+  },
+  map:{
+  }
+};
 
 
 //Begin class definition
-export default class Search extends React.Component {
+export default class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -28,14 +40,13 @@ export default class Search extends React.Component {
         window.removeEventListener('resize', this.searchSizer, false);
     }
 
-
     searchSizer() {
         const { container} = this.props;
         const { offsetHeight, offsetWidth } = container;
         var resultWidth, mapWidth;
-        if(offsetWidth<400){
-          resultWidth=offsetWidth;
-          mapWidth=0;
+        if(offsetWidth<500){
+          resultWidth=0;
+          mapWidth=offsetWidth;
         }else{
          mapWidth=offsetWidth*0.60;
          resultWidth=offsetWidth*0.40;
@@ -49,16 +60,15 @@ export default class Search extends React.Component {
         if (mapWidth=== undefined) {
             return null;
         }
-
         var filteredResources = getFilteredResources();
 
         return (
-          <div width='100%' height='100%' style={{display:'flex', flexDirection:'row', margin:'auto'}}>
+          <div style={styles.wrapper}>
             <div style={{width: resultWidth, height: offsetHeight, overflow: 'auto', paddingLeft:10, paddingRight:5}}>
-              <Results getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
+              <Results height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
             </div>
 
-            <div style={{paddingLeft:10, paddingRight:10, zIndex:0}}>
+            <div style={styles.map}>
               <Map width={mapWidth} height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
             </div>
             <div style={{zIndex:1, bottom:10, right:10, position:'absolute'}}>

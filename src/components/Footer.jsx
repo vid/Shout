@@ -25,29 +25,19 @@ render() {
       <Paper zDepth={1}>
         <BottomNavigation selectedIndex={selectedIndex}>
         <BottomNavigationItem
-          label="View All Results"
+          label="List View"
           icon={<ActionHome />}
           onTouchTap={() => onSelect(0)}
         />
           <BottomNavigationItem
-            label="Favorites"
+            label="Map View"
             icon={<ActionFavorite />}
             onTouchTap={() => onSelect(2)}
           />
           <BottomNavigationItem
-            label="Women's Health"
+            label="Favorites"
             icon={<ActionPregnantWoman />}
             onTouchTap={() => onSelect(3)}
-          />
-          <BottomNavigationItem
-            label="Dental"
-            icon={<ActionFavorite />}
-            onTouchTap={() => onSelect(4)}
-          />
-          <BottomNavigationItem
-            label="Vision"
-            icon={<ActionVisibility />}
-            onTouchTap={() => onSelect(5)}
           />
 
         </BottomNavigation>
