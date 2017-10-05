@@ -29,10 +29,13 @@ const styles = {
     filterButton: {
         color: 'black',
         margin: 5,
+        background:'#D3D3D3'
     },
     selected: {
         color: 'gray',
         margin: 5,
+        background:'white'
+
     },
 };
 

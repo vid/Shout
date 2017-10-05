@@ -22,6 +22,7 @@ const styles = {
         justifyContent: "center"
     },
     places: {
+        zIndex:'10',
         marginTop: 10,
         marginRight: 30
     },
@@ -38,6 +39,11 @@ render() {
   const { addressSearchSubmit, address, onChange, maps }= this.props;
 
     window.google.maps = maps;
+
+    const inputProps = {
+      value: address,
+      onChange: onChange,
+    }
     return (
 
       <div style={styles.wrapper}>
@@ -45,7 +51,7 @@ render() {
           <MapsPlace />
         </div>
         <div style={styles.places}>
-            <PlacesAutocomplete value={address} onChange={onChange} />
+            <PlacesAutocomplete inputProps={inputProps} />
         </div>
         <div style={styles.button}>
         <RaisedButton

@@ -25,6 +25,7 @@ const styles = {
         padding:5
     },
     wrapper:{
+        zIndex:'0',
         display:'flex',
         flexDirection:'row',
         padding:8,
