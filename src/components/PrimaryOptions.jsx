@@ -34,7 +34,6 @@ const styles = {
     filterButton: {
         color: 'white',
         margin: 5,
-        float:'right',
         backgroundColor: '#000000',
         border: 'none',
         borderRadius: 8,
@@ -43,7 +42,6 @@ const styles = {
     selected: {
         color: 'white',
         margin: 5,
-        float:'right',
         backgroundColor: '#707070',
         border: 'none',
         borderRadius: 8,
