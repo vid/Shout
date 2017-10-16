@@ -29,6 +29,7 @@
     "react-star-rating-component": "^1.2.4",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
+    "twilio": "^3.7.0",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1"
   },
