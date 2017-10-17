@@ -29,7 +29,8 @@ const styles = {
         display:'flex',
         flexDirection:'row',
         padding:8,
-        justifyContent: "center"
+        justifyContent: "left",
+        overflow: 'auto'
     },
     filterButton: {
         color: 'white',

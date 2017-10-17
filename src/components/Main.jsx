@@ -13,7 +13,8 @@ const styles={
   wrapper:{
     display:'flex',
     flexDirection:'row',
-    position:'absolute'
+    position:'absolute',
+    overflow: 'hidden',
   },
   results:{
     display:'flex',
@@ -71,7 +72,7 @@ export default class Main extends React.Component {
             <div style={styles.map}>
               <Map width={mapWidth} height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
             </div>
-            <div style={{zIndex:1, bottom:10, right:10, position:'absolute'}}>
+            <div style={{zIndex:1, bottom:'2%', right:'2%', position:'absolute'}}>
                         <FloatingActionButton
                           backgroundColor='#000000'
                           onTouchTap={()=>displayAddResource()}>

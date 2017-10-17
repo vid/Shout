@@ -28,13 +28,11 @@ const styles = {
     },
     filterButton: {
         color: 'black',
-        margin: 5,
         hoverColor:'#707070',
         background:'white'
     },
     selected: {
         color: 'black',
-        margin: 5,
         hoverColor:'#707070',
         background:'#D3D3D3'
     },

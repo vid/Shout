@@ -73,7 +73,8 @@ PouchDB.sync(feedback, remoteFeedback);
 const styles = {
 
     appbar: {
-      backgroundColor:'white'
+      backgroundColor:'transparent',
+      overflow:'auto'
     },
     appbarTitle: {
         paddingTop: 7,
@@ -131,7 +132,7 @@ export default class App extends React.Component {
             selectedIndex: 0,
             appbarTitle: 'Shout',
             appbarSubtitle: '',
-            appbarIcon: '',
+            appbarIcon: <NavigationMenu />,
             searchBar: "",
             searchBar2: "",
             pageLoading: 'true', //true if page has not loaded yet
@@ -280,9 +281,9 @@ export default class App extends React.Component {
     appbarClick() {
 
         if (!this.state.appbarState) {
-            //this.setState({
-            //    showMenu: !this.state.showMenu
-            //});
+            this.setState({
+                showMenu: !this.state.showMenu
+            });
         } else {
             this.displaySearch();
         }
@@ -486,7 +487,7 @@ export default class App extends React.Component {
             appbarState: false
         });
         this.setState({
-            appbarIcon: ''
+            appbarIcon: <NavigationMenu />
         });
         this.setState({
             searchBar: <div>
@@ -1023,7 +1024,7 @@ export default class App extends React.Component {
          </div>
 
           <div id='header'>
-              <AppBar iconElementLeft={<IconButton>{this.state.appbarIcon}</IconButton>}
+              <AppBar iconElementLeft={this.state.appbarIcon}
                       onLeftIconButtonTouchTap={() => this.appbarClick()}
                       style={styles.appbar}>
               <div style={styles.column}>
