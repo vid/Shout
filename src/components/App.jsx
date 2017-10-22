@@ -23,6 +23,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 
+import {Switch, Route, Link} from 'react-router-dom';
+
 
 
 //import other components
@@ -829,9 +831,9 @@ export default class App extends React.Component {
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
               <MenuItem primaryText="About"
-                          onTouchTap={()=>this.displayAbout()} />
+                          containerElement={<Link to="/About" />} />
               <MenuItem primaryText="Blog"
-                          onTouchTap={()=>this.displayBlog()}/>
+                          containerElement={<Link to="/Blog" />}/>
               <MenuItem primaryText ={"My Account ("+this.state.userinfo.name+")"}
                      onTouchTap={()=>this.displayMyAccount()} />
               <MenuItem primaryText="Logout"/>
@@ -843,11 +845,11 @@ export default class App extends React.Component {
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
               <MenuItem primaryText="About"
-                          onTouchTap={()=>this.displayAbout()} />
+                          containerElement={<Link to="/About" />} />
               <MenuItem primaryText="Blog"
-                          onTouchTap={()=>this.displayBlog()}/>
+                          containerElement={<Link to="/Blog" />}/>
               <MenuItem primaryText ="Login/Register"
-                                 onTouchTap={()=>this.displayLogin()} />
+                                 containerElement={<Link to="/LoginRegister" />} />
             </IconMenu>
       }
 
@@ -1039,9 +1041,29 @@ export default class App extends React.Component {
               </div>
           </AppBar>
 
+          </div>
+
           {this.getSearchMenu()}
 
-          </div>
+          <Switch>
+            <Route exact path="/About" render={(props) => (
+              <About {...props} container={this.refs.content}/>
+            )} />
+            <Route exact path="/Blog" render={(props) => (
+              <Blog {...props} container={this.refs.content}/>
+            )} />
+            <Route exact path="/LoginRegister" render={(props) => (
+              <LoginRegister container={this.refs.content}
+                                     displaySearch={() => this.displaySearch()}
+                                     addResource={(x) => this.addResource(x)}
+                                     registerNew={(user,metadata)=>this.registerNew(user,metadata)}
+                                     loginUser={(user,callback)=>this.loginUser(user,callback)}
+                                     getLoggedIn={()=>this.state.loggedin}
+                                     getRegistered={()=>this.state.registered}/>
+            )} />
+          </Switch>
+
+
 
           <div ref='content' id='content'>
           <CSSTransitionGroup transitionName='slide'
