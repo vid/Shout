@@ -8,6 +8,8 @@ import { cyan300, indigo900 } from 'material-ui/styles/colors';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
+import {withRouter} from 'react-router-dom';
+
 const styles={
 
   wrapper:{
@@ -56,6 +58,7 @@ export default class Main extends React.Component {
     }
 
     render() {
+        const ResultsWithRouter = withRouter(Results);
         const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, getPageLoading, userLat, userLng } = this.props;
         var { mapWidth, resultWidth, offsetHeight, offsetWidth} = this.state;
         if (mapWidth=== undefined) {
@@ -66,7 +69,7 @@ export default class Main extends React.Component {
         return (
           <div style={styles.wrapper}>
             <div style={{width: resultWidth, height: offsetHeight, overflow: 'auto', paddingLeft:10, paddingRight:5}}>
-              <Results height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
+              <ResultsWithRouter height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
             </div>
 
             <div style={styles.map}>

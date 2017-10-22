@@ -23,7 +23,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 
-import {Switch, Route, Link} from 'react-router-dom';
+import {Switch, Route, Link, withRouter} from 'react-router-dom';
 
 
 
@@ -1006,6 +1006,8 @@ export default class App extends React.Component {
 
     render() {
 
+        const ClinicPageWithRouter = withRouter(ClinicPage)
+
         return (
 
             <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -1060,6 +1062,22 @@ export default class App extends React.Component {
                                      loginUser={(user,callback)=>this.loginUser(user,callback)}
                                      getLoggedIn={()=>this.state.loggedin}
                                      getRegistered={()=>this.state.registered}/>
+            )} />
+            <Route exact path="/AddResource" render={(props) => (
+              <AddResource container={this.refs.content}
+                           addResource={(x) => this.addResource(x)}
+                           displaySearch={()=>this.displaySearch()}/>
+            )} />
+            <Route path="/ClinicPage/:rowNumber" render={(props) => (
+              <ClinicPageWithRouter container={this.refs.content}
+                          footer={this.refs.footer}
+                          displaySearch={(result) => this.displaySearch()}
+                          addFeedback={(x) => this.addFeedback(x)}
+                          getFeedbacks={()=>this.state.clinicpageFeedbacks}
+                          getFilteredResources={() => this.state.filteredResources}
+                          vouchFor={(a,b,c)=>this.vouchFor(a,b,c)}
+                          vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)}
+                          addFlag={()=>this.addFlag(a,b)}/>
             )} />
           </Switch>
 
