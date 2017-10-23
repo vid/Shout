@@ -2,35 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="google-site-verification" content="CkQIETEu6BehAPguSFx4W8b5D11pn0pqmjRLZEB9Yr4" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
-    <title>Shout App</title>
+    <meta name="description" content="Shout is an app to let Atlanta residents search and share information about affordable, free, or reduced-cost healthcare resources in Atlanta. It's healthcare for the people." />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
+    <title>Shout Atlanta</title>
+
   </head>
     <div id="app"></div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="./bundle.js"></script>
     <script type="text/javascript" charset="utf-8">
 
-    // Wait for device API libraries to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
 
-    // device APIs are available
-    //
-    function onDeviceReady() {
-        // Register the event listener
-        alert("ADDED EVENT LISTENER");
-        document.addEventListener("backbutton", onBackKeyDown, false);
-    }
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    // Handle the back button
-    //
-    function onBackKeyDown() {
-      alert("YO TRIED TO PRESS EXIT");
-    }
+      ga('create', 'UA-91756202-1', 'auto');
+      ga('send', 'pageview');
+
 
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     <body>
   </body>

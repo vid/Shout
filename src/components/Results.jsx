@@ -105,17 +105,17 @@ export default class Results extends React.Component {
         return (
         <div>
             <h2>Results</h2>
-      <Table
-        selectable={false}
-        fixedHeader={true}
-        style={styles.table}
-        onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
-        <TableBody
-            displayRowCheckbox={false}
-            showRowHover={true}>
-        {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
-        </TableBody>
-      </Table>
+        <Table
+          selectable={false}
+          fixedHeader={true}
+          style={styles.table}
+          onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
+          <TableBody
+              displayRowCheckbox={false}
+              showRowHover={true}>
+          {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
+          </TableBody>
+        </Table>
       </div>
         );
     }

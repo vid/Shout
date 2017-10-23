@@ -7,14 +7,14 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.phonegap.reacthotloadingtemplate"
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.shouthealth.reacthotloadingtemplate"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.phonegap.reacthotloadingtemplate"
+            "PACKAGE_NAME": "com.shouthealth.reacthotloadingtemplate"
         },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.phonegap.reacthotloadingtemplate"
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.shouthealth.reacthotloadingtemplate"
         }
     },
     "dependent_plugins": {}

@@ -9,7 +9,7 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
                         },
                         {
@@ -17,7 +17,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -26,26 +26,18 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.phonegap.reacthotloadingtemplate"
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.shouthealth.reacthotloadingtemplate"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.phonegap.reacthotloadingtemplate"
+            "PACKAGE_NAME": "com.shouthealth.reacthotloadingtemplate"
         },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.phonegap.reacthotloadingtemplate"
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.shouthealth.reacthotloadingtemplate"
         }
     },
     "dependent_plugins": {},
     "modules": [
-        {
-            "id": "cordova-plugin-statusbar.statusbar",
-            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-            "pluginId": "cordova-plugin-statusbar",
-            "clobbers": [
-                "window.StatusBar"
-            ]
-        },
         {
             "id": "cordova-plugin-inappbrowser.inappbrowser",
             "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
@@ -54,11 +46,19 @@
                 "cordova.InAppBrowser.open",
                 "window.open"
             ]
+        },
+        {
+            "id": "cordova-plugin-statusbar.statusbar",
+            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+            "pluginId": "cordova-plugin-statusbar",
+            "clobbers": [
+                "window.StatusBar"
+            ]
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-whitelist": "1.3.0",
+        "cordova-plugin-inappbrowser": "1.6.1",
         "cordova-plugin-statusbar": "2.1.3",
-        "cordova-plugin-inappbrowser": "1.6.1"
+        "cordova-plugin-whitelist": "1.3.0"
     }
 }
