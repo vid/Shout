@@ -41,6 +41,10 @@ import MyAccount from './MyAccount.jsx';
 import AddressBar from './AddressBar.jsx';
 import About from './About.jsx';
 import Blog from './Blog.jsx';
+import {
+    geocodeByAddress,
+    geocodeByPlaceId
+} from 'react-places-autocomplete'
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -758,7 +762,7 @@ export default class App extends React.Component {
         if (!this.state.appbarState&&this.state.gmaps) {
             return (
               <div>
-                <AddressBar submit={()=>this.addressSearchSubmit} maps={this.state.gmaps} address={this.state.address} onChange={(address)=>this.setState({address})}/>
+                <AddressBar submit={()=>this.addressSearchSubmit()} maps={this.state.gmaps} address={this.state.address} onChange={(address)=>this.setState({address})}/>
                 {this.state.searchBar}
               </div>
                 )
@@ -772,20 +776,28 @@ export default class App extends React.Component {
     }
 
     addressSearchSubmit() {
-        event.preventDefault()
 
-        geocodeByAddress(this.state.address, (err, latLng) => {
-            if (err) {
-                console.log('Oh no!', err)
-            }
-            this.setState({
-                userLat: latLng.lat
-            });
-            this.setState({
-                userLng: latLng.lng
-            });
-        })
-        this.filterNearMe(this.state.filteredResources);
+        var getCoords= new Promise((resolve, reject) =>{
+          geocodeByAddress(this.state.address, (err, latLng) => {
+                if (err) {
+                    console.log('error geocoding by address:', err)
+                    reject(err);
+                }else{
+                  this.setState({
+                      userLat: latLng.lat
+                  });
+                  this.setState({
+                      userLng: latLng.lng
+                  });
+                  resolve();
+                }
+              });
+        });
+        getCoords.then((result)=>{
+          this.filterNearMe(this.state.filteredResources);
+          }).catch((error)=>{
+            console.log("error getting geocode response");
+          });
     }
 
 
