@@ -78,19 +78,15 @@ const styles = {
 
     appbar: {
       backgroundColor:'transparent',
-      overflow:'auto'
+      overflow:'hidden',
+      maxHeight:65
     },
     appbarTitle: {
         paddingTop: 7,
         paddingLeft:5,
         color: '#000000',
         fontSize: 40,
-    },
-    appbarSubtitle: {
-        paddingTop: 13,
-        fontSize: 15,
-        color: '#000000',
-        marginLeft: 10
+        overflow: 'hidden'
     },
     row: {
         display: 'flex',
@@ -135,7 +131,6 @@ export default class App extends React.Component {
             appbarState: false,
             selectedIndex: 0,
             appbarTitle: 'Shout',
-            appbarSubtitle: '',
             appbarIcon: <NavigationMenu />,
             searchBar: "",
             searchBar2: "",
@@ -313,9 +308,6 @@ export default class App extends React.Component {
             appbarIcon: <NavigationChevronLeft />
         });
         this.setState({
-            appbarSubtitle: ' '
-        });
-        this.setState({
             appbarState: true
         });
         this.setState({
@@ -483,9 +475,6 @@ export default class App extends React.Component {
         });
         this.setState({
             appbarTitle: 'ShoutHealth'
-        });
-        this.setState({
-            appbarSubtitle: ''
         });
         this.setState({
             appbarState: false
@@ -1070,7 +1059,6 @@ export default class App extends React.Component {
               <div style={styles.row}>
                 <img src={pathToLogo} height="60"></img>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
-                <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
                 <div style={styles.headermenu}>
                 {this.getMenuOptions()}
               </div>

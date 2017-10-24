@@ -60,7 +60,7 @@ export default class SecondaryOptions extends React.Component {
             <FlatButton
                     onClick={() => this.onSelect(7)}
                     style={index===7?styles.selected:styles.filterButton}
-                    label="Check-up/Physical Exam" />
+                    label="Check-up" />
             <FlatButton
                     onClick={() => this.onSelect(8)}
                     style={index===8?styles.selected:styles.filterButton}

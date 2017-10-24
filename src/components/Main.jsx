@@ -4,6 +4,7 @@
 import React from 'react';
 import Map from './Map.jsx';
 import Results from './Results.jsx';
+import SwitchViewButton from './SwitchViewButton.jsx';
 import { cyan300, indigo900 } from 'material-ui/styles/colors';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -29,10 +30,23 @@ const styles={
 export default class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+          viewList:false,
+          switchButton:false
+        };
 
     }
 
+    switchView() {
+        var promise=new Promise((resolve, reject) =>{
+          this.setState({viewList:!this.state.viewList});
+          resolve();
+          });
+        promise.then((result)=>{
+          this.searchSizer();
+          }).catch((error)=>console.log(error));
+    }
+    
     componentDidMount() {
         this.searchSizer();
         window.addEventListener('resize', () => this.searchSizer(), false);
@@ -46,9 +60,16 @@ export default class Main extends React.Component {
         const { offsetHeight, offsetWidth } = container;
         var resultWidth, mapWidth;
         if(offsetWidth<500){
-          resultWidth=0;
-          mapWidth=offsetWidth;
+          this.setState({switchButton:true})
+          if(this.state.viewList){
+            resultWidth=offsetWidth;
+            mapWidth=0;
+          }else{
+            resultWidth=0;
+            mapWidth=offsetWidth;
+          }
         }else{
+         this.setState({switchButton:false})
          mapWidth=offsetWidth*0.60;
          resultWidth=offsetWidth*0.40;
         }
@@ -72,7 +93,8 @@ export default class Main extends React.Component {
             <div style={styles.map}>
               <Map width={mapWidth} height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} onGoogleApiLoad={onGoogleApiLoad} userLat={userLat} userLng={userLng} center={[userLat,userLng]}/>
             </div>
-            <div style={{zIndex:1, bottom:'2%', right:'2%', position:'absolute'}}>
+            {this.state.switchButton?<SwitchViewButton switchView={()=>this.switchView()} getView={()=>this.state.viewList}/>:" "}
+            <div style={{zIndex:1, bottom:'2%', right:'10%', position:'absolute', padding:'10px'}}>
                         <FloatingActionButton
                           backgroundColor='#000000'
                           onTouchTap={()=>displayAddResource()}>
