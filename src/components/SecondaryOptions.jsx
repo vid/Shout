@@ -16,25 +16,20 @@ import ActionVisibility from 'material-ui/svg-icons/action/visibility';
 import PlacesChildCare from 'material-ui/svg-icons/places/child-care';
 
 const styles = {
-    hint: {
-        color: '#A9A9A9',
-    },
     wrapper:{
         display:'flex',
         flexDirection:'row',
         flexWrap:'wrap',
-        padding:8,
+        padding:2,
         justifyContent: "center"
     },
-    filterButton: {
+    filterButton2: {
         color: 'black',
-        hoverColor:'#707070',
-        background:'white'
+        background:'#E8E8E8'
     },
-    selected: {
+    selected2: {
         color: 'black',
-        hoverColor:'#707070',
-        background:'#D3D3D3'
+        background:'#E8E8E8'
     },
 };
 
@@ -50,7 +45,7 @@ export default class SecondaryOptions extends React.Component {
         return(
         <div style={styles.wrapper}>
           <FlatButton
-                style={index===7?styles.selected:styles.filterButton} label=" Showing All Results "/>
+                backgroundColor={index===7?"#E8E8E8":"#D3D3D3"} label=" Showing All Results "/>
         </div>
         )
     }
@@ -59,18 +54,18 @@ export default class SecondaryOptions extends React.Component {
         <div style={styles.wrapper}>
             <FlatButton
                     onClick={() => this.onSelect(7)}
-                    style={index===7?styles.selected:styles.filterButton}
+                    backgroundColor={index===7?"#E8E8E8":"#D3D3D3"}
                     label="Check-up" />
             <FlatButton
                     onClick={() => this.onSelect(8)}
-                    style={index===8?styles.selected:styles.filterButton}
+                    backgroundColor={index===8?"#E8E8E8":"#D3D3D3"}
                     label="Emergency rooms"/>
             <FlatButton
                     onClick={() => this.onSelect(9)}
-                    style={index===9?styles.selected:styles.filterButton} label="Chronic Disease Management"/>
+                    backgroundColor={index===9?"#E8E8E8":"#D3D3D3"} label="Chronic Disease Management"/>
             <FlatButton
                     onClick={() => this.onSelect(10)}
-                    style={index===10?styles.selected:styles.filterButton} label="STD Testing"/>
+                    backgroundColor={index===10?"#E8E8E8":"#D3D3D3"} label="STD Testing"/>
         </div>);
     }
     else if(index==1||(index<20&&index>10)){
@@ -78,87 +73,87 @@ export default class SecondaryOptions extends React.Component {
       <div style={styles.wrapper}>
           <FlatButton
                   onClick={() => this.onSelect(11)}
-                  style={index===11?styles.selected:styles.filterButton} label="Pregnancy Test"/>
+                  backgroundColor={index===11?"#E8E8E8":"#D3D3D3"} label="Pregnancy Test"/>
           <FlatButton
                   onClick={() => this.onSelect(12)}
-                  style={index===12?styles.selected:styles.filterButton} label="Pap Smear"/>
+                  backgroundColor={index===12?"#E8E8E8":"#D3D3D3"} label="Pap Smear"/>
           <FlatButton
                   onClick={() => this.onSelect(13)}
-                  style={index===13?styles.selected:styles.filterButton} label="Mammogram"/>
+                  backgroundColor={index===13?"#E8E8E8":"#D3D3D3"} label="Mammogram"/>
           <FlatButton
                   onClick={() => this.onSelect(14)}
-                  style={index===14?styles.selected:styles.filterButton} label="Birth Control"/>
+                  backgroundColor={index===14?"#E8E8E8":"#D3D3D3"} label="Birth Control"/>
       </div>);
     }else if(index==2||(index<30&&index>20)){
       return(
       <div style={styles.wrapper}>
           <FlatButton
                   onClick={() => this.onSelect(21)}
-                  style={index===21?styles.selected:styles.filterButton} label="Immunization"/>
+                  backgroundColor={index===21?"#E8E8E8":"#D3D3D3"} label="Immunization"/>
           <FlatButton
                   onClick={() => this.onSelect(22)}
-                  style={index===22?styles.selected:styles.filterButton} label="Check-up"/>
+                  backgroundColor={index===22?"#E8E8E8":"#D3D3D3"} label="Check-up"/>
           <FlatButton
                   onClick={() => this.onSelect(23)}
-                  style={index===23?styles.selected:styles.filterButton} label="Emergency"/>
+                  backgroundColor={index===23?"#E8E8E8":"#D3D3D3"} label="Emergency"/>
       </div>);
     }else if(index==3||(index<40&&index>30)){
       return(
       <div style={styles.wrapper}>
           <FlatButton
                   onClick={() => this.onSelect(31)}
-                  style={index===31?styles.selected:styles.filterButton} label="Behavioral Health"/>
+                  backgroundColor={index===31?"#E8E8E8":"#D3D3D3"} label="Behavioral Health"/>
           <FlatButton
                   onClick={() => this.onSelect(32)}
-                  style={index===32?styles.selected:styles.filterButton} label="Counseling"/>
+                  backgroundColor={index===32?"#E8E8E8":"#D3D3D3"} label="Counseling"/>
           <FlatButton
                   onClick={() => this.onSelect(33)}
-                  style={index===33?styles.selected:styles.filterButton} label="Psychiatric Emergency"/>
+                  backgroundColor={index===33?"#E8E8E8":"#D3D3D3"} label="Psychiatric Emergency"/>
       </div>);
     }else if(index==4||(index<50&&index>40)){
       return(
       <div style={styles.wrapper}>
           <FlatButton
                   onClick={() => this.onSelect(41)}
-                  style={index===41?styles.selected:styles.filterButton} label="Basic filling/extraction"/>
+                  backgroundColor={index===41?"#E8E8E8":"#D3D3D3"} label="Basic filling/extraction"/>
           <FlatButton
                   onClick={() => this.onSelect(42)}
-                  style={index===42?styles.selected:styles.filterButton} label="Cleaning"/>
+                  backgroundColor={index===42?"#E8E8E8":"#D3D3D3"} label="Cleaning"/>
           <FlatButton
                   onClick={() => this.onSelect(43)}
-                  style={index===43?styles.selected:styles.filterButton} label="Advanced dental"/>
+                  backgroundColor={index===43?"#E8E8E8":"#D3D3D3"} label="Advanced dental"/>
       </div>);
     }else if(index==5||(index<60&&index>50)){
       return(
       <div style={styles.wrapper}>
           <FlatButton
                   onClick={() => this.onSelect(51)}
-                  style={index===51?styles.selected:styles.filterButton} label="Vision testing"/>
+                  backgroundColor={index===51?"#E8E8E8":"#D3D3D3"} label="Vision testing"/>
           <FlatButton
                   onClick={() => this.onSelect(52)}
-                  style={index===52?styles.selected:styles.filterButton} label="Retina"/>
+                  backgroundColor={index===52?"#E8E8E8":"#D3D3D3"} label="Retina"/>
       </div>);
     }else if(index==6||(index<70&&index>60)){
       return(
       <div style={styles.wrapper}>
           <FlatButton
                   onClick={() => this.onSelect(61)}
-                  style={index===61?styles.selected:styles.filterButton} label="Housing and Shelters"/>
+                  backgroundColor={index===61?"#E8E8E8":"#D3D3D3"} label="Housing and Shelters"/>
           <FlatButton
                   onClick={() => this.onSelect(62)}
-                  style={index===62?styles.selected:styles.filterButton} label="Food Pantries"/>
+                  backgroundColor={index===62?"#E8E8E8":"#D3D3D3"} label="Food Pantries"/>
           <FlatButton
                   onClick={() => this.onSelect(63)}
-                  style={index===63?styles.selected:styles.filterButton} label="Employment Assistance"/>
+                  backgroundColor={index===63?"#E8E8E8":"#D3D3D3"} label="Employment Assistance"/>
           <FlatButton
                   onClick={() => this.onSelect(64)}
-                  style={index===64?styles.selected:styles.filterButton} label="Veteran Services"/>
+                  backgroundColor={index===64?"#E8E8E8":"#D3D3D3"} label="Veteran Services"/>
           <FlatButton
                   onClick={() => this.onSelect(65)}
-                  style={index===65?styles.selected:styles.filterButton} label="Clothing"/>
+                  backgroundColor={index===65?"#E8E8E8":"#D3D3D3"} label="Clothing"/>
           <FlatButton
                   onClick={() => this.onSelect(66)}
-                  style={index===66?styles.selected:styles.filterButton} label="Identification"/>
+                  backgroundColor={index===66?"#E8E8E8":"#D3D3D3"} label="Identification"/>
       </div>);
     }
     }
