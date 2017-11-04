@@ -41,6 +41,10 @@ import MyAccount from './MyAccount.jsx';
 import AddressBar from './AddressBar.jsx';
 import About from './About.jsx';
 import Blog from './Blog.jsx';
+import {
+    geocodeByAddress,
+    geocodeByPlaceId
+} from 'react-places-autocomplete'
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -74,19 +78,15 @@ const styles = {
 
     appbar: {
       backgroundColor:'transparent',
-      overflow:'auto'
+      overflow:'hidden',
+      maxHeight:65
     },
     appbarTitle: {
         paddingTop: 7,
         paddingLeft:5,
         color: '#000000',
         fontSize: 40,
-    },
-    appbarSubtitle: {
-        paddingTop: 13,
-        fontSize: 15,
-        color: '#000000',
-        marginLeft: 10
+        overflow: 'hidden'
     },
     row: {
         display: 'flex',
@@ -130,7 +130,6 @@ export default class App extends React.Component {
             appbarState: false,
             selectedIndex: 0,
             appbarTitle: 'Shout',
-            appbarSubtitle: '',
             appbarIcon: <NavigationMenu />,
             searchBar: "",
             searchBar2: "",
@@ -288,6 +287,7 @@ export default class App extends React.Component {
       console.log("after delete: ", tempPendingData);
     }
 
+
     displayMyAccount() {
         this.changeHeaderInfo("My Account");
         this.setState({
@@ -390,9 +390,6 @@ export default class App extends React.Component {
             appbarTitle: 'ShoutHealth'
         });
         this.setState({
-            appbarSubtitle: ''
-        });
-        this.setState({
             appbarState: false
         });
         this.setState({
@@ -402,10 +399,10 @@ export default class App extends React.Component {
             searchBar: <div>
                         <PrimaryOptions container={this.refs.content}
                                       getselectedIndex={()=>this.state.selectedIndex}
-                                      onSelect={(index) => this.footerSelect(index)}/>
+                                      onSelect={(index) => this.selectOption(index)}/>
                         <SecondaryOptions container={this.refs.content}
                                       getselectedIndex={()=>this.state.selectedIndex}
-                                      onSelect={(index) => this.footerSelect(index)}/>
+                                      onSelect={(index) => this.selectOption(index)}/>
                         </div>
         });
         this.setState({
@@ -435,27 +432,22 @@ export default class App extends React.Component {
       this.setState({
             searchString: searchString
       });
-        if (!searchString || searchString.length < 1) {
-            console.log("no search string, drawing all resources");
+        if (searchType==="all") {
             db.allDocs({
-                startkey: 'Resource_',
-                endkey: 'Resource_\uffff',
                 include_docs: true
             }, (err, doc) => {
-                this.setState({
-                    searchString: ""
-                });
                 if (err) {
                     return console.log(err);
                 }
-                list.rows.forEach(function (res) {
+                doc.rows.forEach(function (res) {
                       matches.push(res);
                 });
+            this.redrawResources(matches);
             });
-        } else if(searchType="Any"){
+        } else if(searchType==="any"){
             db.search({
                 query: searchString,
-                fields: ['resourcetype', 'population', 'description'],
+                fields: ['resourcetype', 'description'],
                 include_docs: true,
                 highlighting: true,
             }, (err, list) => {
@@ -466,12 +458,49 @@ export default class App extends React.Component {
                             matches.push(res);
 
                 });
-
+            this.redrawResources(matches);
             });
-        } else if(searchType="Services"){
+        } else if(searchType==="services"){
 
+            db.allDocs({
+                include_docs: true
+            }, (err, doc) => {
+                  if (err) {
+                      return this.error(err);
+                  }
+                  doc.rows.forEach(function (res) {
+                    for (var category in res.doc.services) {
+                      var arrayLength = res.doc.services[category].length;
+                      var arrItems=res.doc.services[category];
+                      for (var i = 0; i < arrayLength; i++) {
+                          if(arrItems[i]['label'].indexOf(searchString)!==-1&&arrItems[i]['adminvotes']!="0"){
+                            matches.push(res);
+                          }
+                      }
+                    }
+                  });
+            this.redrawResources(matches);
+            });
+        } else if(searchType==="population"){
+
+            db.allDocs({
+                include_docs: true
+            }, (err, doc) => {
+                  if (err) {
+                      return this.error(err);
+                  }
+                  doc.rows.forEach(function (res) {
+                      var arrItems=res.doc.population;
+                      for (var i = 0; i < arrItems.length; i++) {
+                          if(arrItems[i]['label'].indexOf(searchString)!==-1&&arrItems[i]['adminvotes']!="0"){
+                            matches.push(res);
+                          }
+                      }
+
+                  });
+            this.redrawResources(matches);
+            });
         }
-        this.redrawResources(matches);
     }
 
     //This function allows user to filter resources based on the selected icon in the footer
@@ -481,55 +510,55 @@ export default class App extends React.Component {
             selectedIndex: index
         });
         if (index === 100) {
-            this.filterResources('');
+            this.filterResources('', "all");
         } else if (index === 0) {
-            this.filterResources('clinic');
+            this.filterResources('Adults', "population");
         } else if (index === 1) {
-            this.filterResources('women');
+            this.filterResources('Women', "population");
         } else if (index === 2) {
-            this.filterResources('children');
+            this.filterResources('Children', "population");
         } else if (index === 3) {
-            this.filterResources('mental health');
+            this.filterResources('mental health', "services");
         } else if (index === 4) {
-            this.filterResources('dental');
+            this.filterResources('dental', "services");
         } else if (index === 5) {
-            this.filterResources('vision');
+            this.filterResources('vision', "services");
         } else if (index === 6) {
-            this.filterResources('housing');
+            this.filterResources('housing', "any");
         }
 
          else if (index === 7) {
-            this.filterResources('check-up');
+            this.filterResources('check-up', "services");
         }  else if (index === 8) {
-            this.filterResources('emergency');
+            this.filterResources('emergency', "any");
         }  else if (index === 9) {
-            this.filterResources('chronic disease');
+            this.filterResources('chronic disease', "services");
         }  else if (index === 9) {
-            this.filterResources('STD testing');
+            this.filterResources('STD testing', "services");
         }
 
          else if (index ===11) {
-            this.filterResources('pregnancy testing');
+            this.filterResources('pregnancy', "services");
         } else if (index ===11) {
-           this.filterResources('pap smear');
+           this.filterResources('pap smear', "services");
        } else if (index ===11) {
-          this.filterResources('mammogram');
+          this.filterResources('mammogram', "services");
       } else if (index ===11) {
-         this.filterResources('birth control');
+         this.filterResources('birth control', "services");
      }
 
      else if (index ===21) {
-        this.filterResources('immunization');
+        this.filterResources('immunization', "services");
      }else if (index ===22) {
-        this.filterResources('pediatric check-up');
+        this.filterResources('pediatric check-up', "services");
      }
 
     }
 
     //This function sorts resources based on the distance
-    filterNearMe() {
+    filterNearMe(resourcestoFilter) {
 
-        var originalArray = this.state.filteredResources;
+        var originalArray = resourcestoFilter;
 
         // split original array into 2 arrays, one for locations with coordinates
         // one for without it
@@ -550,7 +579,6 @@ export default class App extends React.Component {
                 var b_distance = Math.pow((this.state.userLat - b.lat), 2) +
                                  Math.pow((this.state.userLng - b.lng), 2);
                 var diff = a_distance - b_distance;
-                // console.log("Difference: " + diff);
                 return diff;
             } else {
                 return 10000;
@@ -565,7 +593,6 @@ export default class App extends React.Component {
         for (var i = 0; i < invalidCoordination.length; i++) {
             arrSorted.push(invalidCoordination[i]);
         }
-
         this.setState({
             filteredResources: arrSorted
         });
@@ -635,20 +662,28 @@ export default class App extends React.Component {
     }
 
     addressSearchSubmit() {
-        event.preventDefault()
 
-        geocodeByAddress(this.state.address, (err, latLng) => {
-            if (err) {
-                console.log('Oh no!', err)
-            }
-            this.setState({
-                userLat: latLng.lat
-            });
-            this.setState({
-                userLng: latLng.lng
-            });
-        })
-        this.filterNearMe();
+        var getCoords= new Promise((resolve, reject) =>{
+          geocodeByAddress(this.state.address, (err, latLng) => {
+                if (err) {
+                    console.log('error geocoding by address:', err)
+                    reject(err);
+                }else{
+                  this.setState({
+                      userLat: latLng.lat
+                  });
+                  this.setState({
+                      userLng: latLng.lng
+                  });
+                  resolve();
+                }
+              });
+        });
+        getCoords.then((result)=>{
+          this.filterNearMe(this.state.filteredResources);
+          }).catch((error)=>{
+            console.log("error getting geocode response");
+          });
     }
 
     //Update the rows of the results table on main page
@@ -797,7 +832,6 @@ export default class App extends React.Component {
                 clinicpageFeedbacks: feedbacks
             });
         });
-        console.log(this.state.clinicpageFeedbacks);
     }
 
     //Function called from ClinicPage to upvote a tag.
@@ -902,7 +936,6 @@ export default class App extends React.Component {
               <div style={styles.row}>
                 <img src={pathToLogo} height="60"></img>
                 <div style={styles.appbarTitle}>{this.state.appbarTitle}</div>
-                <div style={styles.appbarSubtitle}>{this.state.appbarSubtitle}</div>
                 <div style={styles.headermenu}>
                 {this.getMenuOptions()}
               </div>

@@ -36,7 +36,7 @@ export default class AddressBar extends Component {
 
 render() {
 
-  const { addressSearchSubmit, address, onChange, maps }= this.props;
+  const { submit, address, onChange, maps }= this.props;
 
     window.google.maps = maps;
 
@@ -56,7 +56,7 @@ render() {
         <div style={styles.button}>
         <RaisedButton
           label ="Go"
-          onTouchTap={()=>addressSearchSubmit()}/>
+          onTouchTap={()=>submit()}/>
         </div>
       </div>
 

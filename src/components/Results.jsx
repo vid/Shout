@@ -134,6 +134,7 @@ export default class Results extends React.Component {
         {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
         </TableBody>
       </Table>
+
       </div>
         );
     }
