@@ -8,8 +8,7 @@ import { cyan300, indigo900 } from 'material-ui/styles/colors';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
-import {withRouter} from 'react-router-dom';
-
+import {withRouter, Link} from 'react-router-dom';
 const styles={
 
   wrapper:{
@@ -43,13 +42,9 @@ export default class Main extends React.Component {
     }
 
     searchSizer() {
-        console.log("container is: ", container)
-        const { container} = this.props;
-        // const { offsetHeight, offsetWidth } = container;
-
         var offsetHeight = document.getElementById('content').clientHeight
         var offsetWidth = document.getElementById('content').clientWidth
-        
+
         var resultWidth, mapWidth;
         if(offsetWidth<500){
           resultWidth=0;
@@ -91,7 +86,7 @@ export default class Main extends React.Component {
             <div style={{zIndex:1, bottom:'2%', right:'2%', position:'absolute'}}>
                         <FloatingActionButton
                           backgroundColor='#000000'
-                          onTouchTap={()=>displayAddResource()}>
+                          containerElement={<Link to="/AddResource" />}>
                           <ContentAdd />
                         </FloatingActionButton>
             </div>

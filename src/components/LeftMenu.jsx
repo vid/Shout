@@ -60,8 +60,12 @@ export default class LeftMenu extends React.Component {
 
         return (
             <div id='menu'>
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} containerElement={<Link to="/AddResource" />}/>
-            <MenuItem primaryText="About" leftIcon={<SocialPerson />} containerElement={<Link to="/About" />}/>
+            <MenuItem primaryText="Add New Resource"
+                      leftIcon={<ContentAdd />}
+                      containerElement={<Link to="/AddResource" />}/>
+            <MenuItem primaryText="About"
+                      leftIcon={<SocialPerson />}
+                      containerElement={<Link to="/About" />}/>
             {this.getAdminOptions()}
             </div>
         )
