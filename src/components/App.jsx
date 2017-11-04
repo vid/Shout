@@ -126,7 +126,6 @@ export default class App extends React.Component {
             address: "Atlanta, GA",
             filteredResources: [],
             showMenu: false, //toggles left-hand menu
-            landingOpen: true,
             searchString: '',
             appbarState: false,
             selectedIndex: 0,
@@ -142,7 +141,8 @@ export default class App extends React.Component {
             clinicpageFeedbacks: [],
             loggedin: false,
             pendingData: [],
-            userinfo:""
+            userinfo:"",
+            shouldShowSearchMenu: false
         };
     }
 
@@ -474,8 +474,6 @@ export default class App extends React.Component {
         this.redrawResources(matches);
     }
 
-
-
     //This function allows user to filter resources based on the selected icon in the footer
     footerSelect(index) {
         //first, go back to the main screen
@@ -618,7 +616,7 @@ export default class App extends React.Component {
     }
 
     getSearchMenu() {
-        if (!this.state.appbarState&&this.state.gmaps) {
+        if (this.state.shouldShowSearchMenu) {
             return (
               <div>
                 <AddressBar submit={()=>this.addressSearchSubmit}
@@ -860,6 +858,10 @@ export default class App extends React.Component {
         }
     }
 
+    setShouldShowSearchMenu(shouldShowSearchMenu) {
+        this.setState({shouldShowSearchMenu: shouldShowSearchMenu})
+    }
+
     componentDidMount() {
         // may be the wrong place to call these. Might be better to call in
         // component will mount
@@ -958,7 +960,8 @@ export default class App extends React.Component {
                                   getPageLoading={() => this.state.pageLoading}
                                   onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)}
                                   userLat={this.state.userLat} userLng={this.state.userLng}
-                                  getSearchstring={()=>this.state.searchString} />
+                                  getSearchstring={()=>this.state.searchString}
+                                  setShouldShowSearchMenu={(shouldShowSearchMenu)=>this.setShouldShowSearchMenu(shouldShowSearchMenu)}/>
               )} />
             </Switch>
           </CSSTransitionGroup>

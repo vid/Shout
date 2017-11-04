@@ -30,7 +30,7 @@ const styles={
 export default class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        props.setShouldShowSearchMenu(true);
     }
 
     componentDidMount() {
@@ -39,6 +39,7 @@ export default class Main extends React.Component {
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.searchSizer, false);
+        this.props.setShouldShowSearchMenu(false);
     }
 
     searchSizer() {
