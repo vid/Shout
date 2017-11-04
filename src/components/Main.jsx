@@ -32,7 +32,6 @@ export default class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-
     }
 
     componentDidMount() {
@@ -44,8 +43,13 @@ export default class Main extends React.Component {
     }
 
     searchSizer() {
+        console.log("container is: ", container)
         const { container} = this.props;
-        const { offsetHeight, offsetWidth } = container;
+        // const { offsetHeight, offsetWidth } = container;
+
+        var offsetHeight = document.getElementById('content').clientHeight
+        var offsetWidth = document.getElementById('content').clientWidth
+        
         var resultWidth, mapWidth;
         if(offsetWidth<500){
           resultWidth=0;
@@ -59,7 +63,16 @@ export default class Main extends React.Component {
 
     render() {
         const ResultsWithRouter = withRouter(Results);
-        const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, getPageLoading, userLat, userLng } = this.props;
+        const { displayResult,
+                displayAddResource,
+                displaySearch,
+                filterResources,
+                onGoogleApiLoad,
+                getSearchstring,
+                getFilteredResources,
+                getPageLoading,
+                userLat,
+                userLng } = this.props;
         var { mapWidth, resultWidth, offsetHeight, offsetWidth} = this.state;
         if (mapWidth=== undefined) {
             return null;

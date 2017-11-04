@@ -1008,6 +1008,8 @@ export default class App extends React.Component {
 
         const ClinicPageWithRouter = withRouter(ClinicPage)
 
+        console.log(this.refs)
+
         return (
 
             <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -1047,39 +1049,7 @@ export default class App extends React.Component {
 
           {this.getSearchMenu()}
 
-          <Switch>
-            <Route exact path="/About" render={(props) => (
-              <About {...props} container={this.refs.content}/>
-            )} />
-            <Route exact path="/Blog" render={(props) => (
-              <Blog {...props} container={this.refs.content}/>
-            )} />
-            <Route exact path="/LoginRegister" render={(props) => (
-              <LoginRegister container={this.refs.content}
-                                     displaySearch={() => this.displaySearch()}
-                                     addResource={(x) => this.addResource(x)}
-                                     registerNew={(user,metadata)=>this.registerNew(user,metadata)}
-                                     loginUser={(user,callback)=>this.loginUser(user,callback)}
-                                     getLoggedIn={()=>this.state.loggedin}
-                                     getRegistered={()=>this.state.registered}/>
-            )} />
-            <Route exact path="/AddResource" render={(props) => (
-              <AddResource container={this.refs.content}
-                           addResource={(x) => this.addResource(x)}
-                           displaySearch={()=>this.displaySearch()}/>
-            )} />
-            <Route path="/ClinicPage/:rowNumber" render={(props) => (
-              <ClinicPageWithRouter container={this.refs.content}
-                          footer={this.refs.footer}
-                          displaySearch={(result) => this.displaySearch()}
-                          addFeedback={(x) => this.addFeedback(x)}
-                          getFeedbacks={()=>this.state.clinicpageFeedbacks}
-                          getFilteredResources={() => this.state.filteredResources}
-                          vouchFor={(a,b,c)=>this.vouchFor(a,b,c)}
-                          vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)}
-                          addFlag={()=>this.addFlag(a,b)}/>
-            )} />
-          </Switch>
+
 
 
 
@@ -1087,7 +1057,53 @@ export default class App extends React.Component {
           <CSSTransitionGroup transitionName='slide'
                               transitionEnterTimeout={ 100 }
                               transitionLeaveTimeout={ 300 }>
-            {this.state.screen}
+            {/* {this.state.screen} */}
+            <Switch>
+              <Route exact path="/About" render={(props) => (
+                <About {...props} container={this.refs.content}/>
+              )} />
+              <Route exact path="/Blog" render={(props) => (
+                <Blog {...props} container={this.refs.content}/>
+              )} />
+              <Route exact path="/LoginRegister" render={(props) => (
+                <LoginRegister {...props} container={this.refs.content}
+                                       displaySearch={() => this.displaySearch()}
+                                       addResource={(x) => this.addResource(x)}
+                                       registerNew={(user,metadata)=>this.registerNew(user,metadata)}
+                                       loginUser={(user,callback)=>this.loginUser(user,callback)}
+                                       getLoggedIn={()=>this.state.loggedin}
+                                       getRegistered={()=>this.state.registered}/>
+              )} />
+              <Route exact path="/AddResource" render={(props) => (
+                <AddResource {...props} container={this.refs.content}
+                             addResource={(x) => this.addResource(x)}
+                             displaySearch={()=>this.displaySearch()}/>
+              )} />
+              <Route path="/ClinicPage/:rowNumber" render={(props) => (
+                <ClinicPageWithRouter {...props} container={this.refs.content}
+                            footer={this.refs.footer}
+                            displaySearch={(result) => this.displaySearch()}
+                            addFeedback={(x) => this.addFeedback(x)}
+                            getFeedbacks={()=>this.state.clinicpageFeedbacks}
+                            getFilteredResources={() => this.state.filteredResources}
+                            vouchFor={(a,b,c)=>this.vouchFor(a,b,c)}
+                            vouchAgainst={(a,b,c)=>this.vouchAgainst(a,b,c)}
+                            addFlag={()=>this.addFlag(a,b)}/>
+              )} />
+              <Route exact path="/" render={(props) => (
+                  <Main {...props} container={this.refs.content}
+                                  footer={this.refs.footer}
+                                  displayResult={(result) => this.displayResult(result)}
+                                  displaySearch={() => this.displaySearch()}
+                                  filterResources={(string) => this.filterResources(string)}
+                                  displayAddResource={() => this.displayAddResource()}
+                                  getFilteredResources={() => this.state.filteredResources}
+                                  getPageLoading={() => this.state.pageLoading}
+                                  onGoogleApiLoad={(map, maps) => this.onGoogleApiLoad(map, maps)}
+                                  userLat={this.state.userLat} userLng={this.state.userLng}
+                                  getSearchstring={()=>this.state.searchString} />
+              )} />
+            </Switch>
           </CSSTransitionGroup>
           </div>
 
