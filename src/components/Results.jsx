@@ -9,6 +9,10 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
+import PropTypes from 'prop-types'
+
+import {Link, withRouter} from 'react-router-dom'
+
 const styles = {
 
     table: {
@@ -32,6 +36,12 @@ const styles = {
 
 
 export default class Results extends React.Component {
+
+    // static propTypes = {
+    //   match: PropTypes.object.isRequired,
+    //   location: PropTypes.object.isRequired,
+    //   history: PropTypes.object.isRequired
+    // }
 
     calculateDistance(result) {
         var userLat = this.props.userLat, userLng = this.props.userLng;
@@ -59,6 +69,11 @@ export default class Results extends React.Component {
 
     }
 
+    handleClick(rowNumber) {
+      console.log(rowNumber);
+      this.props.history.push('/ClinicPage/' + rowNumber);
+    }
+
 //This method returns the filteredResources formatted as a table of results
 //If the page has not yet loaded, then it returns a simple message "Loading resources"
     formatFilteredResources(filteredResources, searchstring, pageLoading){
@@ -70,7 +85,9 @@ export default class Results extends React.Component {
               (filteredResources.map((result, i) => (
                 <TableRow
                   key={i}
-                  onClick={() => displayResult()}>
+                  >
+                  {/* // onClick={() => displayResult()}> */}
+                  {/* > */}
                   <TableRowColumn>
                   <div style={{display:'flex',flexDirection:'row'}}><h3>{(i+1)+".  "+result.name}</h3><div style={styles.dist}>({this.calculateDistance(result)+" mi"})</div></div>
                   <div><b>Type: </b>{result.resourcetype+" "}<div style={styles.dist}>({result.numberreviews+" reviews"})</div></div>
@@ -105,17 +122,19 @@ export default class Results extends React.Component {
         return (
         <div>
             <h2>Results</h2>
-        <Table
-          selectable={false}
-          fixedHeader={true}
-          style={styles.table}
-          onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
-          <TableBody
-              displayRowCheckbox={false}
-              showRowHover={true}>
-          {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
-          </TableBody>
-        </Table>
+      <Table
+        selectable={false}
+        fixedHeader={true}
+        style={styles.table}
+        // onCellClick={(rowNumber, columnID) => displayResult(filteredResources[rowNumber])}>
+        onCellClick={(rowNumber, columnID) => this.handleClick(rowNumber)}>
+        <TableBody
+            displayRowCheckbox={false}
+            showRowHover={true}>
+        {this.formatFilteredResources(filteredResources, searchstring, pageLoading)} //Populate results based on the "pageLoading" state boolean that indicates whether or not DB is synced
+        </TableBody>
+      </Table>
+
       </div>
         );
     }

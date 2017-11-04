@@ -171,8 +171,8 @@ export default class AddResource extends React.Component {
     }
 
     searchSizer() {
-        const { container} = this.props;
-        const { offsetHeight, offsetWidth } = container;
+        var offsetHeight = document.getElementById('content').clientHeight
+        var offsetWidth = document.getElementById('content').clientWidth
         this.setState({ offsetHeight, offsetWidth});
     }
 

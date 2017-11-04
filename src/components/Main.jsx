@@ -9,6 +9,7 @@ import { cyan300, indigo900 } from 'material-ui/styles/colors';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
+import {withRouter, Link} from 'react-router-dom';
 const styles={
 
   wrapper:{
@@ -30,11 +31,11 @@ const styles={
 export default class Main extends React.Component {
     constructor(props) {
         super(props);
+        props.setShouldShowSearchMenu(true);
         this.state = {
           viewList:false,
           switchButton:false
         };
-
     }
 
     switchView() {
@@ -53,11 +54,13 @@ export default class Main extends React.Component {
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.searchSizer, false);
+        this.props.setShouldShowSearchMenu(false);
     }
 
     searchSizer() {
-        const { container} = this.props;
-        const { offsetHeight, offsetWidth } = container;
+        var offsetHeight = document.getElementById('content').clientHeight
+        var offsetWidth = document.getElementById('content').clientWidth
+
         var resultWidth, mapWidth;
         if(offsetWidth<500){
           this.setState({switchButton:true})
@@ -77,7 +80,17 @@ export default class Main extends React.Component {
     }
 
     render() {
-        const { displayResult, displayAddResource, displaySearch, filterResources, onGoogleApiLoad, getSearchstring, getFilteredResources, getPageLoading, userLat, userLng } = this.props;
+        const ResultsWithRouter = withRouter(Results);
+        const { displayResult,
+                displayAddResource,
+                displaySearch,
+                filterResources,
+                onGoogleApiLoad,
+                getSearchstring,
+                getFilteredResources,
+                getPageLoading,
+                userLat,
+                userLng } = this.props;
         var { mapWidth, resultWidth, offsetHeight, offsetWidth} = this.state;
         if (mapWidth=== undefined) {
             return null;
@@ -86,8 +99,9 @@ export default class Main extends React.Component {
 
         return (
           <div style={styles.wrapper}>
-            <div style={{width: resultWidth, height: offsetHeight, overflow: 'auto'}}>
-              <Results height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
+            <div style={{width: resultWidth, height: offsetHeight, overflow: 'auto', paddingLeft:10, paddingRight:5}}>
+              <ResultsWithRouter height={offsetHeight} getFilteredResources={getFilteredResources} displayResult={displayResult} displaySearch={displaySearch} displayAddResource={displayAddResource} getPageLoading={getPageLoading} getSearchstring={getSearchstring}  userLat={userLat} userLng={userLng}/>
+
             </div>
 
             <div style={styles.map}>
@@ -97,7 +111,7 @@ export default class Main extends React.Component {
             <div style={{zIndex:1, bottom:'2%', right:'10%', position:'absolute', padding:'10px'}}>
                         <FloatingActionButton
                           backgroundColor='#000000'
-                          onTouchTap={()=>displayAddResource()}>
+                          containerElement={<Link to="/AddResource" />}>
                           <ContentAdd />
                         </FloatingActionButton>
             </div>

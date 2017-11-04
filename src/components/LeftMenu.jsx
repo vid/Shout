@@ -17,6 +17,7 @@ import ContentMail from 'material-ui/svg-icons/content/mail';
 import MapsEditLocation from 'material-ui/svg-icons/maps/edit-location';
 import SocialPerson from 'material-ui/svg-icons/social/person';
 
+import {Link} from 'react-router-dom';
 
 import AddResource from './AddResource.jsx';
 import UpdateDocs from './UpdateDocs.jsx';
@@ -59,8 +60,12 @@ export default class LeftMenu extends React.Component {
 
         return (
             <div id='menu'>
-            <MenuItem primaryText="Add New Resource" leftIcon={<ContentAdd />} onTouchTap={() => displayAddResource()}/>
-            <MenuItem primaryText="About" leftIcon={<SocialPerson />} onTouchTap={() => displayAbout()}/>
+            <MenuItem primaryText="Add New Resource"
+                      leftIcon={<ContentAdd />}
+                      containerElement={<Link to="/AddResource" />}/>
+            <MenuItem primaryText="About"
+                      leftIcon={<SocialPerson />}
+                      containerElement={<Link to="/About" />}/>
             {this.getAdminOptions()}
             </div>
         )

@@ -32,8 +32,8 @@ export default class About extends React.Component {
     }
 
     searchSizer() {
-        const { container} = this.props;
-        const { offsetHeight, offsetWidth } = container;
+        var offsetHeight = document.getElementById('content').clientHeight
+        var offsetWidth = document.getElementById('content').clientWidth
         this.setState({ offsetHeight, offsetWidth});
     }
 
@@ -63,7 +63,7 @@ export default class About extends React.Component {
             Why? A major reason for this is a barrier to information.</p>
             <p>Our Goal: Decentralize information.</p>
             <p>We believe that the best way to achieve good healthcare among marginalized communities is to empower them to inform themselves and each other.</p>
-          
+
         </Paper>
         );
     }

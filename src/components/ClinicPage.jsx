@@ -141,6 +141,9 @@ export default class ClinicPage extends React.Component {
     constructor(props) {
         super(props);
 
+        this.result = this.props.getFilteredResources()[props.match.params.rowNumber];
+        console.log(this.result)
+
         this.state = {
 
         //Flags for all expandable containers in the page
@@ -173,7 +176,7 @@ export default class ClinicPage extends React.Component {
     componentDidMount() {
         this.searchSizer();
         window.addEventListener('resize', () => this.searchSizer(), false);
-
+        // console.log("this result is: " + thid)
     }
 
     componentWillUnmount() {
@@ -307,17 +310,17 @@ export default class ClinicPage extends React.Component {
 
     render() {
 
-        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, result,
+        const { getFeedbacks, vouchFor, vouchAgainst, addFlag, getFilteredResources,
                 addFeedback, displayVoucher } = this.props;
         const { customError, wordsError, numericError, urlError } = this.errorMessages;
         const { offsetWidth, offsetHeight} = this.state;
+        const result = this.result;
         if (offsetHeight === undefined) {
             return null;
         }
         const allFeedbacks = getFeedbacks();
-        const id = result._id;
+        const id = this.result._id;
         var expandedFeedback = this.viewAllFeedbacks(allFeedbacks);
-
 
         return (
 
